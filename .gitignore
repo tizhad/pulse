@@ -1,5 +1,8 @@
 # See https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
+# Local learning notes — not for version control
+DECISIONS.md
+
 # compiled output
 dist
 tmp
@@ -52,3 +55,4 @@ vitest.config.*.timestamp*
 
 .nx/polygraph
 .nx/self-healing
+__screenshots__/
