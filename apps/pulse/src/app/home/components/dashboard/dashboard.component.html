@@ -1,0 +1,242 @@
+<div class="page page--home">
+
+  <!-- ── Header ── -->
+  <header class="dash-header">
+    <div class="dash-header__left">
+      <h1 class="page-title">Portfolio</h1>
+      @if (loading()) {
+        <span class="loading-badge">Updating…</span>
+      }
+    </div>
+    <div class="dash-header__actions">
+      <a class="btn btn--ghost" routerLink="/dutch">Flash Cards</a>
+      <button class="btn btn--ghost" (click)="refreshPrices()" [disabled]="loading()">↻</button>
+      <button class="btn btn--primary" (click)="openPanel('gold')">+ Gold</button>
+      <button class="btn btn--primary" (click)="openPanel('crypto')">+ Crypto</button>
+    </div>
+  </header>
+
+  <!-- ── Add-asset panel ── -->
+  @if (showPanel()) {
+    <div class="add-panel">
+
+      <div class="add-tabs">
+        <button class="tab" [class.tab--active]="activeTab() === 'gold'"
+                (click)="openPanel('gold')">Gold</button>
+        <button class="tab" [class.tab--active]="activeTab() === 'crypto'"
+                (click)="openPanel('crypto')">Crypto</button>
+        <button class="add-panel__close" (click)="showPanel.set(false)" aria-label="Close">✕</button>
+      </div>
+
+      <!-- Gold form -->
+      @if (activeTab() === 'gold') {
+        <div class="add-form">
+          <div class="form-row-inline">
+            <div class="form-group">
+              <label class="form-label">Karat</label>
+              <select class="form-input" (change)="onKaratChange($event)">
+                @for (k of GOLD_KARATS; track k.karat) {
+                  <option [value]="k.karat" [selected]="k.karat === goldKarat()">
+                    {{ k.label }}
+                  </option>
+                }
+              </select>
+            </div>
+            <div class="form-group form-group--grow">
+              <label class="form-label">Weight (grams)</label>
+              <input class="form-input" type="number" min="0.01" step="0.01"
+                     placeholder="e.g. 50" [value]="goldGrams()"
+                     (input)="onGoldGramsInput($event)" />
+            </div>
+          </div>
+
+          @if (goldSpot()) {
+            <div class="preview-row">
+              @if (goldPreviewPerGram()) {
+                <span class="preview-row__item">
+                  ~{{ goldPreviewPerGram()! | currency }}/g
+                </span>
+              }
+              @if (goldPreviewTotal()) {
+                <span class="preview-row__total">
+                  ≈ {{ goldPreviewTotal()! | currency }} total
+                </span>
+              }
+            </div>
+          }
+
+          <button class="btn btn--primary"
+                  [disabled]="!goldGrams() || +goldGrams() <= 0"
+                  (click)="addGold()">
+            Add to Portfolio
+          </button>
+        </div>
+      }
+
+      <!-- Crypto form -->
+      @if (activeTab() === 'crypto') {
+        <div class="add-form">
+          @if (topCoinsLoading()) {
+            <p class="loading-text">Loading coins…</p>
+          } @else {
+
+            @if (selectedCoin()) {
+              <!-- Selected coin display -->
+              <div class="selected-coin">
+                <img class="selected-coin__img" [src]="selectedCoin()!.image"
+                     [alt]="selectedCoin()!.name" />
+                <div class="selected-coin__info">
+                  <span class="selected-coin__name">{{ selectedCoin()!.name }}</span>
+                  <span class="selected-coin__price">
+                    {{ selectedCoin()!.current_price | currency }}
+                  </span>
+                </div>
+                <button class="remove-btn" (click)="clearCoin()" aria-label="Clear">✕</button>
+              </div>
+            } @else {
+              <!-- Coin search -->
+              <div class="form-group coin-search">
+                <label class="form-label">Search coin</label>
+                <input class="form-input" type="text" placeholder="e.g. Bitcoin"
+                       [value]="cryptoQuery()"
+                       (input)="onCryptoQueryInput($event)"
+                       (focus)="dropdownOpen.set(true)"
+                       (blur)="scheduleDropdownClose()" />
+                @if (dropdownOpen() && filteredCoins().length) {
+                  <div class="coin-dropdown">
+                    @for (coin of filteredCoins(); track coin.id) {
+                      <button class="coin-option" (click)="selectCoin(coin)">
+                        <img class="coin-option__img" [src]="coin.image" [alt]="coin.name" />
+                        <span class="coin-option__name">{{ coin.name }}</span>
+                        <span class="coin-option__symbol">{{ coin.symbol | uppercase }}</span>
+                        <span class="coin-option__price">
+                          {{ coin.current_price | currency }}
+                        </span>
+                      </button>
+                    }
+                  </div>
+                }
+              </div>
+            }
+
+            <div class="form-group">
+              <label class="form-label">Amount</label>
+              <input class="form-input" type="number" min="0" step="any"
+                     placeholder="e.g. 0.5" [value]="cryptoAmount()"
+                     (input)="onCryptoAmountInput($event)" />
+            </div>
+
+            @if (cryptoPreviewTotal()) {
+              <div class="preview-row">
+                <span class="preview-row__total">
+                  ≈ {{ cryptoPreviewTotal()! | currency }} total
+                </span>
+              </div>
+            }
+
+            <button class="btn btn--primary"
+                    [disabled]="!selectedCoin() || !cryptoAmount() || +cryptoAmount() <= 0"
+                    (click)="addCrypto()">
+              Add to Portfolio
+            </button>
+          }
+        </div>
+      }
+    </div>
+  }
+
+  <!-- ── Portfolio summary ── -->
+  @if (totalValue() > 0) {
+    <div class="summary-card">
+      <p class="summary-card__label">Total Portfolio Value</p>
+      <p class="summary-card__value">{{ totalValue() | currency }}</p>
+      <div class="summary-card__changes">
+        <span class="change-chip"
+              [class.change-chip--up]="portfolioPct7d() >= 0"
+              [class.change-chip--down]="portfolioPct7d() < 0">
+          {{ portfolioPct7d() >= 0 ? '▲' : '▼' }}
+          {{ portfolioPct7d() | number:'1.2-2' }}%
+          ({{ portfolioChange7d() | currency }})
+          <span class="change-chip__period">7d</span>
+        </span>
+        <span class="change-chip"
+              [class.change-chip--up]="portfolioPct30d() >= 0"
+              [class.change-chip--down]="portfolioPct30d() < 0">
+          {{ portfolioPct30d() >= 0 ? '▲' : '▼' }}
+          {{ portfolioPct30d() | number:'1.2-2' }}%
+          ({{ portfolioChange30d() | currency }})
+          <span class="change-chip__period">30d</span>
+        </span>
+      </div>
+    </div>
+  }
+
+  <!-- ── Error ── -->
+  @if (error()) {
+    <div class="error-bar">
+      {{ error() }}
+      <button class="btn btn--ghost" (click)="refreshPrices()">Retry</button>
+    </div>
+  }
+
+  <!-- ── Asset list ── -->
+  <div class="asset-list">
+    @for (row of assetRows(); track row.holding.id) {
+      <div class="asset-card">
+        <div class="asset-card__header">
+          <div class="asset-card__identity">
+            @if (row.holding.type === 'gold') {
+              <div class="asset-card__icon-wrap asset-card__icon-wrap--gold">
+                <span>Au</span>
+              </div>
+            } @else {
+              <img class="asset-card__icon-img"
+                   [src]="isCryptoHolding(row.holding) ? row.holding.coinImage : ''"
+                   [alt]="row.holding.type === 'crypto' ? row.holding.coinName : 'Gold'" />
+            }
+            <div>
+              <p class="asset-card__name">{{ row.label }}</p>
+              @if (row.holding.type === 'crypto') {
+                <p class="asset-card__sub">
+                  {{ row.holding.coinSymbol | uppercase }} ·
+                  {{ isCryptoHolding(row.holding) ? row.holding.coinName : '' }}
+                </p>
+              }
+            </div>
+          </div>
+          <div class="asset-card__right">
+            <p class="asset-card__value">{{ row.currentValue | currency }}</p>
+            <button class="remove-btn" (click)="removeHolding(row.holding.id)"
+                    aria-label="Remove holding">✕</button>
+          </div>
+        </div>
+
+        <div class="asset-card__changes">
+          <span [class]="row.priceChange7d >= 0 ? 'change change--up' : 'change change--down'">
+            <strong>7d</strong>
+            {{ row.priceChange7d >= 0 ? '+' : '' }}{{ row.priceChange7d | number:'1.2-2' }}%
+            <span class="change__usd">
+              ({{ row.valueChange7d >= 0 ? '+' : '' }}{{ row.valueChange7d | currency }})
+            </span>
+          </span>
+          <span [class]="row.priceChange30d >= 0 ? 'change change--up' : 'change change--down'">
+            <strong>30d</strong>
+            {{ row.priceChange30d >= 0 ? '+' : '' }}{{ row.priceChange30d | number:'1.2-2' }}%
+            <span class="change__usd">
+              ({{ row.valueChange30d >= 0 ? '+' : '' }}{{ row.valueChange30d | currency }})
+            </span>
+          </span>
+        </div>
+      </div>
+    }
+
+    @if (holdings().length === 0) {
+      <div class="empty-state">
+        <div class="empty-state__icon">📊</div>
+        <h2>No assets yet</h2>
+        <p>Add your gold or crypto holdings to track their live value and trends.</p>
+      </div>
+    }
+  </div>
+
+</div>
