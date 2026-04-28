@@ -1,0 +1,119 @@
+<div class="page">
+  <header class="page-header">
+    <div class="page-header__left">
+      <a class="back-link" routerLink="/dutch">← Decks</a>
+      <h1 class="page-title">Import Deck</h1>
+    </div>
+  </header>
+
+  <div class="import-card">
+
+    <div class="form-group">
+      <label class="form-label" for="deckName">Deck name</label>
+      <input
+        id="deckName"
+        class="form-input"
+        type="text"
+        placeholder="e.g. Dutch Vocabulary"
+        [value]="deckName()"
+        (input)="deckName.set($any($event.target).value)"
+      />
+    </div>
+
+    <div class="form-group">
+      <span class="form-label">Upload file</span>
+      <!-- Using div + template ref avoids the label-association ESLint rule on hidden inputs -->
+      <div
+        class="file-drop"
+        (click)="fileInput.click()"
+        (keydown.enter)="fileInput.click()"
+        tabindex="0"
+        role="button"
+        aria-label="Choose a file to import"
+      >
+        <input
+          #fileInput
+          type="file"
+          accept=".csv,.json,.apkg"
+          (change)="onFileChange($event)"
+        />
+        @if (loading()) {
+          <span class="file-drop__icon">⏳</span>
+          <span class="file-drop__text">Reading .apkg file…</span>
+          <div class="spinner"></div>
+        } @else {
+          <span class="file-drop__icon">📂</span>
+          <span class="file-drop__text">Choose a CSV, JSON, or Anki (.apkg) file</span>
+          <span class="file-drop__hint">CSV: two columns — front, back · JSON: array of objects · APKG: Anki deck export</span>
+        }
+      </div>
+    </div>
+
+    <div class="divider"><span>or paste CSV</span></div>
+
+    <div class="form-group">
+      <label class="form-label" for="csvPaste">Paste CSV content</label>
+      <textarea
+        id="csvPaste"
+        class="form-textarea"
+        rows="6"
+        placeholder="hello,hallo&#10;goodbye,tot ziens&#10;thank you,dank je wel"
+        [value]="csvText()"
+        (input)="onCsvPaste($any($event.target).value)"
+      ></textarea>
+    </div>
+
+    <div class="form-check">
+      <input
+        id="skipHeader"
+        type="checkbox"
+        [checked]="skipHeader()"
+        (change)="onSkipHeaderChange($any($event.target).checked)"
+      />
+      <label for="skipHeader">First row is a header — skip it</label>
+    </div>
+
+    @if (preview().length > 0) {
+      <div class="preview">
+        <p class="preview__title">
+          Preview <span class="preview__count">({{ totalRows() }} cards total)</span>
+        </p>
+        <table class="preview-table">
+          <thead>
+            <tr>
+              <th>Front</th>
+              <th>Back</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of preview(); track $index) {
+              <tr>
+                <td>{{ row.front }}</td>
+                <td>{{ row.back }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+        @if (totalRows() > 5) {
+          <p class="preview__more">…and {{ totalRows() - 5 }} more rows</p>
+        }
+      </div>
+    }
+
+    @if (error()) {
+      <p class="error-msg">⚠ {{ error() }}</p>
+    }
+
+    <div class="import-actions">
+      <button
+        class="btn btn--primary btn--lg"
+        (click)="import()"
+        [disabled]="totalRows() === 0 || loading()"
+      >
+        Import {{ totalRows() > 0 ? totalRows() + ' cards' : '' }}
+      </button>
+      <a class="btn btn--ghost" routerLink="/dutch">Cancel</a>
+    </div>
+
+  </div>
+</div>

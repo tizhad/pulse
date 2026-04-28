@@ -1,0 +1,101 @@
+<div class="page page--study">
+
+  @if (isComplete()) {
+    <div class="complete">
+      <div class="complete__icon">🎉</div>
+      <h2 class="complete__title">Session Complete!</h2>
+      <p class="complete__sub">You reviewed {{ reviewedCount() }} cards.</p>
+
+      <div class="complete__stats">
+        <div class="stat-box stat-box--again">
+          <span class="stat-box__value">{{ stats().again }}</span>
+          <span class="stat-box__label">Again</span>
+        </div>
+        <div class="stat-box stat-box--hard">
+          <span class="stat-box__value">{{ stats().hard }}</span>
+          <span class="stat-box__label">Hard</span>
+        </div>
+        <div class="stat-box stat-box--good">
+          <span class="stat-box__value">{{ stats().good }}</span>
+          <span class="stat-box__label">Good</span>
+        </div>
+        <div class="stat-box stat-box--easy">
+          <span class="stat-box__value">{{ stats().easy }}</span>
+          <span class="stat-box__label">Easy</span>
+        </div>
+      </div>
+
+      <a class="btn btn--primary" routerLink="/dutch">← Back to Decks</a>
+    </div>
+
+  } @else if (currentCard()) {
+
+    <header class="study-header">
+      <a class="study-header__back" routerLink="/dutch">← Decks</a>
+      <span class="study-header__deck">{{ deck()?.name }}</span>
+      <span class="study-header__count">{{ reviewedCount() }} / {{ totalCards() }}</span>
+    </header>
+
+    <div class="progress-bar">
+      <div class="progress-bar__fill" [style.width.%]="progress()"></div>
+    </div>
+
+    <!-- card-scene--rich gives extra height when the card has embedded images -->
+    <div class="card-scene" [class.card-scene--rich]="!!currentCard()!.frontHtml">
+      <div class="flashcard" [class.flashcard--flipped]="isFlipped()" (click)="!isFlipped() && flip()">
+
+        <div class="flashcard__face flashcard__face--front">
+          @if (currentCard()!.frontHtml) {
+            <!-- Rich Anki HTML with resolved image URLs -->
+            <div class="anki-content" [innerHTML]="resolvedFrontHtml()"></div>
+          } @else {
+            <p class="flashcard__text">{{ currentCard()!.front }}</p>
+          }
+          <span class="flashcard__hint">Click or press Space to reveal</span>
+        </div>
+
+        <div class="flashcard__face flashcard__face--back">
+          @if (currentCard()!.backHtml) {
+            <!-- Show the answer HTML; front context is implied from the visible front face -->
+            <div class="anki-content" [innerHTML]="resolvedBackHtml()"></div>
+          } @else {
+            <p class="flashcard__label">Question</p>
+            <p class="flashcard__text flashcard__text--question">{{ currentCard()!.front }}</p>
+            <hr class="flashcard__divider" />
+            <p class="flashcard__label">Answer</p>
+            <p class="flashcard__text flashcard__text--answer">{{ currentCard()!.back }}</p>
+          }
+        </div>
+
+      </div>
+    </div>
+
+    @if (isFlipped()) {
+      <div class="rating-row">
+        <button class="rating-btn rating-btn--again" (click)="rate(1)">
+          <span class="rating-btn__label">Again</span>
+          <span class="rating-btn__interval">{{ nextInterval(1) }}</span>
+        </button>
+        <button class="rating-btn rating-btn--hard" (click)="rate(2)">
+          <span class="rating-btn__label">Hard</span>
+          <span class="rating-btn__interval">{{ nextInterval(2) }}</span>
+        </button>
+        <button class="rating-btn rating-btn--good" (click)="rate(3)">
+          <span class="rating-btn__label">Good</span>
+          <span class="rating-btn__interval">{{ nextInterval(3) }}</span>
+        </button>
+        <button class="rating-btn rating-btn--easy" (click)="rate(4)">
+          <span class="rating-btn__label">Easy</span>
+          <span class="rating-btn__interval">{{ nextInterval(4) }}</span>
+        </button>
+      </div>
+      <p class="keyboard-hint">Keyboard: <kbd>1</kbd> Again · <kbd>2</kbd> Hard · <kbd>3</kbd> Good · <kbd>4</kbd> Easy</p>
+    } @else {
+      <div class="show-answer">
+        <button class="btn btn--primary btn--lg" (click)="flip()">Show Answer</button>
+        <p class="keyboard-hint"><kbd>Space</kbd> to reveal</p>
+      </div>
+    }
+
+  }
+</div>

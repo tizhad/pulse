@@ -1,0 +1,49 @@
+<div class="page">
+  <header class="page-header">
+    <div class="page-header__left">
+      <h1 class="page-title">Dutch Flashcards</h1>
+    </div>
+    <a class="btn btn--primary" routerLink="/dutch/import">+ Import Deck</a>
+  </header>
+
+  @if (decks().length === 0) {
+    <div class="empty-state">
+      <div class="empty-state__icon">🗂️</div>
+      <h2>No decks yet</h2>
+      <p>Import a CSV or JSON file to create your first deck.</p>
+      <a class="btn btn--primary" routerLink="/dutch/import">Import Deck</a>
+    </div>
+  } @else {
+    <div class="deck-grid">
+      @for (deck of decks(); track deck.id) {
+        <div class="deck-card">
+          <div class="deck-card__body">
+            <h2 class="deck-card__name">{{ deck.name }}</h2>
+            <p class="deck-card__total">{{ deck.cards.length }} cards</p>
+            <div class="deck-card__badges">
+              @if (dueCount(deck) > 0) {
+                <span class="badge badge--due">{{ dueCount(deck) }} due</span>
+              }
+              @if (newCount(deck) > 0) {
+                <span class="badge badge--new">{{ newCount(deck) }} new</span>
+              }
+              @if (dueCount(deck) === 0 && newCount(deck) === 0) {
+                <span class="badge badge--done">✓ Up to date</span>
+              }
+            </div>
+          </div>
+          <div class="deck-card__actions">
+            @if (studyCount(deck) > 0) {
+              <button class="btn btn--primary" (click)="study(deck)">
+                Study ({{ studyCount(deck) }})
+              </button>
+            } @else {
+              <button class="btn btn--ghost" disabled>Nothing due</button>
+            }
+            <button class="btn btn--danger" (click)="deleteDeck(deck.id)">Delete</button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

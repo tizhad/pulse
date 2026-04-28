@@ -18,6 +18,11 @@
           {
             "glob": "**/*",
             "input": "apps/pulse/public"
+          },
+          {
+            "glob": "sql-wasm.wasm",
+            "input": "node_modules/sql.js/dist",
+            "output": "assets"
           }
         ],
         "styles": ["apps/pulse/src/styles.scss"],

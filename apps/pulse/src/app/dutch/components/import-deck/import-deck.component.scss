@@ -1,0 +1,142 @@
+.import-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: 2rem;
+  max-width: 620px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.file-drop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 2rem;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color 0.2s;
+
+  &:hover {
+    border-color: var(--primary);
+  }
+
+  input[type='file'] {
+    display: none;
+  }
+
+  &__icon {
+    font-size: 2rem;
+  }
+  &__text {
+    font-weight: 500;
+  }
+  &__hint {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    border-top: 1px solid var(--border);
+  }
+}
+
+.form-check {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+
+  input {
+    cursor: pointer;
+  }
+  label {
+    cursor: pointer;
+  }
+}
+
+.preview {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+
+  &__title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    background: var(--bg);
+    margin: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  &__count {
+    font-weight: 400;
+    color: var(--text-muted);
+  }
+  &__more {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    padding: 0.5rem 1rem;
+    margin: 0;
+  }
+}
+
+.preview-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+
+  th,
+  td {
+    padding: 0.5rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  th {
+    font-weight: 600;
+    background: var(--bg);
+  }
+  tr:last-child td {
+    border-bottom: none;
+  }
+}
+
+.error-msg {
+  color: var(--again);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.import-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

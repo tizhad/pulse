@@ -1,0 +1,257 @@
+.page--study {
+  max-width: 680px;
+}
+
+.study-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+
+  &__back {
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 0.875rem;
+
+    &:hover { text-decoration: underline; }
+  }
+
+  &__deck {
+    font-weight: 600;
+    flex: 1;
+    text-align: center;
+  }
+
+  &__count {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
+}
+
+.progress-bar {
+  height: 6px;
+  background: var(--border);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+
+  &__fill {
+    height: 100%;
+    background: var(--primary);
+    border-radius: 99px;
+    transition: width 0.4s ease;
+  }
+}
+
+.card-scene {
+  perspective: 1200px;
+  height: 280px;
+  margin-bottom: 2rem;
+
+  // Taller container for Anki cards that include images and multi-line content
+  &--rich {
+    height: 480px;
+  }
+}
+
+.flashcard {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+
+  &--flipped {
+    transform: rotateY(180deg);
+    cursor: default;
+  }
+
+  &__face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+
+    &--back {
+      transform: rotateY(180deg);
+      justify-content: flex-start;
+      padding-top: 1.5rem;
+    }
+  }
+
+  &__text {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin: 0;
+    line-height: 1.4;
+
+    &--question {
+      font-size: 1rem;
+      color: var(--text-muted);
+    }
+
+    &--answer {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+  }
+
+  &__label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin: 0 0 0.25rem;
+  }
+
+  &__divider {
+    width: 100%;
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0.75rem 0;
+  }
+
+  &__hint {
+    position: absolute;
+    bottom: 1rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+}
+
+// Container for rich Anki HTML content (cards with images, styled text, etc.)
+// ::ng-deep lets these styles reach the dynamically injected innerHTML
+.anki-content {
+  width: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  text-align: center;
+  padding: 0.5rem;
+
+  // Scope the Anki model's .card wrapper so it fills the face cleanly
+  /* stylelint-disable-next-line selector-class-pattern */
+  ::ng-deep .card {
+    font-size: 1rem;
+    line-height: 1.6;
+    font-family: inherit;
+  }
+
+  // Images from Anki media — constrained so they don't overflow the card
+  ::ng-deep img {
+    max-width: 180px;
+    max-height: 160px;
+    border-radius: 8px;
+    object-fit: cover;
+    display: block;
+    margin: 0.5rem auto;
+  }
+}
+
+.rating-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.rating-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.75rem 0.5rem;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 0.15s, transform 0.1s;
+
+  &:hover { opacity: 0.88; transform: translateY(-1px); }
+  &:active { transform: translateY(0); }
+
+  &__label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  &__interval {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  &--again { background: var(--again); }
+  &--hard  { background: var(--hard); }
+  &--good  { background: var(--good); }
+  &--easy  { background: var(--easy); }
+}
+
+.show-answer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.complete {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 3rem 1rem;
+
+  &__icon { font-size: 4rem; margin-bottom: 1rem; }
+  &__title { font-size: 2rem; margin: 0 0 0.5rem; }
+  &__sub { color: var(--text-muted); margin: 0 0 2rem; }
+
+  &__stats {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+}
+
+.stat-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-radius: var(--radius);
+  min-width: 70px;
+
+  &__value { font-size: 1.75rem; font-weight: 700; color: #fff; }
+  &__label { font-size: 0.75rem; color: rgba(255,255,255,0.85); margin-top: 0.25rem; }
+
+  &--again { background: var(--again); }
+  &--hard  { background: var(--hard); }
+  &--good  { background: var(--good); }
+  &--easy  { background: var(--easy); }
+}
+
+.keyboard-hint {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin: 0;
+
+  kbd {
+    display: inline-block;
+    padding: 0.1em 0.4em;
+    background: var(--border);
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.75rem;
+  }
+}
