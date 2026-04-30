@@ -1,1 +1,88 @@
-/* You can add global styles to this file, and also import other style files */
+/* ── CSS custom properties ─────────────────────────────────────────────── */
+:root {
+  /* surfaces */
+  --color-bg:             #f0f4f8;
+  --color-surface:        #ffffff;
+  --color-surface-hover:  #f7fafc;
+  --color-border:         #e2e8f0;
+
+  /* text */
+  --color-text:           #1a202c;
+  --color-text-muted:     #718096;
+
+  /* tags */
+  --color-study:          #4299e1;
+  --color-study-bg:       #ebf8ff;
+  --color-project:        #ed8936;
+  --color-project-bg:     #fffaf0;
+
+  /* progress */
+  --color-progress-track: #e2e8f0;
+  --color-progress-fill:  #48bb78;
+
+  /* company statuses */
+  --color-not-applied:    #a0aec0;
+  --color-applied:        #4299e1;
+  --color-interview:      #ed8936;
+  --color-offer:          #48bb78;
+  --color-rejected:       #fc8181;
+
+  /* resume fix urgency */
+  --color-critical:       #fc8181;
+  --color-critical-bg:    #fff5f5;
+  --color-warning:        #d69e2e;
+  --color-warning-bg:     #fffff0;
+  --color-resolved:       #68d391;
+  --color-resolved-bg:    #f0fff4;
+
+  /* tabs */
+  --color-tab-active:     #4299e1;
+  --color-tab-text:       #4a5568;
+
+  /* misc */
+  --radius:               8px;
+  --radius-sm:            4px;
+  --transition:           180ms ease;
+  --shadow-sm:            0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg:             #1a202c;
+    --color-surface:        #2d3748;
+    --color-surface-hover:  #3a4a5c;
+    --color-border:         #4a5568;
+    --color-text:           #f7fafc;
+    --color-text-muted:     #a0aec0;
+    --color-progress-track: #4a5568;
+    --color-study-bg:       #1a365d;
+    --color-project-bg:     #3d2a14;
+    --color-critical-bg:    #3d1414;
+    --color-warning-bg:     #3d3214;
+    --color-resolved-bg:    #143d1e;
+    --color-tab-text:       #a0aec0;
+    --shadow-sm:            0 1px 3px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* ── Reset ─────────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
