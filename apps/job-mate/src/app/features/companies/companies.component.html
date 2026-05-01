@@ -1,0 +1,46 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Companies</h1>
+      <p class="page-subtitle">Every company you've studied for or applied to.</p>
+    </div>
+    <button class="btn-primary">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      Add company
+    </button>
+  </div>
+
+  <div class="companies-grid">
+    @for (company of state.companies(); track company.id) {
+      <div class="card company-card">
+        <div class="company-top">
+          <div class="company-avatar">{{ initial(company.name) }}</div>
+          <div class="company-info">
+            <span class="company-name">{{ company.name }}</span>
+            <span class="company-category">
+              <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+              </svg>
+              {{ company.category }}
+            </span>
+          </div>
+          <span class="badge" [class]="statusClass(company.status)">{{ statusLabel(company.status) }}</span>
+        </div>
+        <div class="company-stats">
+          <div class="stat">
+            <span class="stat-num">{{ company.linkedSubjects }}</span>
+            <span class="stat-label">Linked subjects</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat">
+            <span class="stat-num">{{ company.applications }}</span>
+            <span class="stat-label">Applications</span>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>
