@@ -1,0 +1,57 @@
+<div class="page">
+  <div class="page-header">
+    <h1 class="page-title">Settings</h1>
+    <p class="page-subtitle">Make JobMate feel like yours.</p>
+  </div>
+
+  <div class="settings-grid">
+    <!-- Profile -->
+    <div class="card settings-card">
+      <h2 class="card-title">Profile</h2>
+      <div class="profile-row">
+        <div class="profile-avatar">{{ initial() }}</div>
+        <div class="profile-info">
+          <span class="profile-name">{{ state.settings().displayName }}</span>
+          <span class="profile-email">{{ state.settings().email }}</span>
+        </div>
+      </div>
+      <div class="field">
+        <label class="field-label" for="display-name">Display name</label>
+        <input
+          id="display-name"
+          class="field-input"
+          type="text"
+          [ngModel]="displayName()"
+          (ngModelChange)="displayName.set($event)"
+          (blur)="saveDisplayName()"
+        />
+      </div>
+    </div>
+
+    <!-- Accent palette -->
+    <div class="card settings-card">
+      <h2 class="card-title">Accent palette</h2>
+      <div class="accent-row">
+        @for (accent of accents; track accent.key) {
+          <button
+            class="accent-swatch"
+            [class.selected]="state.settings().accent === accent.key"
+            [style.background]="accent.color"
+            (click)="setAccent(accent.key)"
+            [attr.aria-label]="accent.label"
+          ></button>
+          <span class="accent-label">{{ accent.label }}</span>
+        }
+      </div>
+    </div>
+
+    <!-- Data -->
+    <div class="card settings-card">
+      <h2 class="card-title">Data</h2>
+      <div class="data-actions">
+        <button class="btn-secondary">Export data (JSON)</button>
+        <button class="btn-danger">Sign out</button>
+      </div>
+    </div>
+  </div>
+</div>

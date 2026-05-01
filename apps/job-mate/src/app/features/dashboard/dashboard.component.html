@@ -1,0 +1,155 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Welcome back, Tina 👋</h1>
+      <p class="page-subtitle">Here's how your prep is going this week.</p>
+    </div>
+    <a routerLink="/subjects" class="btn-primary">
+      <svg
+        width="14"
+        height="14"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        viewBox="0 0 24 24"
+      >
+        <line x1="12" y1="5" x2="12" y2="19" />
+        <line x1="5" y1="12" x2="19" y2="12" />
+      </svg>
+      New subject
+    </a>
+  </div>
+
+  <!-- Top stat cards -->
+  <div class="stats-row">
+    <!-- Progress -->
+    <div class="card progress-card">
+      <div class="card-label">Progress</div>
+      <div class="progress-body">
+        <div class="donut-wrap">
+          <svg viewBox="0 0 64 64" class="donut">
+            <circle
+              cx="32"
+              cy="32"
+              r="26"
+              fill="none"
+              stroke="var(--border)"
+              stroke-width="8"
+            />
+            <circle
+              cx="32"
+              cy="32"
+              r="26"
+              fill="none"
+              stroke="var(--accent)"
+              stroke-width="8"
+              [attr.stroke-dasharray]="
+                state.progressPercent() * 1.634 + ' 163.4'
+              "
+              stroke-linecap="round"
+              transform="rotate(-90 32 32)"
+            />
+          </svg>
+          <div class="donut-label">
+            {{ state.progressPercent() }}%<span>COMPLETE</span>
+          </div>
+        </div>
+        <div class="progress-legend">
+          <div class="legend-row">
+            <span class="dot done"></span>Done
+            <strong>{{ state.doneCount() }}</strong>
+          </div>
+          <div class="legend-row">
+            <span class="dot progress"></span>In progress
+            <strong>{{ state.inProgressCount() }}</strong>
+          </div>
+          <div class="legend-row">
+            <span class="dot todo"></span>To&#8209;do
+            <strong>{{ state.toDoCount() }}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Streak -->
+    <div class="card streak-card">
+      <div class="streak-top">
+        <span class="streak-icon">🔥</span>
+        <span class="streak-days">{{ state.streak() }} day streak</span>
+      </div>
+      <div class="streak-dots">
+        @for (d of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]; track d) {
+          <div class="streak-dot" [class.filled]="d <= state.streak()"></div>
+        }
+      </div>
+      <p class="streak-msg">Studied 4h 20m this week. Keep going!</p>
+    </div>
+
+    <!-- Pipeline -->
+    <div class="card pipeline-card">
+      <div class="pipeline-header">
+        <span class="card-label">Pipeline</span>
+        <a routerLink="/applications" class="view-all">View all →</a>
+      </div>
+      @for (row of pipelineRows; track row.key) {
+        <div class="pipeline-row">
+          <span class="pipe-label">{{ row.label }}</span>
+          <div class="pipe-bar-wrap">
+            <div
+              class="pipe-bar"
+              [style.background]="row.color"
+              [style.width.%]="getPipelineCount(row.key) * 25"
+            ></div>
+          </div>
+          <span class="pipe-count">{{ getPipelineCount(row.key) }}</span>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Bottom sections -->
+  <div class="bottom-row">
+    <!-- Today's focus -->
+    <div class="card focus-card">
+      <div class="section-header">
+        <span class="section-title">Today's focus</span>
+        <a routerLink="/subjects" class="view-all">All subjects →</a>
+      </div>
+      @for (subject of state.todaysFocus(); track subject.id) {
+        <a [routerLink]="['/subjects', subject.id]" class="focus-row">
+          <div class="focus-potential">{{ subject.potential }}</div>
+          <div class="focus-info">
+            <span class="focus-name">{{ subject.name }}</span>
+            <span class="focus-meta"
+              >{{ subject.qaCount }} questions ·
+              {{ subject.companies?.join(', ') }}</span
+            >
+          </div>
+          <span class="badge" [class]="priorityClass(subject.priority)">
+            {{ subject.priority.toUpperCase() }}
+          </span>
+        </a>
+      }
+    </div>
+
+    <!-- Recent applications -->
+    <div class="card recents-card">
+      <div class="section-header">
+        <span class="section-title">Recent applications</span>
+        <a routerLink="/applications" class="view-all">View all →</a>
+      </div>
+      @for (app of state.recentApplications(); track app.id) {
+        <div class="app-row">
+          <div class="app-avatar">{{ companyInitial(app.company) }}</div>
+          <div class="app-info">
+            <span class="app-title">{{ app.title }}</span>
+            <span class="app-meta">{{ app.company }} · {{ app.date }}</span>
+          </div>
+          <span class="badge" [class]="statusClass(app.status)">{{
+            statusLabel(app.status)
+          }}</span>
+        </div>
+      }
+    </div>
+  </div>
+</div>

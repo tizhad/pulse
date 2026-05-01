@@ -1,0 +1,159 @@
+.page {
+  padding: 2rem;
+  max-width: 760px;
+}
+
+.page-header {
+  margin-bottom: 1.5rem;
+}
+
+.page-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.page-subtitle {
+  font-size: 13.5px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.settings-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 520px;
+}
+
+.settings-card { display: flex; flex-direction: column; gap: 1rem; }
+
+.card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* ── Profile ─────────────────────────────────────────────────────────────── */
+
+.profile-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profile-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.profile-info { display: flex; flex-direction: column; }
+
+.profile-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.profile-email {
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.field { display: flex; flex-direction: column; gap: 6px; }
+
+.field-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.field-input {
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 0.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 14px;
+  outline: none;
+  transition: border-color var(--transition);
+
+  &:focus { border-color: var(--accent); }
+}
+
+/* ── Accent ──────────────────────────────────────────────────────────────── */
+
+.accent-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.accent-swatch {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform var(--transition), border-color var(--transition);
+
+  &:hover { transform: scale(1.08); }
+  &.selected { border-color: var(--text); transform: scale(1.08); }
+}
+
+.accent-label {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin-right: 8px;
+}
+
+/* ── Data ────────────────────────────────────────────────────────────────── */
+
+.data-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn-secondary {
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  border: 0.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--transition);
+  font-family: inherit;
+
+  &:hover { background: var(--surface-hover); }
+}
+
+.btn-danger {
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  border: 0.5px solid var(--priority-critical-bg);
+  background: var(--priority-critical-bg);
+  color: var(--priority-critical-text);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity var(--transition);
+
+  &:hover { opacity: 0.8; }
+}
