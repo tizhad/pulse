@@ -1,0 +1,13 @@
+<section class="arch-page">
+  <h2 class="page-title">Architecture</h2>
+
+  @if (error()) {
+    <p class="arch-error">{{ error() }}</p>
+  }
+
+  @if (content()) {
+    <div class="arch-content" [innerHTML]="content()"></div>
+  } @else if (!error()) {
+    <p class="arch-loading">Loading diagram…</p>
+  }
+</section>
