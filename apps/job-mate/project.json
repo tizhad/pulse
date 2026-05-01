@@ -1,31 +1,31 @@
 {
-  "name": "tracker",
+  "name": "job-mate",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "prefix": "app",
-  "sourceRoot": "apps/tracker/src",
+  "sourceRoot": "apps/job-mate/src",
   "tags": [],
   "targets": {
     "build": {
       "executor": "@angular/build:application",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/tracker",
-        "browser": "apps/tracker/src/main.ts",
-        "tsConfig": "apps/tracker/tsconfig.app.json",
+        "outputPath": "dist/apps/job-mate",
+        "browser": "apps/job-mate/src/main.ts",
+        "tsConfig": "apps/job-mate/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
           {
             "glob": "**/*",
-            "input": "apps/tracker/public"
+            "input": "apps/job-mate/public"
           },
           {
             "glob": "ARCHITECTURE.md",
-            "input": "apps/tracker",
+            "input": "apps/job-mate",
             "output": "/"
           }
         ],
-        "styles": ["apps/tracker/src/styles.scss"]
+        "styles": ["apps/job-mate/src/styles.scss"]
       },
       "configurations": {
         "production": {
@@ -56,10 +56,10 @@
       "executor": "@angular/build:dev-server",
       "configurations": {
         "production": {
-          "buildTarget": "tracker:build:production"
+          "buildTarget": "job-mate:build:production"
         },
         "development": {
-          "buildTarget": "tracker:build:development"
+          "buildTarget": "job-mate:build:development"
         }
       },
       "defaultConfiguration": "development"
@@ -75,8 +75,8 @@
       "continuous": true,
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "tracker:build",
-        "staticFilePath": "dist/apps/tracker/browser",
+        "buildTarget": "job-mate:build",
+        "staticFilePath": "dist/apps/job-mate/browser",
         "spa": true
       }
     }

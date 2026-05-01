@@ -1,23 +1,23 @@
 {
-  "name": "pulse",
+  "name": "wealth-mate",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "prefix": "app",
-  "sourceRoot": "apps/pulse/src",
+  "sourceRoot": "apps/wealth-mate/src",
   "tags": [],
   "targets": {
     "build": {
       "executor": "@angular/build:application",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/pulse",
-        "browser": "apps/pulse/src/main.ts",
-        "tsConfig": "apps/pulse/tsconfig.app.json",
+        "outputPath": "dist/apps/wealth-mate",
+        "browser": "apps/wealth-mate/src/main.ts",
+        "tsConfig": "apps/wealth-mate/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
           {
             "glob": "**/*",
-            "input": "apps/pulse/public"
+            "input": "apps/wealth-mate/public"
           },
           {
             "glob": "sql-wasm.wasm",
@@ -25,10 +25,10 @@
             "output": "assets"
           }
         ],
-        "styles": ["apps/pulse/src/styles.scss"],
-        "server": "apps/pulse/src/main.server.ts",
+        "styles": ["apps/wealth-mate/src/styles.scss"],
+        "server": "apps/wealth-mate/src/main.server.ts",
         "ssr": {
-          "entry": "apps/pulse/src/server.ts"
+          "entry": "apps/wealth-mate/src/server.ts"
         },
         "outputMode": "server"
       },
@@ -61,10 +61,10 @@
       "executor": "@angular/build:dev-server",
       "configurations": {
         "production": {
-          "buildTarget": "pulse:build:production"
+          "buildTarget": "wealth-mate:build:production"
         },
         "development": {
-          "buildTarget": "pulse:build:development"
+          "buildTarget": "wealth-mate:build:development"
         }
       },
       "defaultConfiguration": "development"
@@ -80,8 +80,8 @@
       "continuous": true,
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "pulse:build",
-        "staticFilePath": "dist/apps/pulse/browser",
+        "buildTarget": "wealth-mate:build",
+        "staticFilePath": "dist/apps/wealth-mate/browser",
         "spa": true
       }
     }
