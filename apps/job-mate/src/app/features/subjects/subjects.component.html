@@ -1,0 +1,88 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Subjects</h1>
+      <p class="page-subtitle">
+        Your study tree — sorted by interview potential.
+      </p>
+    </div>
+    <button class="btn-primary">
+      <svg
+        width="14"
+        height="14"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        viewBox="0 0 24 24"
+      >
+        <line x1="12" y1="5" x2="12" y2="19" />
+        <line x1="5" y1="12" x2="19" y2="12" />
+      </svg>
+      New subject
+    </button>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <div class="sort-group">
+      <span class="toolbar-label">Sort:</span>
+      @for (
+        opt of [
+          { key: 'potential', label: 'Potential' },
+          { key: 'name', label: 'Name' },
+          { key: 'qaCount', label: 'Q&A count' },
+        ];
+        track opt.key
+      ) {
+        <button
+          class="sort-btn"
+          [class.active]="sortKey() === opt.key"
+          (click)="setSort($any(opt.key))"
+        >
+          {{ opt.label }}
+        </button>
+      }
+    </div>
+    <div class="subject-count">
+      <strong>{{ state.totalSubjects() }}</strong> subjects ·
+      <!-- <strong>{{ state.totalQA() }}</strong> questions -->
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="card subjects-table">
+    <div class="table-header">
+      <span>SUBJECT</span>
+      <span>STATUS</span>
+      <span>PRIORITY</span>
+      <span>POTENTIAL</span>
+    </div>
+
+    @for (subject of state.subjects(); track subject.id) {
+      <a [routerLink]="['/subjects', subject.id]" class="table-row">
+        <div class="subject-cell">
+          <div class="subject-name">{{ subject.name }}</div>
+          <div class="subject-meta">
+            {{ subject.qaCount }} Q&amp;A
+            @for (company of subject.companies; track company) {
+              <span class="company-tag">{{ company }}</span>
+            }
+          </div>
+        </div>
+        <div>
+          <span class="badge" [class]="statusClass(subject.status)">
+            {{ statusLabel(subject.status) }}
+          </span>
+        </div>
+        <div>
+          <span class="badge" [class]="priorityClass(subject.priority)">
+            {{ subject.priority.toUpperCase() }}
+          </span>
+        </div>
+        <div class="potential-cell">
+          <div class="potential-score">{{ subject.potential }}</div>
+        </div>
+      </a>
+    }
+  </div>
+</div>
