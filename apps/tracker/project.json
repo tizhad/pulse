@@ -18,6 +18,11 @@
           {
             "glob": "**/*",
             "input": "apps/tracker/public"
+          },
+          {
+            "glob": "ARCHITECTURE.md",
+            "input": "apps/tracker",
+            "output": "/"
           }
         ],
         "styles": ["apps/tracker/src/styles.scss"]
