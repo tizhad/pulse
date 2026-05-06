@@ -103,7 +103,6 @@
       </div>
       @for (subject of state.todaysFocus(); track subject.id) {
         <a [routerLink]="['/subjects', subject.id]" class="focus-row">
-          <div class="focus-potential">{{ subject.potential }}</div>
           <div class="focus-info">
             <span class="focus-name">{{ subject.name }}</span>
             <span class="focus-meta"
