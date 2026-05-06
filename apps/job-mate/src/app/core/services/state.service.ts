@@ -156,6 +156,11 @@ export class StateService {
     );
   }
 
+  addApplication(app: Omit<Application, 'id'>): void {
+    const id = `app-${Date.now()}`;
+    this.applications.update((list) => [{ id, ...app }, ...list]);
+  }
+
   setCompanyStatus(id: string, status: CompanyStatus): void {
     this.companies.update((list) =>
       list.map((c) => (c.id === id ? { ...c, status } : c)),
