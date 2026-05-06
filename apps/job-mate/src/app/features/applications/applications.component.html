@@ -4,9 +4,17 @@
       <h1 class="page-title">Applications</h1>
       <p class="page-subtitle">Track every conversation, end-to-end.</p>
     </div>
-    <button class="btn-primary">
-      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+    <button class="btn-primary" (click)="openForm()">
+      <svg
+        width="14"
+        height="14"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        viewBox="0 0 24 24"
+      >
+        <line x1="12" y1="5" x2="12" y2="19" />
+        <line x1="5" y1="12" x2="19" y2="12" />
       </svg>
       New application
     </button>
@@ -35,14 +43,34 @@
               }
               <div class="app-meta-row">
                 <span class="app-meta">
-                  <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                  <svg
+                    width="10"
+                    height="10"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <rect x="3" y="4" width="18" height="18" rx="2" />
+                    <line x1="16" y1="2" x2="16" y2="6" />
+                    <line x1="8" y1="2" x2="8" y2="6" />
+                    <line x1="3" y1="10" x2="21" y2="10" />
                   </svg>
                   {{ app.date }}
                 </span>
                 <span class="app-meta">
-                  <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 14 8 14s8-8.75 8-14a8 8 0 0 0-8-8z"/>
+                  <svg
+                    width="10"
+                    height="10"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle cx="12" cy="10" r="3" />
+                    <path
+                      d="M12 2a8 8 0 0 0-8 8c0 5.25 8 14 8 14s8-8.75 8-14a8 8 0 0 0-8-8z"
+                    />
                   </svg>
                   {{ app.location }}
                 </span>
@@ -64,3 +92,155 @@
     }
   </div>
 </div>
+
+@if (showForm()) {
+  <div
+    class="drawer-backdrop"
+    tabindex="0"
+    (click)="closeForm()"
+    (keydown.enter)="closeForm()"
+    (keydown.space)="closeForm()"
+  ></div>
+  <div class="drawer" [formGroup]="form">
+    <div class="drawer-header">
+      <span class="drawer-title">New application</span>
+      <button class="drawer-close" (click)="closeForm()">
+        <svg
+          width="16"
+          height="16"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="drawer-body">
+      <div class="field">
+        <label class="field-label" for="app-title"
+          >Job title <span class="required">*</span></label
+        >
+        <input
+          id="app-title"
+          class="field-input"
+          type="text"
+          placeholder="e.g. Senior Frontend Engineer"
+          formControlName="title"
+        />
+        @if (
+          form.controls.title.touched &&
+          form.controls.title.hasError('required')
+        ) {
+          <span class="field-error">Required</span>
+        }
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="app-company"
+          >Company <span class="required">*</span></label
+        >
+        <input
+          id="app-company"
+          class="field-input"
+          type="text"
+          placeholder="e.g. Notion"
+          formControlName="company"
+        />
+        @if (
+          form.controls.company.touched &&
+          form.controls.company.hasError('required')
+        ) {
+          <span class="field-error">Required</span>
+        }
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label" for="app-location"
+            >Location <span class="required">*</span></label
+          >
+          <input
+            id="app-location"
+            class="field-input"
+            type="text"
+            placeholder="e.g. Remote"
+            formControlName="location"
+          />
+          @if (
+            form.controls.location.touched &&
+            form.controls.location.hasError('required')
+          ) {
+            <span class="field-error">Required</span>
+          }
+        </div>
+        <div class="field">
+          <label class="field-label" for="app-salary">Salary</label>
+          <input
+            id="app-salary"
+            class="field-input"
+            type="text"
+            placeholder="e.g. $180k"
+            formControlName="salary"
+          />
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label" for="app-status">Status</label>
+          <select id="app-status" class="field-input" formControlName="status">
+            @for (opt of statusOptions; track opt.value) {
+              <option [value]="opt.value">{{ opt.label }}</option>
+            }
+          </select>
+        </div>
+        <div class="field">
+          <label class="field-label" for="app-date">Date</label>
+          <input
+            id="app-date"
+            class="field-input"
+            type="text"
+            placeholder="e.g. May 6"
+            formControlName="date"
+          />
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="app-tags">Tags</label>
+        <div class="tag-input-wrap">
+          @for (tag of tags(); track tag) {
+            <span class="tag-chip">
+              {{ tag }}
+              <button type="button" class="tag-remove" (click)="removeTag(tag)">
+                ×
+              </button>
+            </span>
+          }
+          <input
+            id="app-tags"
+            class="tag-input"
+            type="text"
+            placeholder="Add tag, press Enter"
+            [formControl]="tagInput"
+            (keydown)="onTagKeydown($event)"
+            (blur)="addTag()"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="drawer-footer">
+      <button type="button" class="btn-ghost" (click)="closeForm()">
+        Cancel
+      </button>
+      <button type="button" class="btn-primary" (click)="submit()">
+        Add application
+      </button>
+    </div>
+  </div>
+}

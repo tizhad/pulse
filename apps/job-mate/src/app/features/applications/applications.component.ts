@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { StateService } from '../../core/services/state.service';
 import { Application, AppStatus } from '../../core/models/jobmate.models';
 
@@ -7,6 +8,7 @@ import { Application, AppStatus } from '../../core/models/jobmate.models';
   templateUrl: './applications.component.html',
   styleUrl: './applications.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [ReactiveFormsModule],
 })
 export class ApplicationsComponent {
   readonly state = inject(StateService);
@@ -20,11 +22,79 @@ export class ApplicationsComponent {
     { key: 'rejected', label: 'Rejected' },
   ];
 
+  readonly statusOptions: { value: AppStatus; label: string }[] = [
+    { value: 'saved', label: 'Saved' },
+    { value: 'applied', label: 'Applied' },
+    { value: 'phone-screen', label: 'Phone screen' },
+    { value: 'interviewing', label: 'Interviewing' },
+    { value: 'offer', label: 'Offer' },
+    { value: 'rejected', label: 'Rejected' },
+  ];
+
+  readonly showForm = signal(false);
+  readonly tags = signal<string[]>([]);
+
+  readonly tagInput = new FormControl('', { nonNullable: true });
+
+  readonly form = new FormGroup({
+    title: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    company: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    location: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    status: new FormControl<AppStatus>('saved', { nonNullable: true }),
+    date: new FormControl(this.todayLabel(), { nonNullable: true }),
+    salary: new FormControl('', { nonNullable: true }),
+  });
+
+  openForm(): void {
+    this.form.reset();
+    this.tags.set([]);
+    this.tagInput.reset();
+    this.showForm.set(true);
+  }
+
+  closeForm(): void {
+    this.showForm.set(false);
+  }
+
+  addTag(): void {
+    const tag = this.tagInput.value.trim();
+    if (tag && !this.tags().includes(tag)) {
+      this.tags.update((t) => [...t, tag]);
+    }
+    this.tagInput.reset();
+  }
+
+  removeTag(tag: string): void {
+    this.tags.update((t) => t.filter((x) => x !== tag));
+  }
+
+  onTagKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Enter' || event.key === ',') {
+      event.preventDefault();
+      this.addTag();
+    }
+  }
+
+  submit(): void {
+    this.form.markAllAsTouched();
+    if (this.form.invalid) return;
+
+    const { title, company, location, status, date, salary } = this.form.getRawValue();
+    this.state.addApplication({
+      title,
+      company,
+      location,
+      status,
+      date,
+      salary: salary.trim() || undefined,
+      tags: this.tags().length ? this.tags() : undefined,
+    });
+    this.closeForm();
+  }
+
   colApps(key: string): Application[] {
     return (
-      (this.state.applicationsByStatus() as Record<string, Application[]>)[
-        key
-      ] ?? []
+      (this.state.applicationsByStatus() as Record<string, Application[]>)[key] ?? []
     );
   }
 
@@ -54,5 +124,9 @@ export class ApplicationsComponent {
       rejected: 'pipe-rejected',
     };
     return map[status];
+  }
+
+  private todayLabel(): string {
+    return new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   }
 }
