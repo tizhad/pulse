@@ -1,0 +1,329 @@
+@if (subject(); as sub) {
+  <div class="page">
+    <!-- Back -->
+    <a routerLink="/subjects" class="back-link">
+      <svg
+        width="14"
+        height="14"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+      >
+        <polyline points="15 18 9 12 15 6" />
+      </svg>
+      Subjects
+    </a>
+
+    <!-- Header -->
+    <div class="subject-header">
+      <div class="header-left">
+        <h1 class="subject-title">{{ sub.name }}</h1>
+        <div class="header-badges">
+          <span class="badge" [class]="statusClass(sub.status)">{{
+            statusLabel(sub.status)
+          }}</span>
+          <span class="badge" [class]="priorityClass(sub.priority)">{{
+            sub.priority.toUpperCase()
+          }}</span>
+          @for (company of sub.companies; track company) {
+            <span class="company-chip">{{ company }}</span>
+          }
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="potential-ring">
+          <span class="potential-num">{{ sub.potential }}</span>
+          <span class="potential-label">potential</span>
+        </div>
+        <button class="btn-edit" (click)="openEdit()">Edit</button>
+      </div>
+    </div>
+
+    <!-- Edit panel -->
+    @if (editMode()) {
+      <div class="edit-panel">
+        <div class="edit-panel-header">
+          <span class="edit-panel-title">Edit subject</span>
+          <button class="btn-ghost" (click)="editMode.set(false)">
+            Cancel
+          </button>
+        </div>
+
+        <div class="edit-fields">
+          <div class="field-group">
+            <span class="field-label">Status</span>
+            <div class="radio-group">
+              @for (opt of ['to-do', 'in-progress', 'done']; track opt) {
+                <label class="radio-label">
+                  <input
+                    type="radio"
+                    name="edit-status"
+                    [value]="opt"
+                    [checked]="editStatus() === opt"
+                    (change)="editStatus.set($any(opt))"
+                  />
+                  {{ statusLabel(opt) }}
+                </label>
+              }
+            </div>
+          </div>
+
+          <div class="field-group">
+            <span class="field-label">Priority</span>
+            <div class="radio-group">
+              @for (opt of ['critical', 'medium', 'low']; track opt) {
+                <label class="radio-label">
+                  <input
+                    type="radio"
+                    name="edit-priority"
+                    [value]="opt"
+                    [checked]="editPriority() === opt"
+                    (change)="editPriority.set($any(opt))"
+                  />
+                  {{ opt }}
+                </label>
+              }
+            </div>
+          </div>
+
+          <div class="field-group">
+            <span class="field-label">Potential (1–10)</span>
+            <input
+              class="field-input short"
+              type="number"
+              min="1"
+              max="10"
+              [value]="editPotential()"
+              (input)="editPotential.set(+$any($event.target).value)"
+            />
+          </div>
+
+          <div class="field-group">
+            <span class="field-label">Companies</span>
+            <div class="chip-row">
+              @for (c of editCompanies(); track c) {
+                <span class="chip">
+                  {{ c }}
+                  <button class="chip-remove" (click)="removeCompany(c)">
+                    ×
+                  </button>
+                </span>
+              }
+            </div>
+            <div class="company-input-row">
+              <input
+                class="field-input"
+                placeholder="Add company…"
+                [value]="companyInput()"
+                (input)="companyInput.set($any($event.target).value)"
+                (keydown.enter)="addCompany()"
+              />
+              <button class="btn-add" (click)="addCompany()">Add</button>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-primary" (click)="saveEdit()">Save changes</button>
+      </div>
+    }
+
+    <!-- Tab bar -->
+    <div class="tab-bar">
+      @for (tab of tabs; track tab.key) {
+        <button
+          class="tab-btn"
+          [class.active]="activeTab() === tab.key"
+          (click)="setTab(tab.key)"
+        >
+          {{ tab.label }}
+          <span class="tab-count">{{
+            tab.key === 'notes'
+              ? (sub.content?.length ?? 0)
+              : (sub.qa?.length ?? 0)
+          }}</span>
+        </button>
+      }
+    </div>
+
+    <!-- Notes tab -->
+    @if (activeTab() === 'notes') {
+      <div class="tab-content" style="background: green">
+        @if (sub.content?.length) {
+          <div class="notes-list" style="background: red">
+            @for (note of sub.content; track $index; let i = $index) {
+              <div class="note-card">
+                <div class="note-card-top">
+                  @if (note.title) {
+                    <div class="note-title">{{ note.title }}</div>
+                  }
+                  <button
+                    class="btn-remove"
+                    (click)="removeNote(i)"
+                    title="Remove note"
+                  >
+                    ×
+                  </button>
+                </div>
+                @if (note.description) {
+                  <p class="note-desc">{{ note.description }}</p>
+                }
+                @if (note.code) {
+                  <pre class="code-block"><code>{{ note.code }}</code></pre>
+                }
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="empty-state">
+            <p class="empty-text">No notes yet.</p>
+            <p class="empty-sub">Add your first note below.</p>
+          </div>
+        }
+
+        @if (showNoteForm()) {
+          <div class="form-card">
+            <input
+              class="field-input"
+              placeholder="Title (optional)"
+              [value]="noteTitle()"
+              (input)="noteTitle.set($any($event.target).value)"
+            />
+            <textarea
+              class="field-textarea"
+              placeholder="Description…"
+              rows="4"
+              [value]="noteDesc()"
+              (input)="noteDesc.set($any($event.target).value)"
+            ></textarea>
+            <textarea
+              class="field-textarea mono"
+              placeholder="Code snippet (optional)"
+              rows="3"
+              [value]="noteCode()"
+              (input)="noteCode.set($any($event.target).value)"
+            ></textarea>
+            <div class="form-actions">
+              <button class="btn-ghost" (click)="showNoteForm.set(false)">
+                Cancel
+              </button>
+              <button class="btn-primary" (click)="submitNote()">
+                Add note
+              </button>
+            </div>
+          </div>
+        } @else {
+          <button class="btn-add-item" (click)="showNoteForm.set(true)">
+            + Add note
+          </button>
+        }
+      </div>
+    }
+
+    <!-- Q&A tab -->
+    @if (activeTab() === 'qa') {
+      <div class="tab-content">
+        @if (sub.qa?.length) {
+          <div class="qa-list">
+            @for (item of sub.qa; track $index; let i = $index) {
+              <div class="qa-card" [class.open]="openQAIndex() === i">
+                <button class="qa-header" (click)="toggleQA(i)">
+                  <div class="qa-meta">
+                    @if (item.difficulty) {
+                      <span
+                        class="badge"
+                        [class]="difficultyClass(item.difficulty)"
+                        >{{ item.difficulty }}</span
+                      >
+                    }
+                    <button
+                      class="btn-remove-inline"
+                      (click)="removeQA(i); $event.stopPropagation()"
+                      title="Remove"
+                    >
+                      ×
+                    </button>
+                  </div>
+                  <div class="qa-question">{{ item.question }}</div>
+                  <svg
+                    class="chevron"
+                    width="14"
+                    height="14"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </button>
+                @if (openQAIndex() === i) {
+                  <div class="qa-answer">
+                    @for (para of answerParagraphs(item.answer); track $index) {
+                      <p>{{ para }}</p>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="empty-state">
+            <p class="empty-text">No Q&A yet.</p>
+            <p class="empty-sub">Add interview questions below.</p>
+          </div>
+        }
+
+        @if (showQAForm()) {
+          <div class="form-card">
+            <textarea
+              class="field-textarea"
+              placeholder="Question…"
+              rows="2"
+              [value]="qaQuestion()"
+              (input)="qaQuestion.set($any($event.target).value)"
+            ></textarea>
+            <textarea
+              class="field-textarea"
+              placeholder="Answer…"
+              rows="5"
+              [value]="qaAnswer()"
+              (input)="qaAnswer.set($any($event.target).value)"
+            ></textarea>
+            <div class="field-group">
+              <span class="field-label">Difficulty</span>
+              <div class="radio-group">
+                @for (opt of ['easy', 'medium', 'hard']; track opt) {
+                  <label class="radio-label">
+                    <input
+                      type="radio"
+                      name="qa-difficulty"
+                      [value]="opt"
+                      [checked]="qaDifficulty() === opt"
+                      (change)="qaDifficulty.set($any(opt))"
+                    />
+                    {{ opt }}
+                  </label>
+                }
+              </div>
+            </div>
+            <div class="form-actions">
+              <button class="btn-ghost" (click)="showQAForm.set(false)">
+                Cancel
+              </button>
+              <button class="btn-primary" (click)="submitQA()">Add Q&A</button>
+            </div>
+          </div>
+        } @else {
+          <button class="btn-add-item" (click)="showQAForm.set(true)">
+            + Add Q&A
+          </button>
+        }
+      </div>
+    }
+  </div>
+} @else {
+  <div class="page not-found">
+    <p>Subject not found. <a routerLink="/subjects">Back to subjects</a></p>
+  </div>
+}
