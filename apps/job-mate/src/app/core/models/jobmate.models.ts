@@ -35,7 +35,7 @@ export interface Subject {
   companies?: string[];
   status: SubjectStatus;
   priority: SubjectPriority;
-  potential?: number;
+  notes?: string;
   content?: Content[];
   qa?: QA[];
 }
