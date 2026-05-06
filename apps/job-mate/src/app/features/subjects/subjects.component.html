@@ -3,10 +3,10 @@
     <div>
       <h1 class="page-title">Subjects</h1>
       <p class="page-subtitle">
-        Your study tree — sorted by interview potential.
+        Your study tree — sorted by interview priority.
       </p>
     </div>
-    <button class="btn-primary">
+    <button class="btn-primary" (click)="openForm()">
       <svg
         width="14"
         height="14"
@@ -28,7 +28,6 @@
       <span class="toolbar-label">Sort:</span>
       @for (
         opt of [
-          { key: 'potential', label: 'Potential' },
           { key: 'name', label: 'Name' },
           { key: 'qa', label: 'Q&A count' },
         ];
@@ -44,8 +43,7 @@
       }
     </div>
     <div class="subject-count">
-      <strong>{{ state.totalSubjects() }}</strong> subjects ·
-      <!-- <strong>{{ state.totalQA() }}</strong> questions -->
+      <strong>{{ state.totalSubjects() }}</strong> subjects
     </div>
   </div>
 
@@ -55,7 +53,6 @@
       <span>SUBJECT</span>
       <span>STATUS</span>
       <span>PRIORITY</span>
-      <span>POTENTIAL</span>
     </div>
 
     @for (subject of state.subjects(); track subject.id) {
@@ -79,10 +76,123 @@
             {{ subject.priority.toUpperCase() }}
           </span>
         </div>
-        <div class="potential-cell">
-          <div class="potential-score">{{ subject.potential }}</div>
-        </div>
       </a>
     }
   </div>
 </div>
+
+@if (showForm()) {
+  <div
+    class="drawer-backdrop"
+    tabindex="0"
+    (click)="closeForm()"
+    (keydown.enter)="closeForm()"
+    (keydown.space)="closeForm()"
+  ></div>
+  <div class="drawer" [formGroup]="form">
+    <div class="drawer-header">
+      <span class="drawer-title">New subject</span>
+      <button class="drawer-close" (click)="closeForm()" aria-label="Close">
+        <svg
+          width="16"
+          height="16"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="drawer-body">
+      <!-- Name -->
+      <div class="field">
+        <label class="field-label" for="sub-name">
+          Name <span class="required">*</span>
+        </label>
+        <input
+          id="sub-name"
+          class="field-input"
+          type="text"
+          placeholder="e.g. Dynamic Programming"
+          formControlName="name"
+        />
+        @if (
+          form.controls.name.touched && form.controls.name.hasError('required')
+        ) {
+          <span class="field-error">Required</span>
+        }
+      </div>
+
+      <!-- Priority + Status -->
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label" for="sub-priority">Priority</label>
+          <select
+            id="sub-priority"
+            class="field-input"
+            formControlName="priority"
+          >
+            @for (opt of priorityOptions; track opt.value) {
+              <option [value]="opt.value">{{ opt.label }}</option>
+            }
+          </select>
+        </div>
+        <div class="field">
+          <label class="field-label" for="sub-status">Status</label>
+          <select id="sub-status" class="field-input" formControlName="status">
+            @for (opt of statusOptions; track opt.value) {
+              <option [value]="opt.value">{{ opt.label }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <!-- Notes (rich editor) -->
+      <div class="field">
+        <label class="field-label">Notes</label>
+        <app-rich-editor [(value)]="notesHtml" />
+      </div>
+
+      <!-- Companies -->
+      <div class="field">
+        <label class="field-label" for="sub-companies">Companies</label>
+        <div class="tag-input-wrap">
+          @for (co of companies(); track co) {
+            <span class="tag-chip">
+              {{ co }}
+              <button
+                type="button"
+                class="tag-remove"
+                (click)="removeCompany(co)"
+              >
+                ×
+              </button>
+            </span>
+          }
+          <input
+            id="sub-companies"
+            class="tag-input"
+            type="text"
+            placeholder="Add company, press Enter"
+            [formControl]="companyInput"
+            (keydown)="onCompanyKeydown($event)"
+            (blur)="addCompany()"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="drawer-footer">
+      <button type="button" class="btn-ghost" (click)="closeForm()">
+        Cancel
+      </button>
+      <button type="button" class="btn-primary" (click)="submit()">
+        Add subject
+      </button>
+    </div>
+  </div>
+}
