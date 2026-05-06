@@ -1,0 +1,161 @@
+<div class="landing">
+
+  <!-- ── Nav ─────────────────────────────────────────────────────────────── -->
+  <nav class="ln-nav">
+    <div class="ln-brand">
+      <div class="ln-logo-mark">J</div>
+      <span class="ln-logo-name">JobMate</span>
+    </div>
+    <div class="ln-nav-links">
+      <a href="#features">Features</a>
+      <a href="#how-it-works">How it works</a>
+    </div>
+    <a routerLink="/dashboard" class="ln-nav-cta">Get started →</a>
+  </nav>
+
+  <!-- ── Hero ─────────────────────────────────────────────────────────────── -->
+  <section class="ln-hero">
+    <div class="ln-hero-text">
+      <div class="ln-hero-eyebrow">Interview prep, reimagined</div>
+      <h1 class="ln-hero-title">
+        Feel your <span class="ln-gradient">momentum</span><br>
+        build daily. Land<br>
+        <span class="ln-gradient">the offer.</span>
+      </h1>
+      <p class="ln-hero-sub">
+        JobMate is the prep tool for serious candidates. Track every subject,
+        company and application — and know your streak has been building.
+      </p>
+      <div class="ln-hero-actions">
+        <a routerLink="/dashboard" class="ln-btn-primary">Start for free →</a>
+        <a href="#how-it-works" class="ln-btn-ghost">See how it works</a>
+      </div>
+      <div class="ln-trusted">
+        <span class="ln-trusted-label">LOVED BY CANDIDATES LANDING AT</span>
+        <div class="ln-trusted-chips">
+          @for (co of trustedBy; track co) {
+            <span class="ln-chip">{{ co }}</span>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="ln-hero-preview">
+      <div class="ln-preview-streak">🔥 7 day streak</div>
+      <div class="ln-preview-card">
+        <div class="ln-preview-top">
+          <span class="ln-preview-title">Weekly overview</span>
+          <span class="ln-preview-week">This week</span>
+        </div>
+        <svg class="ln-preview-chart" viewBox="0 0 260 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="cg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#6C5CE7" stop-opacity="0.18"/>
+              <stop offset="100%" stop-color="#6C5CE7" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path d="M0,60 C20,55 30,48 50,42 S80,30 100,22 S130,18 155,12 S200,8 220,6 L260,4"
+                stroke="#6C5CE7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M0,60 C20,55 30,48 50,42 S80,30 100,22 S130,18 155,12 S200,8 220,6 L260,4 L260,72 L0,72 Z"
+                fill="url(#cg)"/>
+        </svg>
+        <div class="ln-preview-stats">
+          <div class="ln-preview-stat">
+            <strong>28</strong>
+            <span>Subjects</span>
+          </div>
+          <div class="ln-preview-stat">
+            <strong>14</strong>
+            <span>Q&amp;As done</span>
+          </div>
+          <div class="ln-preview-stat">
+            <strong>12</strong>
+            <span>Companies</span>
+          </div>
+          <div class="ln-preview-stat">
+            <strong>5</strong>
+            <span>Applications</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Features ─────────────────────────────────────────────────────────── -->
+  <section class="ln-features" id="features">
+    <div class="ln-section-inner">
+      <h2 class="ln-section-title">
+        Built for the way candidates <em>actually</em> prep.
+      </h2>
+      <p class="ln-section-sub">
+        Everything you need in one place. Nothing you don't.
+      </p>
+      <div class="ln-features-grid">
+        @for (f of features; track f.title) {
+          <div class="ln-feature-card">
+            <span class="ln-feature-tag" [class]="f.tagClass">{{ f.tag }}</span>
+            <h3 class="ln-feature-title">{{ f.title }}</h3>
+            <p class="ln-feature-desc">{{ f.desc }}</p>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ── How it works ─────────────────────────────────────────────────────── -->
+  <section class="ln-steps" id="how-it-works">
+    <div class="ln-section-inner">
+      <div class="ln-steps-grid">
+        @for (step of steps; track step.num) {
+          <div class="ln-step">
+            <span class="ln-step-num">{{ step.num }}</span>
+            <h3 class="ln-step-title">{{ step.title }}</h3>
+            <p class="ln-step-desc">{{ step.desc }}</p>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Testimonial + CTA ─────────────────────────────────────────────────── -->
+  <section class="ln-bottom">
+    <div class="ln-section-inner ln-bottom-inner">
+      <div class="ln-testimonial">
+        <div class="ln-stars">★★★★★</div>
+        <blockquote class="ln-quote">
+          "I went from a chaotic Notion to a single dashboard that actually
+          told me what to study. Three offers in five weeks."
+        </blockquote>
+        <div class="ln-testifier">
+          <div class="ln-testifier-avatar">M</div>
+          <div class="ln-testifier-info">
+            <strong>Maeil</strong>
+            <span>Software Engineer · Google</span>
+          </div>
+        </div>
+      </div>
+      <div class="ln-final-cta">
+        <h2 class="ln-final-title">Start your prep today.</h2>
+        <p class="ln-final-sub">
+          Sign in to build your personalised interview study plan.
+        </p>
+        <a routerLink="/dashboard" class="ln-btn-primary">Get started →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ─────────────────────────────────────────────────────────────── -->
+  <footer class="ln-footer">
+    <div class="ln-footer-inner">
+      <div class="ln-footer-brand">
+        <div class="ln-logo-mark ln-logo-mark--sm">J</div>
+        <span>JobMate</span>
+      </div>
+      <div class="ln-footer-links">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+      </div>
+    </div>
+  </footer>
+
+</div>
