@@ -1,0 +1,87 @@
+import { Injectable, inject, signal, effect } from '@angular/core';
+import { SupabaseService } from '../services/supabase.service';
+import { AuthService } from '../services/auth.service';
+import { fromApplicationRow } from '../models/mappers';
+import type { Application, AppStatus } from '../models/jobmate.models';
+
+@Injectable({ providedIn: 'root' })
+export class ApplicationStore {
+  private readonly supabase = inject(SupabaseService);
+  private readonly auth = inject(AuthService);
+
+  private readonly _applications = signal<Application[]>([]);
+  private readonly _loaded = signal(false);
+
+  readonly applications = this._applications.asReadonly();
+
+  constructor() {
+    effect(() => {
+      if (this.auth.user()) {
+        this.load();
+      } else {
+        this._applications.set([]);
+        this._loaded.set(false);
+      }
+    });
+  }
+
+  async load(): Promise<void> {
+    if (this._loaded()) return;
+    const userId = this.auth.user()?.id;
+    if (!userId) return;
+
+    const { data, error } = await this.supabase.client.from('applications').select('*').eq('user_id', userId);
+    if (!error && data) {
+      this._applications.set(data.map(fromApplicationRow));
+      this._loaded.set(true);
+    }
+  }
+
+  async addApplication(
+    payload: Pick<Application, 'title' | 'company' | 'date' | 'location' | 'status' | 'salary' | 'tags'>,
+  ): Promise<Application | null> {
+    const userId = this.auth.user()?.id;
+    if (!userId) return null;
+
+    const { data, error } = await this.supabase.client.from('applications').insert({
+      user_id: userId,
+      title: payload.title,
+      company: payload.company,
+      date: payload.date,
+      location: payload.location ?? null,
+      status: payload.status,
+      salary: payload.salary ?? null,
+      tags: payload.tags,
+    }).select().single();
+
+    if (error || !data) return null;
+    const app = fromApplicationRow(data);
+    this._applications.update(list => [app, ...list]);
+    return app;
+  }
+
+  async updateApplication(
+    id: string,
+    patch: Partial<Pick<Application, 'title' | 'company' | 'date' | 'location' | 'status' | 'salary' | 'tags'>>,
+  ): Promise<void> {
+    const prev = this._applications();
+    this._applications.update(list => list.map(a => a.id === id ? { ...a, ...patch } : a));
+    const { error } = await this.supabase.client.from('applications').update(patch).eq('id', id);
+    if (error) this._applications.set(prev);
+  }
+
+  async updateStatus(id: string, status: AppStatus): Promise<void> {
+    return this.updateApplication(id, { status });
+  }
+
+  async deleteApplication(id: string): Promise<void> {
+    const prev = this._applications();
+    this._applications.update(list => list.filter(a => a.id !== id));
+    const { error } = await this.supabase.client.from('applications').delete().eq('id', id);
+    if (error) this._applications.set(prev);
+  }
+
+  invalidate(): void {
+    this._loaded.set(false);
+  }
+}
