@@ -1,0 +1,60 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h1 class="auth-title">JobMate</h1>
+      <p class="auth-subtitle">{{ mode() === 'signin' ? 'Welcome back' : 'Create your account' }}</p>
+    </div>
+
+    @if (!supabase.isConfigured) {
+      <div class="setup-notice">
+        <strong>Supabase not configured</strong>
+        <p>Open <code>apps/job-mate/src/environments/environment.ts</code> and replace the placeholder values with your Supabase project URL and anon key.</p>
+      </div>
+    }
+
+    <form class="auth-form" (submit)="$event.preventDefault(); submit()" [class.form-disabled]="!supabase.isConfigured">
+      <div class="field">
+        <label class="field-label" for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          class="field-input"
+          [value]="email()"
+          (input)="email.set($any($event.target).value)"
+          autocomplete="email"
+          required
+        />
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          class="field-input"
+          [value]="password()"
+          (input)="password.set($any($event.target).value)"
+          autocomplete="current-password"
+          required
+        />
+      </div>
+
+      @if (errorMessage()) {
+        <p class="auth-message" [class.is-error]="!errorMessage()?.startsWith('Check')">
+          {{ errorMessage() }}
+        </p>
+      }
+
+      <button type="submit" class="btn-primary" [disabled]="loading()">
+        {{ loading() ? 'Please wait…' : (mode() === 'signin' ? 'Sign in' : 'Create account') }}
+      </button>
+    </form>
+
+    <p class="auth-toggle">
+      {{ mode() === 'signin' ? "Don't have an account?" : 'Already have an account?' }}
+      <button type="button" class="toggle-btn" (click)="toggleMode()">
+        {{ mode() === 'signin' ? 'Sign up' : 'Sign in' }}
+      </button>
+    </p>
+  </div>
+</div>

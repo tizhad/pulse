@@ -16,8 +16,8 @@ export class App {
   readonly showShell = toSignal(
     this.router.events.pipe(
       filter((e): e is NavigationEnd => e instanceof NavigationEnd),
-      map(e => e.urlAfterRedirects !== '/'),
+      map(e => e.urlAfterRedirects !== '/' && e.urlAfterRedirects !== '/auth'),
     ),
-    { initialValue: this.router.url !== '/' },
+    { initialValue: this.router.url !== '/' && this.router.url !== '/auth' },
   );
 }
