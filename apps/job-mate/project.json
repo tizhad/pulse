@@ -29,6 +29,12 @@
       },
       "configurations": {
         "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/job-mate/src/environments/environment.ts",
+              "with": "apps/job-mate/src/environments/environment.prod.ts"
+            }
+          ],
           "budgets": [
             {
               "type": "initial",
