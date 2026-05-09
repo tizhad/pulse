@@ -32,6 +32,18 @@
   --status-todo-bg:       #F4F4F7;
   --status-todo-text:     #6B6B8A;
 
+  /* subject statuses */
+  --status-not-started-bg:   #F2F2F6;
+  --status-not-started-text: #6B6B8A;
+  --status-in-progress-bg:   #E8F0FE;
+  --status-in-progress-text: #1A56C4;
+  --status-needs-review-bg:  #FEF3C7;
+  --status-needs-review-text:#92530A;
+  --status-confident-bg:     #D1FAF0;
+  --status-confident-text:   #0B7B5B;
+  --status-mastered-bg:      #DCFCE7;
+  --status-mastered-text:    #166534;
+
   /* priority */
   --priority-critical-bg:   #FFEEEE;
   --priority-critical-text: #C93B3B;
@@ -149,9 +161,15 @@ input, textarea {
   white-space: nowrap;
   letter-spacing: 0.02em;
 
-  &.status-progress  { background: var(--status-progress-bg);  color: var(--status-progress-text); }
-  &.status-done      { background: var(--status-done-bg);      color: var(--status-done-text); }
-  &.status-todo      { background: var(--status-todo-bg);      color: var(--status-todo-text); }
+  &.status-progress      { background: var(--status-progress-bg);      color: var(--status-progress-text); }
+  &.status-done          { background: var(--status-done-bg);          color: var(--status-done-text); }
+  &.status-todo          { background: var(--status-todo-bg);          color: var(--status-todo-text); }
+
+  &.status-not-started   { background: var(--status-not-started-bg);   color: var(--status-not-started-text); }
+  &.status-in-progress   { background: var(--status-in-progress-bg);   color: var(--status-in-progress-text); }
+  &.status-needs-review  { background: var(--status-needs-review-bg);  color: var(--status-needs-review-text); }
+  &.status-confident     { background: var(--status-confident-bg);     color: var(--status-confident-text); }
+  &.status-mastered      { background: var(--status-mastered-bg);      color: var(--status-mastered-text); }
 
   &.priority-critical { background: var(--priority-critical-bg); color: var(--priority-critical-text); }
   &.priority-high     { background: var(--priority-high-bg);     color: var(--priority-high-text); }

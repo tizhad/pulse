@@ -140,6 +140,90 @@
   color: var(--text-secondary);
 }
 
+/* ── Inline status dropdown ──────────────────────────────────────────────── */
+
+.status-cell {
+  position: relative;
+}
+
+.status-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+
+  svg { opacity: 0.7; flex-shrink: 0; }
+
+  &:hover {
+    filter: brightness(0.95);
+  }
+}
+
+.status-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+}
+
+.status-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 11;
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10);
+  min-width: 160px;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.status-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  padding: 7px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: background var(--transition), color var(--transition);
+
+  &:hover {
+    background: var(--surface-hover);
+    color: var(--text);
+  }
+
+  &.active {
+    color: var(--text);
+    font-weight: 600;
+    background: var(--surface-hover);
+  }
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+
+  &.dot-not_started  { background: var(--status-not-started-text); }
+  &.dot-in_progress  { background: var(--status-in-progress-text); }
+  &.dot-needs_review { background: var(--status-needs-review-text); }
+  &.dot-confident    { background: var(--status-confident-text); }
+  &.dot-mastered     { background: var(--status-mastered-text); }
+}
+
 /* ── Drawer ──────────────────────────────────────────────────────────────── */
 
 .drawer-backdrop {

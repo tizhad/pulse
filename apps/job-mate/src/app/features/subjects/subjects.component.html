@@ -71,10 +71,32 @@
         <div>
           <span class="badge category-badge">{{ categoryLabel(subject.category) }}</span>
         </div>
-        <div>
-          <span class="badge" [class]="statusClass(subject.status)">
+        <div class="status-cell">
+          <button
+            class="badge status-trigger"
+            [class]="statusClass(subject.status)"
+            (click)="toggleStatusMenu(subject.id, $event)"
+          >
             {{ statusLabel(subject.status) }}
-          </span>
+            <svg width="9" height="9" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+          @if (openStatusId() === subject.id) {
+            <div class="status-backdrop" tabindex="-1" (click)="closeStatusMenu()" (keydown.escape)="closeStatusMenu()"></div>
+            <div class="status-menu">
+              @for (opt of statusOptions; track opt.value) {
+                <button
+                  class="status-option"
+                  [class.active]="subject.status === opt.value"
+                  (click)="setStatus(subject.id, opt.value, $event)"
+                >
+                  <span class="status-dot" [class]="'dot-' + opt.value"></span>
+                  {{ opt.label }}
+                </button>
+              }
+            </div>
+          }
         </div>
         <div>
           <span class="badge" [class]="priorityClass(subject.priority)">

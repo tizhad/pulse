@@ -100,8 +100,27 @@ export class SubjectsComponent {
     { value: 'mastered', label: 'Mastered' },
   ];
 
+  readonly openStatusId = signal<string | null>(null);
+
   setSort(key: SortKey): void {
     this.sortKey.set(key);
+  }
+
+  toggleStatusMenu(id: string, event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.openStatusId.update(cur => cur === id ? null : id);
+  }
+
+  async setStatus(id: string, status: SubjectStatus, event: Event): Promise<void> {
+    event.preventDefault();
+    event.stopPropagation();
+    await this.store.updateSubject(id, { status });
+    this.openStatusId.set(null);
+  }
+
+  closeStatusMenu(): void {
+    this.openStatusId.set(null);
   }
 
   openForm(): void {
