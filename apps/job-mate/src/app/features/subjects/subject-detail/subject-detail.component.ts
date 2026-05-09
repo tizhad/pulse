@@ -52,14 +52,25 @@ export class SubjectDetailComponent {
 
   readonly noteHtml = signal('');
   readonly noteSaving = signal(false);
+  readonly noteEditMode = signal(false);
 
   constructor() {
-    // Initialise the editor with the saved note content after the first render.
-    // We do this once — the editor owns the HTML after that and syncs back via model().
     afterNextRender(() => {
       const notes = this.subject()?.notes ?? [];
       if (notes.length > 0) this.noteHtml.set(notes[0].content);
     });
+  }
+
+  openNoteEdit(): void {
+    const notes = this.subject()?.notes ?? [];
+    if (notes.length > 0) this.noteHtml.set(notes[0].content);
+    this.noteEditMode.set(true);
+  }
+
+  cancelNoteEdit(): void {
+    const notes = this.subject()?.notes ?? [];
+    this.noteHtml.set(notes.length > 0 ? notes[0].content : '');
+    this.noteEditMode.set(false);
   }
 
   async saveNote(): Promise<void> {
