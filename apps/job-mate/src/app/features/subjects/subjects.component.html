@@ -52,6 +52,7 @@
   <div class="card subjects-table">
     <div class="table-header">
       <span>SUBJECT</span>
+      <span>CATEGORY</span>
       <span>STATUS</span>
       <span>PRIORITY</span>
     </div>
@@ -66,6 +67,9 @@
               <span class="company-tag">{{ ct.name }}</span>
             }
           </div>
+        </div>
+        <div>
+          <span class="badge category-badge">{{ categoryLabel(subject.category) }}</span>
         </div>
         <div>
           <span class="badge" [class]="statusClass(subject.status)">

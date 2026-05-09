@@ -7,7 +7,7 @@ import {
   input,
   signal,
 } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { StudyStore } from '../../../core/stores/study.store';
 import type { SubjectPriority, SubjectStatus } from '../../../core/models/jobmate.models';
 import { RichEditorComponent } from '../../../shared/components/rich-editor/rich-editor.component';
@@ -24,6 +24,7 @@ type SubjectTab = 'notes' | 'qa';
 export class SubjectDetailComponent {
   readonly id = input.required<string>();
   readonly store = inject(StudyStore);
+  private readonly router = inject(Router);
 
   readonly subject = computed(() => this.store.getById(this.id()));
 
@@ -75,6 +76,7 @@ export class SubjectDetailComponent {
       await this.store.addNote(sub.id, html);
     }
     this.noteSaving.set(false);
+    this.router.navigate(['/subjects']);
   }
 
   /* ── Edit mode ───────────────────────────────────────────────────────────── */

@@ -157,6 +157,8 @@ input, textarea {
   &.priority-high     { background: var(--priority-high-bg);     color: var(--priority-high-text); }
   &.priority-medium   { background: var(--priority-medium-bg);   color: var(--priority-medium-text); }
 
+  &.category-badge    { background: var(--surface-hover); color: var(--text-muted); }
+
   &.pipe-saved        { background: #F4F4F7; color: var(--pipe-saved); }
   &.pipe-applied      { background: #EAF3FD; color: var(--pipe-applied); }
   &.pipe-phone        { background: #F5EEFF; color: var(--pipe-phone); }
