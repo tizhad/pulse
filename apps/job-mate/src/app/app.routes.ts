@@ -46,6 +46,12 @@ export const appRoutes: Route[] = [
       import('./features/applications/applications.component').then(m => m.ApplicationsComponent),
   },
   {
+    path: 'ask',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/ask-ai/ask-ai.component').then(m => m.AskAiComponent),
+  },
+  {
     path: 'settings',
     canActivate: [authGuard],
     loadComponent: () =>

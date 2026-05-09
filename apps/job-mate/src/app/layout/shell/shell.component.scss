@@ -91,6 +91,22 @@
   }
 }
 
+.nav-ask {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, transparent), color-mix(in srgb, var(--coral) 8%, transparent));
+}
+
+.nav-soon {
+  margin-left: auto;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  background: var(--accent-light);
+  border-radius: 999px;
+  padding: 2px 7px;
+}
+
 .sidebar-footer {
   display: flex;
   align-items: center;

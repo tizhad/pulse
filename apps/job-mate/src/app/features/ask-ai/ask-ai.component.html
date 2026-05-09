@@ -1,0 +1,373 @@
+<div class="page ai-page">
+
+  <!-- ── Page header ───────────────────────────────────────────────────────── -->
+  <div class="page-header">
+    <div>
+      <div class="ai-page-title-row">
+        <h1 class="page-title">Ask AI</h1>
+        <span class="coming-soon-badge">
+          <span class="coming-soon-dot"></span>
+          Coming Soon
+        </span>
+      </div>
+      <p class="page-subtitle">
+        Search any topic — we'll generate a study-ready brief you can drop into your subjects.
+      </p>
+    </div>
+  </div>
+
+  <!-- ── Hero search card ───────────────────────────────────────────────────── -->
+  <div class="ai-hero-card">
+    <div class="ai-hero-blob" aria-hidden="true"></div>
+
+    <div class="ai-hero-eyebrow">
+      <div class="ai-hero-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+          <path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/>
+        </svg>
+      </div>
+      <span class="ai-hero-label">AI research assistant</span>
+    </div>
+
+    <h2 class="ai-hero-h2">What do you want to learn next?</h2>
+
+    <form class="ai-search-form" (submit)="$event.preventDefault(); onSubmit()">
+      <div class="ai-search-input-wrap">
+        <svg class="ai-search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+        </svg>
+        <input
+          #queryInput
+          class="ai-search-input"
+          type="text"
+          [value]="query()"
+          (input)="query.set(queryInput.value)"
+          placeholder='Try "Angular Router", "Bloom filters", "CAP theorem"…'
+          autocomplete="off"
+        />
+      </div>
+      <button
+        type="submit"
+        class="ai-search-btn"
+        [disabled]="!query().trim() || pageState() === 'loading'"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 4V2"/><path d="M15 16v-2"/><path d="M8 9h2"/><path d="M20 9h2"/>
+          <path d="M17.8 11.8 19 13"/><path d="M15 9h0"/><path d="M17.8 6.2 19 5"/>
+          <path d="m3 21 9-9"/><path d="M12.2 6.2 11 5"/>
+        </svg>
+        {{ pageState() === 'loading' ? 'Thinking…' : 'Ask AI' }}
+      </button>
+    </form>
+
+    <div class="ai-suggestions">
+      <span class="ai-suggestions-label">Try:</span>
+      @for (s of suggestions; track s) {
+        <button class="ai-suggestion-chip" type="button" (click)="ask(s)">{{ s }}</button>
+      }
+    </div>
+  </div>
+
+  <!-- ── Idle state ─────────────────────────────────────────────────────────── -->
+  @if (pageState() === 'idle') {
+    <div class="ai-idle-grid">
+      <div class="ai-idle-card">
+        <div class="ai-idle-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/>
+            <path d="M9 18h6"/><path d="M10 22h4"/>
+          </svg>
+        </div>
+        <div class="ai-idle-title">Concept brief</div>
+        <p class="ai-idle-desc">Plain-English summary, gotchas, and mental models.</p>
+      </div>
+      <div class="ai-idle-card">
+        <div class="ai-idle-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 3 9 15"/><path d="M12 3H3v18h18v-9"/><path d="m16 3 5 5"/>
+            <path d="m15 8-5 5"/><path d="m10 13 5-5"/>
+          </svg>
+        </div>
+        <div class="ai-idle-title">Study outline</div>
+        <p class="ai-idle-desc">Sub-topics ready to nest under any subject.</p>
+      </div>
+      <div class="ai-idle-card">
+        <div class="ai-idle-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+          </svg>
+        </div>
+        <div class="ai-idle-title">Code &amp; Q&amp;A</div>
+        <p class="ai-idle-desc">Worked examples and common interview questions.</p>
+      </div>
+    </div>
+  }
+
+  <!-- ── Loading state ──────────────────────────────────────────────────────── -->
+  @if (pageState() === 'loading') {
+    <div class="ai-loading-card">
+      <div class="ai-loading-header">
+        <div class="ai-loading-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="ai-loading-title">Researching "{{ query() }}"…</div>
+          <div class="ai-loading-sub">Pulling concepts, examples, and likely interview questions.</div>
+        </div>
+      </div>
+      <div class="ai-skeleton-rows">
+        <div class="ai-skeleton-row" style="width: 75%"></div>
+        <div class="ai-skeleton-row" style="width: 100%"></div>
+        <div class="ai-skeleton-row" style="width: 83%"></div>
+        <div class="ai-skeleton-row" style="width: 66%"></div>
+      </div>
+    </div>
+  }
+
+  <!-- ── Ready state ────────────────────────────────────────────────────────── -->
+  @if (pageState() === 'ready' && result(); as r) {
+    <div class="ai-result-grid">
+
+      <!-- Main column -->
+      <div class="ai-result-main">
+
+        <!-- Header card -->
+        <div class="ai-card">
+          <div class="ai-result-header">
+            <div class="ai-result-header-left">
+              <div class="ai-brief-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+                </svg>
+                AI brief
+              </div>
+              <h2 class="ai-result-query">{{ r.query }}</h2>
+              <div class="ai-result-tags">
+                @for (tag of r.tags; track tag) {
+                  <span class="ai-tag">{{ tag }}</span>
+                }
+                <span class="ai-tag ai-tag--difficulty">{{ r.difficulty }}</span>
+                <span class="ai-tag ai-tag--potential">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                  </svg>
+                  Potential {{ r.potential }}/10
+                </span>
+              </div>
+            </div>
+            <button class="ai-regenerate-btn" type="button" (click)="onRegenerate()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                <path d="M3 3v5h5"/>
+              </svg>
+              Regenerate
+            </button>
+          </div>
+          <p class="ai-result-summary">{{ r.summary }}</p>
+          <div class="ai-asked-by">
+            <span class="ai-asked-by-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/>
+              </svg>
+              Asked by
+            </span>
+            @for (co of r.askedBy; track co) {
+              <span class="ai-company-tag">{{ co }}</span>
+            }
+          </div>
+        </div>
+
+        <!-- Outline card -->
+        <div class="ai-card">
+          <div class="ai-card-section-header">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 3 9 15"/><path d="M12 3H3v18h18v-9"/>
+            </svg>
+            <h3 class="ai-card-section-title">Suggested study outline</h3>
+            <span class="ai-card-section-hint">Becomes nested sub-subjects on add</span>
+          </div>
+          <div class="ai-outline-list">
+            @for (section of r.outline; track section.title; let i = $index) {
+              <div class="ai-outline-section">
+                <div class="ai-outline-section-header">
+                  <span class="ai-outline-num">{{ i + 1 }}</span>
+                  <span class="ai-outline-section-title">{{ section.title }}</span>
+                </div>
+                <ul class="ai-outline-bullets">
+                  @for (bullet of section.bullets; track bullet) {
+                    <li>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m9 18 6-6-6-6"/>
+                      </svg>
+                      {{ bullet }}
+                    </li>
+                  }
+                </ul>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Q&A card -->
+        <div class="ai-card">
+          <div class="ai-card-section-header">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+            </svg>
+            <h3 class="ai-card-section-title">Likely interview questions</h3>
+          </div>
+          <div class="ai-qa-list">
+            @for (qa of r.questions; track qa.q; let i = $index) {
+              <details class="ai-qa-item">
+                <summary class="ai-qa-summary">
+                  <span class="ai-qa-num">Q{{ i + 1 }}</span>
+                  <span class="ai-qa-question">{{ qa.q }}</span>
+                  <svg class="ai-qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m9 18 6-6-6-6"/>
+                  </svg>
+                </summary>
+                <div class="ai-qa-answer">{{ qa.a }}</div>
+              </details>
+            }
+          </div>
+        </div>
+
+        <!-- Code snippet card -->
+        <div class="ai-card ai-card--code">
+          <div class="ai-code-header">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+            </svg>
+            <span class="ai-code-label">Example</span>
+            <span class="ai-code-lang">{{ r.snippet.lang }}</span>
+          </div>
+          <pre class="ai-code-block"><code>{{ r.snippet.code }}</code></pre>
+        </div>
+
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="ai-sidebar">
+
+        <!-- Save to study tree -->
+        <div class="ai-save-header-card">
+          <div class="ai-save-header-eyebrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+            Save to study tree
+          </div>
+          <div class="ai-save-header-title">Add "{{ r.query }}" as a subject</div>
+          <p class="ai-save-header-desc">
+            We'll create the subject with its outline as sub-subjects, attach the Q&amp;A, and tag the asking companies.
+          </p>
+        </div>
+
+        <!-- Form card -->
+        <div class="ai-form-card">
+
+          <div class="ai-form-field">
+            <label class="ai-form-label">Nest under</label>
+            <select
+              class="ai-select"
+              (change)="selectedParent.set(getSelectValue($event))"
+            >
+              @for (p of parents; track p.id) {
+                <option [value]="p.id" [selected]="p.id === selectedParent()">{{ p.label }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="ai-form-row">
+            <div class="ai-form-field">
+              <label class="ai-form-label">Priority</label>
+              <select class="ai-select" (change)="priority.set(getSelectValue($event))">
+                <option value="low" [selected]="priority() === 'low'">Low</option>
+                <option value="medium" [selected]="priority() === 'medium'">Medium</option>
+                <option value="high" [selected]="priority() === 'high'">High</option>
+                <option value="critical" [selected]="priority() === 'critical'">Critical</option>
+              </select>
+            </div>
+            <div class="ai-form-field">
+              <label class="ai-form-label">Status</label>
+              <select class="ai-select" (change)="status.set(getSelectValue($event))">
+                <option value="todo" [selected]="status() === 'todo'">To-do</option>
+                <option value="in-progress" [selected]="status() === 'in-progress'">In progress</option>
+                <option value="done" [selected]="status() === 'done'">Done</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="ai-toggles">
+            <button class="ai-toggle" type="button" (click)="includeSubjects.set(!includeSubjects())">
+              <span class="ai-toggle-label">Include {{ r.outline.length }} sub-subjects</span>
+              <span class="ai-toggle-track" [class.is-on]="includeSubjects()">
+                <span class="ai-toggle-thumb"></span>
+              </span>
+            </button>
+            <button class="ai-toggle" type="button" (click)="includeQA.set(!includeQA())">
+              <span class="ai-toggle-label">Attach {{ r.questions.length }} Q&amp;A items</span>
+              <span class="ai-toggle-track" [class.is-on]="includeQA()">
+                <span class="ai-toggle-thumb"></span>
+              </span>
+            </button>
+            <button class="ai-toggle" type="button" (click)="includeCompanies.set(!includeCompanies())">
+              <span class="ai-toggle-label">Link {{ r.askedBy.length }} asking companies</span>
+              <span class="ai-toggle-track" [class.is-on]="includeCompanies()">
+                <span class="ai-toggle-thumb"></span>
+              </span>
+            </button>
+            <button class="ai-toggle" type="button" (click)="includeCode.set(!includeCode())">
+              <span class="ai-toggle-label">Save code example as note</span>
+              <span class="ai-toggle-track" [class.is-on]="includeCode()">
+                <span class="ai-toggle-thumb"></span>
+              </span>
+            </button>
+          </div>
+
+          <button
+            class="ai-add-btn"
+            type="button"
+            [class.is-added]="added()"
+            [disabled]="added()"
+            (click)="onAdd()"
+          >
+            @if (added()) {
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 6 9 17l-5-5"/>
+              </svg>
+              Added to subjects
+            } @else {
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+              </svg>
+              Add to my subjects
+            }
+          </button>
+
+          @if (added()) {
+            <p class="ai-added-hint">
+              View it in <strong>Subjects → {{ addedParentLabel() }}</strong>
+            </p>
+          }
+        </div>
+
+        <!-- Disclaimer -->
+        <div class="ai-disclaimer">
+          <div class="ai-disclaimer-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+            </svg>
+            Heads up
+          </div>
+          AI briefs are starting points. Review and edit before your interview — accuracy is on you.
+        </div>
+
+      </aside>
+    </div>
+  }
+
+</div>
