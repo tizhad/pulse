@@ -4,7 +4,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import {
   FormControl,
   FormGroup,
@@ -29,6 +29,7 @@ type SortKey = 'title' | 'qa' | 'status' | 'priority';
 })
 export class SubjectsComponent {
   readonly store = inject(StudyStore);
+  private readonly router = inject(Router);
 
   readonly sortKey = signal<SortKey>('priority');
   readonly showForm = signal(false);
@@ -40,9 +41,15 @@ export class SubjectsComponent {
       nonNullable: true,
       validators: [Validators.required],
     }),
-    category: new FormControl<SubjectCategory>('javascript', { nonNullable: true }),
-    priority: new FormControl<SubjectPriority>('medium', { nonNullable: true }),
-    status: new FormControl<SubjectStatus>('not_started', { nonNullable: true }),
+    category: new FormControl<SubjectCategory>('angular', {
+      nonNullable: true,
+    }),
+    priority: new FormControl<SubjectPriority>('critical', {
+      nonNullable: true,
+    }),
+    status: new FormControl<SubjectStatus>('not_started', {
+      nonNullable: true,
+    }),
   });
 
   readonly categoryOptions: { value: SubjectCategory; label: string }[] = [
@@ -78,7 +85,11 @@ export class SubjectsComponent {
   }
 
   openForm(): void {
-    this.form.reset({ category: 'javascript', priority: 'medium', status: 'not_started' });
+    this.form.reset({
+      category: 'angular',
+      priority: 'critical',
+      status: 'not_started',
+    });
     this.companies.set([]);
     this.companyInput.reset();
     this.showForm.set(true);
@@ -91,13 +102,13 @@ export class SubjectsComponent {
   addCompany(): void {
     const val = this.companyInput.value.trim();
     if (val && !this.companies().includes(val)) {
-      this.companies.update(c => [...c, val]);
+      this.companies.update((c) => [...c, val]);
     }
     this.companyInput.reset();
   }
 
   removeCompany(name: string): void {
-    this.companies.update(c => c.filter(x => x !== name));
+    this.companies.update((c) => c.filter((x) => x !== name));
   }
 
   onCompanyKeydown(event: KeyboardEvent): void {
@@ -112,7 +123,7 @@ export class SubjectsComponent {
     if (this.form.invalid) return;
 
     const { title, category, priority, status } = this.form.getRawValue();
-    await this.store.addSubject({
+    const subject = await this.store.addSubject({
       title,
       summary: null,
       category,
@@ -124,6 +135,9 @@ export class SubjectsComponent {
       sourceUrl: null,
     });
     this.closeForm();
+    if (subject) {
+      this.router.navigate(['/subjects', subject.id]);
+    }
   }
 
   statusClass(status: SubjectStatus): string {
@@ -143,5 +157,9 @@ export class SubjectsComponent {
 
   priorityClass(priority: string): string {
     return `priority-${priority}`;
+  }
+
+  categoryLabel(category: SubjectCategory): string {
+    return this.categoryOptions.find(o => o.value === category)?.label ?? category;
   }
 }
