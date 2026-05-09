@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   signal,
 } from '@angular/core';
@@ -33,6 +34,25 @@ export class SubjectsComponent {
 
   readonly sortKey = signal<SortKey>('priority');
   readonly showForm = signal(false);
+
+  private readonly PRIORITY_ORDER: Record<SubjectPriority, number> = {
+    critical: 0, high: 1, medium: 2, low: 3,
+  };
+  private readonly STATUS_ORDER: Record<SubjectStatus, number> = {
+    not_started: 0, in_progress: 1, needs_review: 2, confident: 3, mastered: 4,
+  };
+
+  readonly sorted = computed(() => {
+    const key = this.sortKey();
+    return [...this.store.filtered()].sort((a, b) => {
+      switch (key) {
+        case 'title':    return a.title.localeCompare(b.title);
+        case 'qa':       return b.qa.length - a.qa.length;
+        case 'status':   return this.STATUS_ORDER[a.status] - this.STATUS_ORDER[b.status];
+        case 'priority': return this.PRIORITY_ORDER[a.priority] - this.PRIORITY_ORDER[b.priority];
+      }
+    });
+  });
   readonly companies = signal<string[]>([]);
   readonly companyInput = new FormControl('', { nonNullable: true });
 

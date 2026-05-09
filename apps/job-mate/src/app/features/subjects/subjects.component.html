@@ -44,7 +44,7 @@
       }
     </div>
     <div class="subject-count">
-      <strong>{{ store.filtered().length }}</strong> subjects
+      <strong>{{ sorted().length }}</strong> subjects
     </div>
   </div>
 
@@ -57,7 +57,7 @@
       <span>PRIORITY</span>
     </div>
 
-    @for (subject of store.filtered(); track subject.id) {
+    @for (subject of sorted(); track subject.id) {
       <a [routerLink]="['/subjects', subject.id]" class="table-row">
         <div class="subject-cell">
           <div class="subject-name">{{ subject.title }}</div>
