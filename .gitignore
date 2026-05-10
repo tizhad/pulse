@@ -56,3 +56,4 @@ vitest.config.*.timestamp*
 .nx/polygraph
 .nx/self-healing
 __screenshots__/
+package-lock.json
