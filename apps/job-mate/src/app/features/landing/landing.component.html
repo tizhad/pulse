@@ -1,5 +1,4 @@
 <div class="ln-root">
-
   <!-- ── Ambient background blobs ──────────────────────────────────────────── -->
   <div class="ln-bg-blobs" aria-hidden="true">
     <div class="ln-blob ln-blob--tl"></div>
@@ -11,8 +10,17 @@
   <header class="ln-nav">
     <a [routerLink]="['/']" class="ln-brand">
       <div class="ln-logo-mark">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
         </svg>
         <span class="ln-logo-ping"></span>
       </div>
@@ -28,8 +36,18 @@
     </nav>
     <a [routerLink]="ctaRoute()" class="ln-nav-cta">
       Open Pulse
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M5 12h14" />
+        <path d="m12 5 7 7-7 7" />
       </svg>
     </a>
   </header>
@@ -37,7 +55,6 @@
   <!-- ── Hero ──────────────────────────────────────────────────────────────── -->
   <section class="ln-hero">
     <div class="ln-hero-text">
-
       <!-- Live badge -->
       <div class="ln-live-badge">
         <span class="ln-dot-wrap">
@@ -52,12 +69,22 @@
         Feel your
         <span class="ln-momentum-wrap">
           <span class="ln-text-gradient-primary">momentum</span>
-          <svg class="ln-hero-underline" viewBox="0 0 300 12" fill="none" preserveAspectRatio="none">
-            <path d="M2 9 Q 75 2, 150 7 T 298 5" stroke="url(#ug)" stroke-width="4" stroke-linecap="round"/>
+          <svg
+            class="ln-hero-underline"
+            viewBox="0 0 300 12"
+            fill="none"
+            preserveAspectRatio="none"
+          >
+            <path
+              d="M2 9 Q 75 2, 150 7 T 298 5"
+              stroke="url(#ug)"
+              stroke-width="4"
+              stroke-linecap="round"
+            />
             <defs>
               <linearGradient id="ug" x1="0" x2="1">
-                <stop offset="0" stop-color="#FF5F87"/>
-                <stop offset="1" stop-color="#6C5CE7"/>
+                <stop offset="0" stop-color="#FF5F87" />
+                <stop offset="1" stop-color="#6C5CE7" />
               </linearGradient>
             </defs>
           </svg>
@@ -66,21 +93,48 @@
       </h1>
 
       <p class="ln-hero-desc">
-        <strong>Pulse</strong> is the playful workspace for serious candidates. Track every
-        subject, company and application — and watch your prep heartbeat grow stronger every day.
+        <strong>Pulse</strong> is the playful workspace for serious candidates.
+        Track every subject, company and application — and watch your prep
+        heartbeat grow stronger every day.
       </p>
 
       <div class="ln-hero-actions">
         <a [routerLink]="ctaRoute()" class="ln-btn-primary-lg">
-          <svg class="ln-google-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-          </svg>
-          Continue with Google
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+          <!-- <svg
+            class="ln-google-icon"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill="#4285F4"
+              d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+            />
+            <path
+              fill="#34A853"
+              d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+            />
+            <path
+              fill="#FBBC05"
+              d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+            />
+            <path
+              fill="#EA4335"
+              d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+            />
+          </svg> -->
+          Continue with Pulse
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M5 12h14" />
+            <path d="m12 5 7 7-7 7" />
           </svg>
         </a>
         <a href="#features" class="ln-btn-outline-lg">Watch a 60s tour</a>
@@ -88,20 +142,50 @@
 
       <div class="ln-hero-trust">
         <span class="ln-trust-item">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--mint)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="var(--mint)"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <path d="m9 12 2 2 4-4" />
           </svg>
           Free forever
         </span>
         <span class="ln-trust-item">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--mint)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="var(--mint)"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <path d="m9 12 2 2 4-4" />
           </svg>
           No credit card
         </span>
         <span class="ln-trust-item">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--mint)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="var(--mint)"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <path d="m9 12 2 2 4-4" />
           </svg>
           Your data, encrypted
         </span>
@@ -110,7 +194,6 @@
 
     <!-- Hero visual -->
     <div class="ln-hero-visual">
-
       <!-- Floating streak badge -->
       <div class="ln-float-streak">
         <div class="ln-float-label">Streak</div>
@@ -132,8 +215,18 @@
             <div class="ln-card-title">This week</div>
           </div>
           <div class="ln-trend-pill">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
+              <polyline points="16 7 22 7 22 13" />
             </svg>
             +24%
           </div>
@@ -144,12 +237,22 @@
           <svg viewBox="0 0 300 80" class="ln-sparkline">
             <defs>
               <linearGradient id="pulseFill" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0" stop-color="#6C5CE7" stop-opacity="0.4"/>
-                <stop offset="1" stop-color="#6C5CE7" stop-opacity="0"/>
+                <stop offset="0" stop-color="#6C5CE7" stop-opacity="0.4" />
+                <stop offset="1" stop-color="#6C5CE7" stop-opacity="0" />
               </linearGradient>
             </defs>
-            <path d="M0 50 L40 50 L55 30 L70 70 L85 20 L100 60 L130 50 L160 50 L175 35 L190 65 L205 45 L240 45 L260 25 L275 55 L300 45 L300 80 L0 80 Z" fill="url(#pulseFill)"/>
-            <path d="M0 50 L40 50 L55 30 L70 70 L85 20 L100 60 L130 50 L160 50 L175 35 L190 65 L205 45 L240 45 L260 25 L275 55 L300 45" stroke="#6C5CE7" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <path
+              d="M0 50 L40 50 L55 30 L70 70 L85 20 L100 60 L130 50 L160 50 L175 35 L190 65 L205 45 L240 45 L260 25 L275 55 L300 45 L300 80 L0 80 Z"
+              fill="url(#pulseFill)"
+            />
+            <path
+              d="M0 50 L40 50 L55 30 L70 70 L85 20 L100 60 L130 50 L160 50 L175 35 L190 65 L205 45 L240 45 L260 25 L275 55 L300 45"
+              stroke="#6C5CE7"
+              stroke-width="2.5"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
           </svg>
         </div>
 
@@ -179,30 +282,57 @@
             <div class="ln-preview-body">
               <div class="ln-preview-name">Trees &amp; Graphs</div>
               <div class="ln-preview-track">
-                <div class="ln-preview-fill" style="width: 82%; background: var(--coral)"></div>
+                <div
+                  class="ln-preview-fill"
+                  style="width: 82%; background: var(--coral)"
+                ></div>
               </div>
             </div>
-            <span class="ln-preview-tag" style="background: color-mix(in oklab, var(--coral) 35%, transparent)">Critical</span>
+            <span
+              class="ln-preview-tag"
+              style="
+                background: color-mix(in oklab, var(--coral) 35%, transparent);
+              "
+              >Critical</span
+            >
           </div>
           <div class="ln-preview-row">
             <div class="ln-preview-icon">⚙️</div>
             <div class="ln-preview-body">
               <div class="ln-preview-name">Caching Strategies</div>
               <div class="ln-preview-track">
-                <div class="ln-preview-fill" style="width: 56%; background: var(--amber)"></div>
+                <div
+                  class="ln-preview-fill"
+                  style="width: 56%; background: var(--amber)"
+                ></div>
               </div>
             </div>
-            <span class="ln-preview-tag" style="background: color-mix(in oklab, var(--amber) 35%, transparent)">High</span>
+            <span
+              class="ln-preview-tag"
+              style="
+                background: color-mix(in oklab, var(--amber) 35%, transparent);
+              "
+              >High</span
+            >
           </div>
           <div class="ln-preview-row">
             <div class="ln-preview-icon">💬</div>
             <div class="ln-preview-body">
               <div class="ln-preview-name">Behavioral — STAR</div>
               <div class="ln-preview-track">
-                <div class="ln-preview-fill" style="width: 34%; background: var(--sky)"></div>
+                <div
+                  class="ln-preview-fill"
+                  style="width: 34%; background: var(--sky)"
+                ></div>
               </div>
             </div>
-            <span class="ln-preview-tag" style="background: color-mix(in oklab, var(--sky) 35%, transparent)">Medium</span>
+            <span
+              class="ln-preview-tag"
+              style="
+                background: color-mix(in oklab, var(--sky) 35%, transparent);
+              "
+              >Medium</span
+            >
           </div>
         </div>
       </div>
@@ -227,7 +357,8 @@
       <div class="ln-features-header">
         <div class="ln-eyebrow">Everything in one heartbeat</div>
         <h2 class="ln-features-h2">
-          Built for the way candidates <em class="ln-text-gradient-warm">actually</em> prep.
+          Built for the way candidates
+          <em class="ln-text-gradient-warm">actually</em> prep.
         </h2>
       </div>
 
@@ -238,33 +369,100 @@
               <div class="ln-feature-icon" [style.background]="f.gradient">
                 @switch (f.iconName) {
                   @case ('book-open') {
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
                     </svg>
                   }
                   @case ('building2') {
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/>
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z" />
+                      <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2" />
+                      <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2" />
+                      <path d="M10 6h4" />
+                      <path d="M10 10h4" />
+                      <path d="M10 14h4" />
+                      <path d="M10 18h4" />
                     </svg>
                   }
                   @case ('briefcase') {
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                      <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
                     </svg>
                   }
                   @case ('target') {
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <circle cx="12" cy="12" r="6" />
+                      <circle cx="12" cy="12" r="2" />
                     </svg>
                   }
                   @case ('zap') {
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <polygon
+                        points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"
+                      />
                     </svg>
                   }
                   @case ('trending-up') {
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
+                      <polyline points="16 7 22 7 22 13" />
                     </svg>
                   }
                 }
@@ -287,7 +485,9 @@
         <div class="ln-steps-grid">
           @for (step of steps; track step.num) {
             <div class="ln-step">
-              <div class="ln-step-num" [style.color]="step.tone">{{ step.num }}</div>
+              <div class="ln-step-num" [style.color]="step.tone">
+                {{ step.num }}
+              </div>
               <div class="ln-step-title">{{ step.title }}</div>
               <p class="ln-step-body">{{ step.body }}</p>
             </div>
@@ -301,20 +501,31 @@
   <section class="ln-bottom">
     <div class="ln-section-inner">
       <div class="ln-bottom-grid">
-
         <!-- Testimonial -->
         <div class="ln-testimonial">
           <div class="ln-stars">
             @for (s of stars; track s) {
-              <svg class="ln-star" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="var(--amber)" stroke="var(--amber)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+              <svg
+                class="ln-star"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+                  fill="var(--amber)"
+                  stroke="var(--amber)"
+                  stroke-width="1"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
               </svg>
             }
           </div>
           <p class="ln-quote">
             "I went from a chaotic Notion to a single dashboard that
-            <span class="ln-text-gradient-primary">actually told me what to study</span>.
-            Three offers in five weeks."
+            <span class="ln-text-gradient-primary"
+              >actually told me what to study</span
+            >. Three offers in five weeks."
           </p>
           <div class="ln-testifier">
             <div class="ln-testifier-avatar">M</div>
@@ -327,28 +538,67 @@
 
         <!-- Final CTA card -->
         <div class="ln-final-cta">
-          <svg class="ln-sparkles" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
-            <path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/>
+          <svg
+            class="ln-sparkles"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"
+            />
+            <path d="M5 3v4" />
+            <path d="M19 17v4" />
+            <path d="M3 5h4" />
+            <path d="M17 19h4" />
           </svg>
           <h3 class="ln-final-title">Start your pulse today.</h3>
           <p class="ln-final-sub">
-            Sign in with Google. Be tracking your first subject in under 30 seconds.
+            Sign in with Google. Be tracking your first subject in under 30
+            seconds.
           </p>
           <a [routerLink]="ctaRoute()" class="ln-btn-white-lg">
-            <svg class="ln-google-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+            <svg
+              class="ln-google-icon"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill="#4285F4"
+                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+              />
+              <path
+                fill="#34A853"
+                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+              />
+              <path
+                fill="#FBBC05"
+                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+              />
+              <path
+                fill="#EA4335"
+                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+              />
             </svg>
             Continue with Google
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M5 12h14" />
+              <path d="m12 5 7 7-7 7" />
             </svg>
           </a>
         </div>
-
       </div>
     </div>
   </section>
@@ -358,8 +608,17 @@
     <div class="ln-footer-inner">
       <div class="ln-footer-brand">
         <div class="ln-footer-logo">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
           </svg>
         </div>
         <strong>Pulse</strong>
@@ -372,5 +631,4 @@
       </div>
     </div>
   </footer>
-
 </div>
