@@ -46,6 +46,17 @@ export class ApplicationsComponent {
   readonly showForm = signal(false);
   readonly saving = signal(false);
   readonly tags = signal<string[]>([]);
+  readonly draggingId = signal<string | null>(null);
+  readonly dragOverCol = signal<string | null>(null);
+
+  private readonly colKeyToStatus: Record<string, AppStatus> = {
+    saved: 'saved',
+    applied: 'applied',
+    phoneScreen: 'phone-screen',
+    interviewing: 'interviewing',
+    offer: 'offer',
+    rejected: 'rejected',
+  };
 
   readonly tagInput = new FormControl('', { nonNullable: true });
 
@@ -54,12 +65,12 @@ export class ApplicationsComponent {
     company: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     location: new FormControl('', { nonNullable: true }),
     status: new FormControl<AppStatus>('saved', { nonNullable: true }),
-    date: new FormControl(this.todayLabel(), { nonNullable: true }),
+    date: new FormControl(this.todayIso(), { nonNullable: true }),
     salary: new FormControl('', { nonNullable: true }),
   });
 
   openForm(): void {
-    this.form.reset();
+    this.form.reset({ date: this.todayIso(), status: 'saved' });
     this.tags.set([]);
     this.tagInput.reset();
     this.showForm.set(true);
@@ -139,7 +150,45 @@ export class ApplicationsComponent {
     return map[status];
   }
 
-  private todayLabel(): string {
-    return new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  formatDate(iso: string): string {
+    if (!iso) return '';
+    const d = new Date(iso + 'T00:00:00');
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  }
+
+  onDragStart(app: Application): void {
+    this.draggingId.set(app.id);
+  }
+
+  onDragEnd(): void {
+    this.draggingId.set(null);
+    this.dragOverCol.set(null);
+  }
+
+  onDragOver(event: DragEvent, colKey: string): void {
+    event.preventDefault();
+    this.dragOverCol.set(colKey);
+  }
+
+  onDragLeave(event: DragEvent, colKey: string): void {
+    const el = event.currentTarget as HTMLElement;
+    if (!el.contains(event.relatedTarget as Node) && this.dragOverCol() === colKey) {
+      this.dragOverCol.set(null);
+    }
+  }
+
+  onDrop(event: DragEvent, colKey: string): void {
+    event.preventDefault();
+    const id = this.draggingId();
+    const status = this.colKeyToStatus[colKey];
+    if (id && status) {
+      this.store.updateStatus(id, status);
+    }
+    this.draggingId.set(null);
+    this.dragOverCol.set(null);
+  }
+
+  private todayIso(): string {
+    return new Date().toISOString().slice(0, 10);
   }
 }

@@ -28,9 +28,21 @@
           <span class="col-title">{{ col.label }}</span>
           <span class="col-count">{{ colApps(col.key).length }}</span>
         </div>
-        <div class="col-cards">
+        <div
+          class="col-cards"
+          [class.drag-over]="dragOverCol() === col.key"
+          (dragover)="onDragOver($event, col.key)"
+          (dragleave)="onDragLeave($event, col.key)"
+          (drop)="onDrop($event, col.key)"
+        >
           @for (app of colApps(col.key); track app.id) {
-            <div class="app-card card">
+            <div
+              class="app-card card"
+              draggable="true"
+              [class.dragging]="draggingId() === app.id"
+              (dragstart)="onDragStart(app)"
+              (dragend)="onDragEnd()"
+            >
               <div class="app-top">
                 <div class="app-avatar">{{ initial(app.company) }}</div>
                 <div class="app-info">
@@ -56,7 +68,7 @@
                     <line x1="8" y1="2" x2="8" y2="6" />
                     <line x1="3" y1="10" x2="21" y2="10" />
                   </svg>
-                  {{ app.date }}
+                  {{ formatDate(app.date) }}
                 </span>
                 <span class="app-meta">
                   <svg
@@ -75,7 +87,7 @@
                   {{ app.location }}
                 </span>
               </div>
-              @if (app.tags?.length) {
+              @if (app.tags.length) {
                 <div class="app-tags">
                   @for (tag of app.tags; track tag) {
                     <span class="app-tag">{{ tag }}</span>
@@ -197,8 +209,7 @@
           <input
             id="app-date"
             class="field-input"
-            type="text"
-            placeholder="e.g. May 6"
+            type="date"
             formControlName="date"
           />
         </div>

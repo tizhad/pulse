@@ -89,6 +89,14 @@
   flex-direction: column;
   gap: 6px;
   flex: 1;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition), outline-color var(--transition);
+
+  &.drag-over {
+    background: var(--accent-light);
+    outline: 1.5px dashed var(--accent);
+    outline-offset: 2px;
+  }
 }
 
 /* ── App card ────────────────────────────────────────────────────────────── */
@@ -101,6 +109,11 @@
   cursor: grab;
 
   &:hover { border-color: var(--accent); }
+
+  &.dragging {
+    opacity: 0.4;
+    cursor: grabbing;
+  }
 }
 
 .app-top {
