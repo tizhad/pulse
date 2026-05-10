@@ -4,7 +4,7 @@
       <h1 class="page-title">Companies</h1>
       <p class="page-subtitle">Every company you've studied for or applied to.</p>
     </div>
-    <button class="btn-primary">
+    <button class="btn-primary" (click)="openForm()">
       <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
         <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
       </svg>
@@ -21,7 +21,7 @@
                [style.color]="avatarColor(company.name)">{{ initial(company.name) }}</div>
           <div class="company-info">
             <span class="company-name">{{ company.name }}</span>
-            <span class="company-category">@ {{ company.category }}</span>
+            <span class="company-category">{{ company.category }}</span>
           </div>
           <span class="badge" [class]="statusClass(company.status)">{{ statusLabel(company.status) }}</span>
         </div>
@@ -38,5 +38,91 @@
         </div>
       </div>
     }
+
+    @if (store.companies().length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">🏢</div>
+        <div class="empty-title">No companies yet</div>
+        <p class="empty-body">Add the companies you're targeting to track your research and applications in one place.</p>
+        <button class="btn-primary" (click)="openForm()">Add your first company</button>
+      </div>
+    }
   </div>
 </div>
+
+@if (showForm()) {
+  <div
+    class="drawer-backdrop"
+    tabindex="-1"
+    (click)="closeForm()"
+    (keydown.escape)="closeForm()"
+  ></div>
+
+  <div class="drawer" role="dialog" aria-modal="true" aria-label="Add company">
+    <div class="drawer-header">
+      <span class="drawer-title">Add company</span>
+      <button class="drawer-close" (click)="closeForm()" aria-label="Close">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="drawer-body" [formGroup]="form">
+      <div class="field">
+        <label class="field-label" for="co-name">Company name <span class="required">*</span></label>
+        <input
+          id="co-name"
+          class="field-input"
+          type="text"
+          placeholder="e.g. Stripe"
+          formControlName="name"
+          autocomplete="organization"
+        />
+        @if (form.controls.name.touched && form.controls.name.hasError('required')) {
+          <span class="field-error">Required</span>
+        }
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="co-category">Category <span class="required">*</span></label>
+        <select id="co-category" class="field-input" formControlName="category">
+          <option value="" disabled>Select a category</option>
+          @for (cat of categoryOptions; track cat) {
+            <option [value]="cat">{{ cat }}</option>
+          }
+        </select>
+        @if (form.controls.category.touched && form.controls.category.hasError('required')) {
+          <span class="field-error">Required</span>
+        }
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="co-status">Status</label>
+        <select id="co-status" class="field-input" formControlName="status">
+          @for (opt of statusOptions; track opt.value) {
+            <option [value]="opt.value">{{ opt.label }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="co-notes">Notes</label>
+        <textarea
+          id="co-notes"
+          class="field-input field-textarea"
+          placeholder="Anything worth remembering about this company…"
+          formControlName="notes"
+          rows="3"
+        ></textarea>
+      </div>
+    </div>
+
+    <div class="drawer-footer">
+      <button type="button" class="btn-ghost" (click)="closeForm()">Cancel</button>
+      <button type="button" class="btn-primary" (click)="submit()" [disabled]="saving()">
+        {{ saving() ? 'Saving…' : 'Add company' }}
+      </button>
+    </div>
+  </div>
+}

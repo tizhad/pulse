@@ -69,6 +69,16 @@
 
 ---
 
+## Add Company Drawer + Fix Application Save — completed 2026-05-10
+
+- Companies: add drawer form (name, category select, status, notes) matching applications UX — slide-in panel, backdrop dismiss, saving state, empty state
+- Applications: fix silent save failure caused by `location` field having `Validators.required` — made location optional
+- Both: added `saving` signal to disable submit button and show "Saving…" during async write
+- Projects affected: `job-mate`
+- Playwright test added: no
+
+---
+
 ## Code Syntax Highlighting with Theme Switcher — completed 2026-05-10
 
 - Installed `highlight.js`; 6 theme CSS files copied to `public/hljs-themes/` as static assets

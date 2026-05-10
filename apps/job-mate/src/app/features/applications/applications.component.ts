@@ -44,6 +44,7 @@ export class ApplicationsComponent {
   ];
 
   readonly showForm = signal(false);
+  readonly saving = signal(false);
   readonly tags = signal<string[]>([]);
 
   readonly tagInput = new FormControl('', { nonNullable: true });
@@ -51,7 +52,7 @@ export class ApplicationsComponent {
   readonly form = new FormGroup({
     title: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     company: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    location: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    location: new FormControl('', { nonNullable: true }),
     status: new FormControl<AppStatus>('saved', { nonNullable: true }),
     date: new FormControl(this.todayLabel(), { nonNullable: true }),
     salary: new FormControl('', { nonNullable: true }),
@@ -91,16 +92,18 @@ export class ApplicationsComponent {
     this.form.markAllAsTouched();
     if (this.form.invalid) return;
 
+    this.saving.set(true);
     const { title, company, location, status, date, salary } = this.form.getRawValue();
     await this.store.addApplication({
       title,
       company,
-      location: location || null,
+      location: location.trim() || null,
       status,
       date,
       salary: salary.trim() || null,
       tags: this.tags(),
     });
+    this.saving.set(false);
     this.closeForm();
   }
 
