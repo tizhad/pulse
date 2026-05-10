@@ -12,9 +12,7 @@ Pulse is a personal interview preparation platform built for software engineers 
 
 ## Screenshots
 
-| Landing | Subjects | Subject Detail |
-|---|---|---|
-| Hero with live prep stats and streak tracker | Sortable table with inline status changes | Rich notes editor with syntax-highlighted code |
+![Pulse landing page](docs/landing.png)
 
 ---
 
