@@ -6,21 +6,54 @@
         Your study tree — sorted by interview priority.
       </p>
     </div>
-    <button class="btn-primary" (click)="openForm()">
-      <svg
-        width="14"
-        height="14"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2.5"
-        viewBox="0 0 24 24"
-      >
-        <line x1="12" y1="5" x2="12" y2="19" />
-        <line x1="5" y1="12" x2="19" y2="12" />
-      </svg>
-      New subject
-    </button>
+    <div class="header-actions">
+      <button class="btn-grouping" [class.active]="grouping()" (click)="grouping.update(v => !v)">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+          <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+        </svg>
+        Grouping
+      </button>
+      <button class="btn-primary" (click)="openForm()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        New subject
+      </button>
+    </div>
   </div>
+
+  @if (grouping()) {
+    <!-- ── Grouped by category ──────────────────────────────────────────────── -->
+    <div class="category-grid">
+      @for (group of groupedByCategory(); track group.category) {
+        <div class="card category-card">
+          <div class="cat-top">
+            <div class="cat-avatar" [style.background]="categoryColor(group.category)">
+              {{ categoryInitial(group.category) }}
+            </div>
+            <div class="cat-info">
+              <span class="cat-name">{{ categoryLabel(group.category) }}</span>
+              <span class="cat-subject-count">{{ group.subjects.length }} subjects</span>
+            </div>
+            <span class="cat-total">{{ group.subjects.length }}</span>
+          </div>
+          @if (statusEntries(group.statusCounts).length) {
+            <div class="cat-statuses">
+              @for (entry of statusEntries(group.statusCounts); track entry.status) {
+                <span class="badge" [class]="statusClass(entry.status)">
+                  {{ entry.count }} {{ statusCountLabel(entry.status) }}
+                </span>
+              }
+            </div>
+          }
+        </div>
+      }
+      @if (groupedByCategory().length === 0) {
+        <div class="cat-empty">No subjects yet.</div>
+      }
+    </div>
+  } @else {
 
   <!-- Toolbar -->
   <div class="toolbar">
@@ -41,70 +74,58 @@
     </div>
   </div>
 
-  <!-- Table -->
-  <div class="card subjects-table">
-    <div class="table-header">
-      <span>Subject</span>
-      <span>Status</span>
-      <span>Priority</span>
-      <span>Potential</span>
-      <span></span>
-    </div>
-
+  <!-- Card grid -->
+  <div class="subjects-grid">
     @for (subject of sorted(); track subject.id) {
-      <a [routerLink]="['/subjects', subject.id]" class="table-row">
-        <div class="subject-cell">
-          <div class="subject-name">{{ subject.title }}</div>
-          <div class="subject-meta">
-            {{ subject.qa.length }} Q&amp;A
-            @for (ct of subject.companyTags; track ct.id) {
-              <span class="company-tag">{{ ct.name }}</span>
-            }
+      <a [routerLink]="['/subjects', subject.id]" class="card subject-card">
+        <div class="subject-card-top">
+          <div class="subject-cat-avatar" [style.background]="categoryColor(subject.category)">
+            {{ categoryInitial(subject.category) }}
           </div>
-        </div>
-        <div class="status-cell">
-          <button
-            class="badge status-trigger"
-            [class]="statusClass(subject.status)"
-            (click)="toggleStatusMenu(subject.id, $event)"
-          >
+          <span class="badge" [class]="statusClass(subject.status)">
             {{ statusLabel(subject.status) }}
-            <svg width="9" height="9" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-              <polyline points="6 9 12 15 18 9"/>
-            </svg>
-          </button>
-          @if (openStatusId() === subject.id) {
-            <div class="status-backdrop" tabindex="-1" (click)="closeStatusMenu()" (keydown.escape)="closeStatusMenu()"></div>
-            <div class="status-menu">
-              @for (opt of statusOptions; track opt.value) {
-                <button
-                  class="status-option"
-                  [class.active]="subject.status === opt.value"
-                  (click)="setStatus(subject.id, opt.value, $event)"
-                >
-                  <span class="status-dot" [class]="'dot-' + opt.value"></span>
-                  {{ opt.label }}
-                </button>
-              }
-            </div>
-          }
+          </span>
         </div>
-        <div>
+
+        <div class="subject-card-body">
+          <div class="subject-card-title">{{ subject.title }}</div>
+          <div class="subject-card-category">{{ categoryLabel(subject.category) }}</div>
+        </div>
+
+        <div class="subject-card-stats">
+          <span class="subject-stat">
+            <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+            {{ subject.qa.length }} Q&amp;A
+          </span>
+          <span class="subject-stat">
+            <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+            {{ subject.confidenceScore }}
+          </span>
           <span class="badge" [class]="priorityClass(subject.priority)">
             {{ subject.priority.toUpperCase() }}
           </span>
         </div>
-        <div class="potential-cell">
-          <span class="potential-badge">{{ subject.confidenceScore }}</span>
-        </div>
-        <button class="row-menu" (click)="$event.preventDefault(); $event.stopPropagation()" aria-label="More options">
-          <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
-            <circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>
-          </svg>
-        </button>
+
+        @if (subject.companyTags.length) {
+          <div class="subject-card-tags">
+            @for (ct of subject.companyTags; track ct.id) {
+              <span class="company-tag">{{ ct.name }}</span>
+            }
+          </div>
+        }
       </a>
     }
+
+    @if (sorted().length === 0) {
+      <div class="subjects-empty">No subjects yet.</div>
+    }
   </div>
+
+  } <!-- end @else grouping -->
 </div>
 
 @if (showForm()) {

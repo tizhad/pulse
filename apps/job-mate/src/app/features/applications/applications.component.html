@@ -22,7 +22,12 @@
 
   <div class="apps-grid">
     @for (app of store.applications(); track app.id) {
-      <div class="card app-card" (click)="openModal(app)">
+      <div class="card app-card"
+           role="button"
+           tabindex="0"
+           (click)="openModal(app)"
+           (keydown.enter)="openModal(app)"
+           (keydown.space)="openModal(app)">
         <div class="app-top">
           <div
             class="app-avatar"

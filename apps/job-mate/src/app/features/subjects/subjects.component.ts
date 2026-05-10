@@ -14,10 +14,17 @@ import {
 } from '@angular/forms';
 import { StudyStore } from '../../core/stores/study.store';
 import {
+  Subject,
   SubjectCategory,
   SubjectPriority,
   SubjectStatus,
 } from '../../core/models/jobmate.models';
+
+type CategoryGroup = {
+  readonly category: SubjectCategory;
+  readonly subjects: Subject[];
+  readonly statusCounts: Partial<Record<SubjectStatus, number>>;
+};
 
 type SortKey = 'title' | 'qa' | 'status' | 'priority' | 'potential';
 
@@ -34,6 +41,7 @@ export class SubjectsComponent {
 
   readonly sortKey = signal<SortKey>('potential');
   readonly showForm = signal(false);
+  readonly grouping = signal(false);
 
   readonly totalQA = computed(() =>
     this.store.filtered().reduce((n, s) => n + s.qa.length, 0)
@@ -114,7 +122,38 @@ export class SubjectsComponent {
     { value: 'mastered', label: 'Mastered' },
   ];
 
-  readonly openStatusId = signal<string | null>(null);
+  private readonly CATEGORY_COLORS: Record<SubjectCategory, string> = {
+    angular:       '#DD0031',
+    react:         '#087EA4',
+    javascript:    '#9B6B0F',
+    typescript:    '#3178C6',
+    performance:   '#7B3FA8',
+    testing:       '#1A7A47',
+    accessibility: '#00838F',
+    system_design: '#2C3E50',
+    css:           '#2645C4',
+    soft_skills:   '#C0621A',
+  };
+
+  private readonly STATUS_DISPLAY_ORDER: SubjectStatus[] = [
+    'mastered', 'confident', 'in_progress', 'needs_review', 'not_started',
+  ];
+
+  readonly groupedByCategory = computed((): CategoryGroup[] => {
+    const map = new Map<SubjectCategory, Subject[]>();
+    for (const s of this.store.filtered()) {
+      const list = map.get(s.category) ?? [];
+      list.push(s);
+      map.set(s.category, list);
+    }
+    return Array.from(map.entries())
+      .map(([category, subjects]) => {
+        const statusCounts: Partial<Record<SubjectStatus, number>> = {};
+        for (const s of subjects) statusCounts[s.status] = (statusCounts[s.status] ?? 0) + 1;
+        return { category, subjects, statusCounts };
+      })
+      .sort((a, b) => b.subjects.length - a.subjects.length);
+  });
 
   setSort(key: SortKey): void {
     this.sortKey.set(key);
@@ -124,23 +163,6 @@ export class SubjectsComponent {
     const keys: SortKey[] = ['potential', 'priority', 'title', 'qa', 'status'];
     const idx = keys.indexOf(this.sortKey());
     this.sortKey.set(keys[(idx + 1) % keys.length]);
-  }
-
-  toggleStatusMenu(id: string, event: Event): void {
-    event.preventDefault();
-    event.stopPropagation();
-    this.openStatusId.update(cur => cur === id ? null : id);
-  }
-
-  async setStatus(id: string, status: SubjectStatus, event: Event): Promise<void> {
-    event.preventDefault();
-    event.stopPropagation();
-    await this.store.updateSubject(id, { status });
-    this.openStatusId.set(null);
-  }
-
-  closeStatusMenu(): void {
-    this.openStatusId.set(null);
   }
 
   openForm(): void {
@@ -220,5 +242,30 @@ export class SubjectsComponent {
 
   categoryLabel(category: SubjectCategory): string {
     return this.categoryOptions.find(o => o.value === category)?.label ?? category;
+  }
+
+  categoryColor(category: SubjectCategory): string {
+    return this.CATEGORY_COLORS[category];
+  }
+
+  categoryInitial(category: SubjectCategory): string {
+    return this.categoryLabel(category).charAt(0).toUpperCase();
+  }
+
+  statusEntries(counts: Partial<Record<SubjectStatus, number>>): { status: SubjectStatus; count: number }[] {
+    return this.STATUS_DISPLAY_ORDER
+      .filter(s => (counts[s] ?? 0) > 0)
+      .map(s => ({ status: s, count: counts[s] ?? 0 }));
+  }
+
+  statusCountLabel(status: SubjectStatus): string {
+    const map: Record<SubjectStatus, string> = {
+      not_started:  'Not started',
+      in_progress:  'In progress',
+      needs_review: 'Needs review',
+      confident:    'Confident',
+      mastered:     'Mastered',
+    };
+    return map[status];
   }
 }
