@@ -13,13 +13,17 @@ Pulse is a personal interview preparation platform built for software engineers 
 ## Screenshots
 
 ![Pulse landing page](docs/landing.png)
+![Pulse Learning Page](docs/subjects.png)
+![Pulse Grouped Subjects Page](docs/grouped-subjects.png)
 
 ---
 
 ## Features
 
 ### Study Subjects
+
 Organize everything you need to learn into subjects. Each subject has:
+
 - **Priority** — Critical, High, Medium, Low
 - **Status** — Not Started, In Progress, Needs Review, Confident, Mastered
 - **Category** — Angular, React, JavaScript, TypeScript, System Design, and more
@@ -30,24 +34,30 @@ Organize everything you need to learn into subjects. Each subject has:
 - **Company tags** — link subjects to the companies that asked about them
 
 ### Company Intelligence
+
 Link interview questions directly to the companies that asked them. Build a study plan driven by real interview signal, not guesswork.
 
 ### Application Pipeline
+
 Track every job application with status, salary notes, and resume versioning.
 
+![Pulse Application Page](docs/grouped-subjects.png)
+
 ### Code Theme Switcher
+
 Choose your syntax highlighting theme from the Settings page — with a live TypeScript preview so you can see exactly what each theme looks like before switching. Six themes available:
 
-| Theme | Style |
-|---|---|
-| GitHub Dimmed | Dark, muted — default |
-| GitHub Dark | Dark, high contrast |
-| Atom One Dark | Dark, warm |
-| Tokyo Night | Dark, cool blue |
-| Monokai | Dark, vibrant |
-| Atom One Light | Light |
+| Theme          | Style                 |
+| -------------- | --------------------- |
+| GitHub Dimmed  | Dark, muted — default |
+| GitHub Dark    | Dark, high contrast   |
+| Atom One Dark  | Dark, warm            |
+| Tokyo Night    | Dark, cool blue       |
+| Monokai        | Dark, vibrant         |
+| Atom One Light | Light                 |
 
-### Ask AI *(Coming Soon)*
+### Ask AI _(Coming Soon)_
+
 AI-generated study outlines and Q&A sessions tailored to your weak spots.
 
 ---
@@ -64,18 +74,18 @@ AI-generated study outlines and Q&A sessions tailored to your weak spots.
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Framework | Angular 21 (standalone, zoneless, OnPush) |
-| State management | NgRx SignalStore |
-| Auth & database | Supabase (Google OAuth + PostgreSQL) |
-| Rich text editor | Tiptap |
-| Syntax highlighting | highlight.js |
-| Styling | SCSS with CSS custom properties |
-| Build system | Nx monorepo |
-| E2E testing | Playwright |
-| Unit testing | Vitest |
-| Deployment | Cloudflare Pages |
+| Layer               | Technology                                |
+| ------------------- | ----------------------------------------- |
+| Framework           | Angular 21 (standalone, zoneless, OnPush) |
+| State management    | NgRx SignalStore                          |
+| Auth & database     | Supabase (Google OAuth + PostgreSQL)      |
+| Rich text editor    | Tiptap                                    |
+| Syntax highlighting | highlight.js                              |
+| Styling             | SCSS with CSS custom properties           |
+| Build system        | Nx monorepo                               |
+| E2E testing         | Playwright                                |
+| Unit testing        | Vitest                                    |
+| Deployment          | Cloudflare Pages                          |
 
 ---
 
@@ -153,28 +163,28 @@ Output: `dist/apps/job-mate/browser/`
 
 ## Pages & Routes
 
-| Route | Page |
-|---|---|
-| `/` | Landing page |
-| `/auth` | Google OAuth sign-in |
-| `/dashboard` | Weekly overview and streak |
-| `/subjects` | Study subjects table |
+| Route           | Page                                    |
+| --------------- | --------------------------------------- |
+| `/`             | Landing page                            |
+| `/auth`         | Google OAuth sign-in                    |
+| `/dashboard`    | Weekly overview and streak              |
+| `/subjects`     | Study subjects table                    |
 | `/subjects/:id` | Subject detail — notes, Q&A, edit panel |
-| `/companies` | Company tracker |
-| `/applications` | Application pipeline |
-| `/ask` | Ask AI *(coming soon)* |
-| `/settings` | Code theme and preferences |
+| `/companies`    | Company tracker                         |
+| `/applications` | Application pipeline                    |
+| `/ask`          | Ask AI _(coming soon)_                  |
+| `/settings`     | Code theme and preferences              |
 
 ---
 
 ## Deployment (Cloudflare Pages)
 
-| Setting | Value |
-|---|---|
-| Build command | `npm run build` |
+| Setting                | Value                        |
+| ---------------------- | ---------------------------- |
+| Build command          | `npm run build`              |
 | Build output directory | `dist/apps/job-mate/browser` |
-| Node version | 22 |
-| `NX_NO_CLOUD` env var | `true` |
+| Node version           | 22                           |
+| `NX_NO_CLOUD` env var  | `true`                       |
 
 > `NX_NO_CLOUD=true` is required — Cloudflare's build environment is not connected to Nx Cloud and the build will exit without it.
 
