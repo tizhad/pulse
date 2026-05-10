@@ -6,90 +6,101 @@
     </div>
   </div>
 
-  <!-- Top stat cards -->
-  <div class="stats-row">
-    <!-- Progress -->
+  <!-- Top row: 3 cards -->
+  <div class="top-row">
+
+    <!-- Progress ring -->
     <div class="card progress-card">
-      <div class="card-label">Progress</div>
+      <div class="card-top-row">
+        <span class="card-label">Progress</span>
+        <span class="card-trend">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+            <polyline points="16 7 22 7 22 13"/>
+          </svg>
+          +12% this week
+        </span>
+      </div>
       <div class="progress-body">
-        <div class="donut-wrap">
-          <svg viewBox="0 0 64 64" class="donut">
+        <div class="ring-wrap">
+          <svg viewBox="0 0 100 100" class="ring-svg">
+            <defs>
+              <linearGradient id="ring-grad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="oklch(0.55 0.22 280)" />
+                <stop offset="100%" stop-color="oklch(0.7 0.2 295)" />
+              </linearGradient>
+            </defs>
+            <circle cx="50" cy="50" r="42" fill="none" stroke="var(--border)" stroke-width="10" />
             <circle
-              cx="32"
-              cy="32"
-              r="26"
+              cx="50" cy="50" r="42"
               fill="none"
-              stroke="var(--border)"
-              stroke-width="8"
-            />
-            <circle
-              cx="32"
-              cy="32"
-              r="26"
-              fill="none"
-              stroke="var(--accent)"
-              stroke-width="8"
-              [attr.stroke-dasharray]="
-                progressPercent() * 1.634 + ' 163.4'
-              "
+              stroke="url(#ring-grad)"
+              stroke-width="10"
               stroke-linecap="round"
-              transform="rotate(-90 32 32)"
+              [attr.stroke-dasharray]="ringCircumference"
+              [attr.stroke-dashoffset]="ringOffset()"
+              transform="rotate(-90 50 50)"
             />
           </svg>
-          <div class="donut-label">
-            {{ progressPercent() }}%<span>COMPLETE</span>
+          <div class="ring-label">
+            <div class="ring-pct">{{ progressPercent() }}%</div>
+            <div class="ring-sub">Complete</div>
           </div>
         </div>
-        <div class="progress-legend">
+        <div class="legend">
           <div class="legend-row">
-            <span class="dot done"></span>Mastered
+            <span class="dot" style="background: var(--mint)"></span>
+            <span>Mastered</span>
             <strong>{{ masteredCount() }}</strong>
           </div>
           <div class="legend-row">
-            <span class="dot progress"></span>In progress
+            <span class="dot" style="background: var(--amber)"></span>
+            <span>In progress</span>
             <strong>{{ inProgressCount() }}</strong>
           </div>
           <div class="legend-row">
-            <span class="dot todo"></span>Not started
+            <span class="dot" style="background: var(--text-muted)"></span>
+            <span>Not started</span>
             <strong>{{ notStartedCount() }}</strong>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Stats summary -->
+    <!-- Streak heatmap -->
     <div class="card streak-card">
-      <div class="streak-top">
-        <span class="streak-icon">📚</span>
-        <span class="streak-days">{{ studyStore.stats().total }} subjects total</span>
+      <div class="streak-heading">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.66 11.2c-.23-.3-.51-.56-.77-.82-.67-.6-1.43-1.03-2.07-1.66C13.33 7.26 13 4.85 13.95 3c-.95.23-1.78.75-2.49 1.32-2.59 2.08-3.61 5.75-2.39 8.9.04.1.08.2.08.33 0 .22-.15.42-.35.5-.23.1-.47.04-.66-.12a.58.58 0 0 1-.14-.17c-1.13-1.43-1.31-3.48-.55-5.12C5.78 10 4.87 12.3 5 14.47c.06.5.12 1 .29 1.5.14.6.41 1.2.71 1.73 1.08 1.73 2.95 2.97 4.96 3.22 2.14.27 4.43-.12 6.07-1.6 1.83-1.66 2.47-4.07 1.63-6.12zm-5.3 5.43c-.57.14-1.17.14-1.7-.04-1.15-.38-1.71-1.58-1.38-2.68.28-.9.82-1.5 1.49-2.1.19-.17.39-.34.6-.51.11.52.14 1.05.26 1.57.17.76.52 1.4 1.12 1.9.2.16.43.31.65.46-.36.17-.73.33-1.04.4z"/></svg>
+        7 day streak
       </div>
-      <div class="progress-legend" style="margin-top: 1rem">
-        <div class="legend-row">
-          <span class="dot done"></span>Needs review
-          <strong>{{ studyStore.stats().needsReview }}</strong>
-        </div>
-        <div class="legend-row">
-          <span class="dot todo"></span>Due for review
-          <strong>{{ studyStore.stats().dueForReview }}</strong>
-        </div>
+      <div class="heatmap">
+        @for (intensity of streakIntensities; track $index) {
+          <div
+            class="heat-cell"
+            [style.background]="'color-mix(in oklab, white ' + (100 - intensity * 70) + '%, transparent)'"
+          ></div>
+        }
       </div>
+      <div class="streak-msg">Studied <strong>4h 20m</strong> this week. Keep going!</div>
     </div>
 
     <!-- Pipeline -->
     <div class="card pipeline-card">
-      <div class="pipeline-header">
-        <span class="card-label">Pipeline</span>
+      <div class="card-top-row">
+        <span class="card-label-row">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="7" width="20" height="14" rx="2"/>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+          </svg>
+          Pipeline
+        </span>
         <a routerLink="/applications" class="view-all">View all →</a>
       </div>
       @for (row of pipelineRows; track row.key) {
         <div class="pipeline-row">
           <span class="pipe-label">{{ row.label }}</span>
           <div class="pipe-bar-wrap">
-            <div
-              class="pipe-bar"
-              [style.background]="row.color"
-              [style.width.%]="getPipelineCount(row.key) * 25"
-            ></div>
+            <div class="pipe-bar" [style.background]="row.color" [style.width.%]="getPipelineBarWidth(row.key)"></div>
           </div>
           <span class="pipe-count">{{ getPipelineCount(row.key) }}</span>
         </div>
@@ -97,27 +108,35 @@
     </div>
   </div>
 
-  <!-- Bottom sections -->
+  <!-- Bottom row: focus (2/3) + recent apps (1/3) -->
   <div class="bottom-row">
+
     <!-- Today's focus -->
     <div class="card focus-card">
       <div class="section-header">
-        <span class="section-title">Today's focus</span>
+        <span class="section-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+          </svg>
+          Today's focus
+        </span>
         <a routerLink="/subjects" class="view-all">All subjects →</a>
       </div>
       @for (subject of todaysFocus(); track subject.id) {
         <a [routerLink]="['/subjects', subject.id]" class="focus-row">
+          <div class="focus-score">{{ scoreFor(subject.qa.length) }}</div>
           <div class="focus-info">
             <span class="focus-name">{{ subject.title }}</span>
             <span class="focus-meta">
-              {{ subject.qa.length }} questions ·
-              {{ subject.companyTags.map(ct => ct.name).join(', ') }}
+              {{ subject.qa.length }} questions
+              @if (subject.companyTags.length) { · {{ subject.companyTags.map(ct => ct.name).join(', ') }} }
             </span>
           </div>
-          <span class="badge" [class]="priorityClass(subject.priority)">
-            {{ subject.priority.toUpperCase() }}
-          </span>
+          <span class="badge" [class]="priorityClass(subject.priority)">{{ subject.priority.toUpperCase() }}</span>
         </a>
+      }
+      @if (!todaysFocus().length) {
+        <p class="empty-msg">All mastered — you're ready. 🎉</p>
       }
     </div>
 
@@ -134,10 +153,11 @@
             <span class="app-title">{{ app.title }}</span>
             <span class="app-meta">{{ app.company }} · {{ app.date }}</span>
           </div>
-          <span class="badge" [class]="statusClass(app.status)">{{
-            statusLabel(app.status)
-          }}</span>
+          <span class="badge" [class]="statusClass(app.status)">{{ statusLabel(app.status) }}</span>
         </div>
+      }
+      @if (!recentApplications().length) {
+        <p class="empty-msg">No applications yet.</p>
       }
     </div>
   </div>
