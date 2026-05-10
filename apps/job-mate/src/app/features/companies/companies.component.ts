@@ -1,17 +1,17 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CompanyStore } from '../../core/stores/company.store';
-import type { CompanyStatus } from '../../core/models/jobmate.models';
+import type { Company, CompanyStatus } from '../../core/models/jobmate.models';
 
 const AVATAR_PALETTE: ReadonlyArray<{ bg: string; color: string }> = [
-  { bg: '#DCF5E7', color: '#1E7A47' },
-  { bg: '#EDE3FD', color: '#6B32B8' },
-  { bg: '#DAE8FC', color: '#1E5FA8' },
-  { bg: '#FDDCDA', color: '#B02B23' },
-  { bg: '#DDE4EA', color: '#2C3E50' },
-  { bg: '#FDEBD0', color: '#C0621A' },
-  { bg: '#E0F7FA', color: '#00838F' },
-  { bg: '#FFF3CD', color: '#A07C10' },
+  { bg: '#1E7A47', color: '#ffffff' },
+  { bg: '#6B32B8', color: '#ffffff' },
+  { bg: '#1E5FA8', color: '#ffffff' },
+  { bg: '#B02B23', color: '#ffffff' },
+  { bg: '#2C3E50', color: '#ffffff' },
+  { bg: '#C0621A', color: '#ffffff' },
+  { bg: '#00838F', color: '#ffffff' },
+  { bg: '#A07C10', color: '#ffffff' },
 ];
 
 @Component({
@@ -68,6 +68,38 @@ export class CompaniesComponent {
     await this.store.addCompany(name.trim(), category, status);
     this.saving.set(false);
     this.closeForm();
+  }
+
+  /* ── Edit modal ──────────────────────────────────────────────────────────── */
+
+  readonly selectedCompany = signal<Company | null>(null);
+
+  readonly editForm = new FormGroup({
+    name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    status: new FormControl<CompanyStatus>('saved', { nonNullable: true }),
+  });
+
+  openModal(company: Company): void {
+    this.editForm.reset({ name: company.name, status: company.status });
+    this.selectedCompany.set(company);
+  }
+
+  closeModal(): void {
+    this.selectedCompany.set(null);
+  }
+
+  async saveModal(): Promise<void> {
+    this.editForm.markAllAsTouched();
+    if (this.editForm.invalid) return;
+
+    const company = this.selectedCompany();
+    if (!company) return;
+
+    this.saving.set(true);
+    const { name, status } = this.editForm.getRawValue();
+    await this.store.updateCompany(company.id, { name: name.trim(), status });
+    this.saving.set(false);
+    this.closeModal();
   }
 
   /* ── Avatar helpers ──────────────────────────────────────────────────────── */
