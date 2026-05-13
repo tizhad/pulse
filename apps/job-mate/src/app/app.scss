@@ -4,6 +4,62 @@
   overflow: hidden;
 }
 
+/* ── Mobile top bar ──────────────────────────────────────────────────────── */
+
+.mobile-header {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 52px;
+  z-index: 301; /* above sidebar (300) and backdrop (299) */
+  background: var(--sidebar-bg);
+  border-bottom: 0.5px solid var(--border);
+  align-items: center;
+  padding: 0 1rem;
+  gap: 12px;
+
+  @media (max-width: 768px) {
+    display: flex;
+  }
+}
+
+.hamburger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background var(--transition);
+  flex-shrink: 0;
+
+  &:hover {
+    background: var(--surface-hover);
+    color: var(--text);
+  }
+}
+
+.mobile-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── Sidebar backdrop (mobile only) ──────────────────────────────────────── */
+
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 299;
+  background: rgba(0, 0, 0, 0.4);
+}
+
 /* ── Sidebar ─────────────────────────────────────────────────────────────── */
 
 .sidebar {
@@ -15,6 +71,21 @@
   flex-direction: column;
   padding: 1.25rem 0.75rem;
   overflow-y: auto;
+
+  @media (max-width: 768px) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 300;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+
+    &.open {
+      transform: translateX(0);
+      box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+    }
+  }
 }
 
 .sidebar-logo {
@@ -159,4 +230,9 @@
   flex: 1;
   overflow-y: auto;
   min-width: 0;
+
+  @media (max-width: 768px) {
+    padding-top: 52px;
+    width: 100%;
+  }
 }
