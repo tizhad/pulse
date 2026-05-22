@@ -39,7 +39,12 @@ Link interview questions directly to the companies that asked them. Build a stud
 
 ### Application Pipeline
 
-Track every job application with status, salary notes, and resume versioning.
+Track every job application end-to-end:
+
+- **Status pipeline** — Saved → Applied → Phone Screen → Interviewing → Offer / Rejected
+- **Sortable** — sort by created date, application date, last updated, status (pipeline order), job title, or company; click the active sort to toggle direction
+- **Salary & location** — attach salary range and location to each card
+- **Tags** — label applications with freeform tags
 
 ![Pulse Application Page](docs/applications.png)
 

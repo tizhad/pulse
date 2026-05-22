@@ -79,6 +79,17 @@
 
 ---
 
+## Application Sort — completed 2026-05-22
+
+- Added a 6-pill sort bar to the applications page, sitting between the header and the card grid
+- Sort options: Created date, Applied date, Last updated, Status (pipeline order), Job title, Company
+- `sortedApplications` computed signal derives a sorted copy from the store reactively
+- Clicking the active pill toggles asc/desc (shown via chevron); clicking a new pill switches to it with a sensible default direction (newest-first for dates, A→Z for text, pipeline order for status)
+- Projects affected: `job-mate`
+- Playwright test added: no
+
+---
+
 ## Code Syntax Highlighting with Theme Switcher — completed 2026-05-10
 
 - Installed `highlight.js`; 6 theme CSS files copied to `public/hljs-themes/` as static assets
