@@ -20,8 +20,31 @@
     </button>
   </div>
 
+  <div class="sort-bar">
+    <span class="sort-label">Sort:</span>
+    @for (opt of sortOptions; track opt.key) {
+      <button
+        type="button"
+        class="sort-pill"
+        [class.active]="sortKey() === opt.key"
+        (click)="setSort(opt.key)"
+      >
+        {{ opt.label }}
+        @if (sortKey() === opt.key) {
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+            @if (sortDir() === 'asc') {
+              <polyline points="18 15 12 9 6 15" />
+            } @else {
+              <polyline points="6 9 12 15 18 9" />
+            }
+          </svg>
+        }
+      </button>
+    }
+  </div>
+
   <div class="apps-grid">
-    @for (app of store.applications(); track app.id) {
+    @for (app of sortedApplications(); track app.id) {
       <div class="card app-card"
            role="button"
            tabindex="0"
