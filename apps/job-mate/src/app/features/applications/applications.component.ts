@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   signal,
 } from '@angular/core';
@@ -12,6 +13,18 @@ import {
 } from '@angular/forms';
 import { ApplicationStore } from '../../core/stores/application.store';
 import { Application, AppStatus } from '../../core/models/jobmate.models';
+
+type SortKey = 'createdAt' | 'date' | 'updatedAt' | 'status' | 'title' | 'company';
+type SortDir = 'asc' | 'desc';
+
+const STATUS_ORDER: Record<AppStatus, number> = {
+  saved: 0,
+  applied: 1,
+  'phone-screen': 2,
+  interviewing: 3,
+  offer: 4,
+  rejected: 5,
+};
 
 const AVATAR_PALETTE: ReadonlyArray<{ bg: string; color: string }> = [
   { bg: '#1E7A47', color: '#ffffff' },
@@ -33,6 +46,54 @@ const AVATAR_PALETTE: ReadonlyArray<{ bg: string; color: string }> = [
 })
 export class ApplicationsComponent {
   readonly store = inject(ApplicationStore);
+
+  /* ── Sort ─────────────────────────────────────────────────────────────── */
+
+  readonly sortKey = signal<SortKey>('createdAt');
+  readonly sortDir = signal<SortDir>('desc');
+
+  readonly sortOptions: { key: SortKey; label: string }[] = [
+    { key: 'createdAt', label: 'Created' },
+    { key: 'date', label: 'Applied' },
+    { key: 'updatedAt', label: 'Updated' },
+    { key: 'status', label: 'Status' },
+    { key: 'title', label: 'Title' },
+    { key: 'company', label: 'Company' },
+  ];
+
+  readonly sortedApplications = computed(() => {
+    const apps = [...this.store.applications()];
+    const key = this.sortKey();
+    const mul = this.sortDir() === 'asc' ? 1 : -1;
+
+    return apps.sort((a, b) => {
+      switch (key) {
+        case 'createdAt':
+          return mul * (new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+        case 'updatedAt':
+          return mul * (new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime());
+        case 'date':
+          return mul * (a.date < b.date ? -1 : a.date > b.date ? 1 : 0);
+        case 'status':
+          return mul * (STATUS_ORDER[a.status] - STATUS_ORDER[b.status]);
+        case 'title':
+          return mul * a.title.localeCompare(b.title);
+        case 'company':
+          return mul * a.company.localeCompare(b.company);
+      }
+    });
+  });
+
+  setSort(key: SortKey): void {
+    if (this.sortKey() === key) {
+      this.sortDir.update((d) => (d === 'asc' ? 'desc' : 'asc'));
+    } else {
+      this.sortKey.set(key);
+      this.sortDir.set(key === 'createdAt' || key === 'date' || key === 'updatedAt' ? 'desc' : 'asc');
+    }
+  }
+
+  /* ── Status options ────────────────────────────────────────────────────── */
 
   readonly statusOptions: { value: AppStatus; label: string }[] = [
     { value: 'saved', label: 'Saved' },
