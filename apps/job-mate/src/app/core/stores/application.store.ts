@@ -38,7 +38,7 @@ export class ApplicationStore {
   }
 
   async addApplication(
-    payload: Pick<Application, 'title' | 'company' | 'date' | 'location' | 'status' | 'salary' | 'tags'>,
+    payload: Pick<Application, 'title' | 'company' | 'date' | 'location' | 'status' | 'salary' | 'url' | 'tags'>,
   ): Promise<Application | null> {
     const userId = this.auth.user()?.id;
     if (!userId) return null;
@@ -51,6 +51,7 @@ export class ApplicationStore {
       location: payload.location ?? null,
       status: payload.status,
       salary: payload.salary ?? null,
+      url: payload.url ?? null,
       tags: payload.tags,
     }).select().single();
 
