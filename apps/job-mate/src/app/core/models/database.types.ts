@@ -171,6 +171,7 @@ export type Database = {
           location: string | null;
           status: string;
           salary: string | null;
+          url: string | null;
           tags: string[];
           created_at: string;
           updated_at: string;
@@ -182,6 +183,7 @@ export type Database = {
           company: string;
           date: string;
           location?: string | null;
+          url?: string | null;
           status?: string;
           salary?: string | null;
           tags?: string[];
@@ -197,6 +199,7 @@ export type Database = {
           user_id: string;
           display_name: string | null;
           accent: string;
+          resume: Json | null;
           updated_at: string;
         };
         Insert: {
@@ -204,6 +207,7 @@ export type Database = {
           user_id: string;
           display_name?: string | null;
           accent?: string;
+          resume?: Json | null;
           updated_at?: string;
         };
         Update: Partial<Database['public']['Tables']['user_settings']['Insert']>;

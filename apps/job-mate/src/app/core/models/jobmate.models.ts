@@ -118,9 +118,34 @@ export interface Application {
   location: string | null;
   status: AppStatus;
   salary: string | null;
+  url: string | null;
   tags: string[];
   createdAt: Date;
   updatedAt: Date;
+}
+
+// ─── Resume ───────────────────────────────────────────────────────────────────
+
+export interface ResumeExperience {
+  readonly title: string;
+  readonly company: string;
+  readonly dates: string;
+  readonly bullets: string[];
+}
+
+export interface ResumeEducation {
+  readonly degree: string;
+  readonly institution: string;
+  readonly year: string | null;
+}
+
+export interface ResumeData {
+  readonly summary: string | null;
+  readonly skills: string[];
+  readonly experience: ResumeExperience[];
+  readonly education: ResumeEducation[];
+  readonly certifications: string[];
+  readonly rawText: string;
 }
 
 // ─── User settings ────────────────────────────────────────────────────────────
@@ -130,5 +155,6 @@ export interface UserSettings {
   userId: string;
   displayName: string | null;
   accent: 'indigo' | 'coral' | 'mint';
+  resume: ResumeData | null;
   updatedAt: Date;
 }

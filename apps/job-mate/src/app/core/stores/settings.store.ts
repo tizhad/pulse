@@ -2,7 +2,8 @@ import { Injectable, inject, signal, effect } from '@angular/core';
 import { SupabaseService } from '../services/supabase.service';
 import { AuthService } from '../services/auth.service';
 import { fromSettingsRow } from '../models/mappers';
-import type { UserSettings } from '../models/jobmate.models';
+import type { UserSettings, ResumeData } from '../models/jobmate.models';
+import type { Json } from '../models/database.types';
 
 @Injectable({ providedIn: 'root' })
 export class SettingsStore {
@@ -37,17 +38,22 @@ export class SettingsStore {
     }
   }
 
-  async upsert(patch: Partial<Pick<UserSettings, 'displayName' | 'accent'>>): Promise<void> {
+  async upsert(patch: Partial<Pick<UserSettings, 'displayName' | 'accent' | 'resume'>>): Promise<void> {
     const userId = this.auth.user()?.id;
     if (!userId) return;
 
     const prev = this._settings();
     this._settings.update(s => s ? { ...s, ...patch } : null);
 
+    const resumeValue: Json | undefined = patch.resume !== undefined
+      ? (patch.resume as unknown as Json)
+      : undefined;
+
     const { data, error } = await this.supabase.client.from('user_settings').upsert({
       user_id: userId,
       display_name: patch.displayName ?? prev?.displayName ?? null,
       accent: patch.accent ?? prev?.accent ?? 'indigo',
+      ...(resumeValue !== undefined ? { resume: resumeValue } : {}),
     }).select().single();
 
     if (error) {

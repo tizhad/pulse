@@ -5,7 +5,7 @@ import type {
 } from './database.types';
 import type {
   Subject, CompanyTag, StudyNote, CodeSample,
-  Resource, Company, Application, UserSettings,
+  Resource, Company, Application, UserSettings, ResumeData,
   SubjectCategory, SubjectPriority, SubjectStatus,
   AppStatus, CompanyStatus, CodeLanguage, ResourceType,
   CompanyFrequency, QA,
@@ -144,6 +144,7 @@ export function fromApplicationRow(row: ApplicationRow): Application {
     location: row.location,
     status: row.status as AppStatus,
     salary: row.salary,
+    url: row.url ?? null,
     tags: row.tags ?? [],
     createdAt: new Date(row.created_at),
     updatedAt: new Date(row.updated_at),
@@ -158,6 +159,7 @@ export function fromSettingsRow(row: UserSettingsRow): UserSettings {
     userId: row.user_id,
     displayName: row.display_name,
     accent: row.accent as UserSettings['accent'],
+    resume: row.resume ? (row.resume as unknown as ResumeData) : null,
     updatedAt: new Date(row.updated_at),
   };
 }
