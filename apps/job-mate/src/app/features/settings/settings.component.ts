@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { SettingsStore } from '../../core/stores/settings.store';
 import { AuthService } from '../../core/services/auth.service';
 import { CodeThemeService, CODE_THEMES } from '../../core/services/code-theme.service';
+import { ResumeParserService } from '../../core/services/resume-parser.service';
 import type { UserSettings } from '../../core/models/jobmate.models';
 
 @Component({
@@ -17,6 +18,10 @@ export class SettingsComponent {
   readonly auth = inject(AuthService);
   readonly codeTheme = inject(CodeThemeService);
   private readonly router = inject(Router);
+  private readonly resumeParser = inject(ResumeParserService);
+
+  readonly resumeText = signal('');
+  readonly resumeSaving = signal(false);
 
   readonly codeThemes = CODE_THEMES;
 
@@ -49,6 +54,20 @@ function schedule(score: number): Date {
   initial(): string {
     const name = this.settingsStore.settings()?.displayName ?? this.auth.user()?.email ?? '?';
     return name.charAt(0).toUpperCase();
+  }
+
+  async saveResume(): Promise<void> {
+    const text = this.resumeText().trim();
+    if (!text) return;
+    this.resumeSaving.set(true);
+    const parsed = this.resumeParser.parse(text);
+    await this.settingsStore.upsert({ resume: parsed });
+    this.resumeText.set('');
+    this.resumeSaving.set(false);
+  }
+
+  async clearResume(): Promise<void> {
+    await this.settingsStore.upsert({ resume: null });
   }
 
   async signOut(): Promise<void> {

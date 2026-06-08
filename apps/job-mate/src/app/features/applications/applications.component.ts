@@ -5,6 +5,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import {
   FormControl,
   FormGroup,
@@ -12,7 +13,9 @@ import {
   Validators,
 } from '@angular/forms';
 import { ApplicationStore } from '../../core/stores/application.store';
+import { SettingsStore } from '../../core/stores/settings.store';
 import { Application, AppStatus } from '../../core/models/jobmate.models';
+import { JobAnalysisService, JobAnalysis } from '../../core/services/job-analysis.service';
 
 type SortKey = 'createdAt' | 'date' | 'updatedAt' | 'status' | 'title' | 'company';
 type SortDir = 'asc' | 'desc';
@@ -42,10 +45,12 @@ const AVATAR_PALETTE: ReadonlyArray<{ bg: string; color: string }> = [
   templateUrl: './applications.component.html',
   styleUrl: './applications.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
 })
 export class ApplicationsComponent {
   readonly store = inject(ApplicationStore);
+  readonly settingsStore = inject(SettingsStore);
+  private readonly analysisService = inject(JobAnalysisService);
 
   /* ── Sort ─────────────────────────────────────────────────────────────── */
 
@@ -111,6 +116,14 @@ export class ApplicationsComponent {
   readonly tags = signal<string[]>([]);
   readonly tagInput = new FormControl('', { nonNullable: true });
 
+  // Analysis state
+  readonly linkedinUrl = new FormControl('', { nonNullable: true });
+  readonly analyzing = signal(false);
+  readonly analyzeError = signal<string | null>(null);
+  readonly analysis = signal<JobAnalysis | null>(null);
+  readonly pasteMode = signal(false);
+  readonly pasteText = new FormControl('', { nonNullable: true });
+
   readonly form = new FormGroup({
     title: new FormControl('', {
       nonNullable: true,
@@ -130,11 +143,65 @@ export class ApplicationsComponent {
     this.form.reset({ date: this.todayIso(), status: 'saved' });
     this.tags.set([]);
     this.tagInput.reset();
+    this.linkedinUrl.reset();
+    this.analysis.set(null);
+    this.analyzeError.set(null);
+    this.analyzing.set(false);
+    this.pasteMode.set(false);
+    this.pasteText.reset();
     this.showForm.set(true);
   }
 
   closeForm(): void {
     this.showForm.set(false);
+  }
+
+  async analyze(): Promise<void> {
+    const url = this.linkedinUrl.value.trim();
+    if (!url) return;
+    this.analyzing.set(true);
+    this.analyzeError.set(null);
+    this.analysis.set(null);
+    try {
+      const result = await this.analysisService.fetchAndAnalyze(url);
+      this.analysis.set(result);
+      this.autofillForm(result);
+    } catch {
+      this.analyzeError.set('Could not fetch the job post. Try pasting the description below.');
+    } finally {
+      this.analyzing.set(false);
+    }
+  }
+
+  analyzeFromPaste(): void {
+    const text = this.pasteText.value.trim();
+    if (!text) return;
+    const result = this.analysisService.analyzeText(text);
+    this.analysis.set(result);
+    this.autofillForm(result);
+    this.analyzeError.set(null);
+  }
+
+  private autofillForm(result: JobAnalysis): void {
+    if (result.jobTitle && !this.form.controls.title.value)
+      this.form.controls.title.setValue(result.jobTitle);
+    if (result.company && !this.form.controls.company.value)
+      this.form.controls.company.setValue(result.company);
+    if (result.location && !this.form.controls.location.value)
+      this.form.controls.location.setValue(result.isRemote ? 'Remote' : result.location);
+    if (result.salaryRange && !this.form.controls.salary.value)
+      this.form.controls.salary.setValue(result.salaryRange);
+  }
+
+  recommendationLabel(rec: JobAnalysis['recommendation']): string {
+    const map: Record<JobAnalysis['recommendation'], string> = {
+      'strong':        'Strong match — go for it',
+      'worth-trying':  'Worth applying',
+      'prepare-first': 'Prepare first',
+      'not-ready':     'Significant gap',
+      'no-data':       'Could not detect skills',
+    };
+    return map[rec];
   }
 
   addTag(): void {
@@ -167,6 +234,7 @@ export class ApplicationsComponent {
       status,
       date,
       salary: salary.trim() || null,
+      url: this.linkedinUrl.value.trim() || null,
       tags: this.tags(),
     });
     this.saving.set(false);

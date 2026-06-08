@@ -325,6 +325,142 @@
     </div>
 
     <div class="drawer-body">
+
+      <!-- ── Analyze section ─────────────────────────────────────────────── -->
+      <div class="analyze-section">
+        <div class="analyze-header">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <span class="analyze-title">Analyze job post</span>
+          <span class="analyze-badge">free</span>
+        </div>
+
+        <div class="analyze-url-row">
+          <input
+            class="field-input analyze-url-input"
+            type="url"
+            placeholder="Paste LinkedIn job URL…"
+            [formControl]="linkedinUrl"
+            (keydown.enter)="analyze()"
+          />
+          <button
+            type="button"
+            class="btn-analyze"
+            [disabled]="analyzing() || !linkedinUrl.value.trim()"
+            (click)="analyze()"
+          >
+            @if (analyzing()) {
+              <span class="spinner"></span>
+            } @else {
+              Analyze
+            }
+          </button>
+        </div>
+
+        @if (!pasteMode()) {
+          <button type="button" class="paste-toggle" (click)="pasteMode.set(true)">
+            Or paste job description manually
+          </button>
+        } @else {
+          <div class="paste-area-wrap">
+            <textarea
+              class="paste-area"
+              placeholder="Paste the full job description here…"
+              rows="5"
+              [formControl]="pasteText"
+            ></textarea>
+            <button
+              type="button"
+              class="btn-analyze btn-analyze--sm"
+              [disabled]="!pasteText.value.trim()"
+              (click)="analyzeFromPaste()"
+            >
+              Analyze text
+            </button>
+          </div>
+        }
+
+        @if (analyzeError()) {
+          <p class="analyze-error">{{ analyzeError() }}</p>
+        }
+
+        @if (analysis(); as result) {
+          <div class="result-card" [class]="'result-card--' + result.recommendation">
+            <div class="result-top">
+              <div class="result-score-wrap">
+                @if (result.matchScore !== null) {
+                  <span class="result-score">{{ result.matchScore }}%</span>
+                  <span class="result-score-label">match</span>
+                } @else {
+                  <span class="result-score result-score--na">N/A</span>
+                  <span class="result-score-label">no skill data</span>
+                }
+              </div>
+              <div class="result-rec">
+                <span class="result-rec-label">{{ recommendationLabel(result.recommendation) }}</span>
+                @if (result.seniorityLevel) {
+                  <span class="result-meta-chip">{{ result.seniorityLevel }}</span>
+                }
+                @if (result.yearsRequired) {
+                  <span class="result-meta-chip">{{ result.yearsRequired }}+ yrs</span>
+                }
+                @if (result.isRemote) {
+                  <span class="result-meta-chip">Remote</span>
+                }
+              </div>
+            </div>
+
+            @if (result.matchedSkills.length) {
+              <div class="result-skills">
+                <span class="result-skills-label">You have</span>
+                <div class="result-skill-list">
+                  @for (s of result.matchedSkills; track s.name) {
+                    <span class="skill-chip skill-chip--match" [title]="s.status">{{ s.name }}</span>
+                  }
+                </div>
+              </div>
+            }
+
+            @if (result.missingSkills.length) {
+              <div class="result-skills">
+                <span class="result-skills-label">Gaps</span>
+                <div class="result-skill-list">
+                  @for (s of result.missingSkills; track s) {
+                    <span class="skill-chip skill-chip--gap">{{ s }}</span>
+                  }
+                </div>
+              </div>
+            }
+
+            @if (result.niceToHaveSkills.length) {
+              <div class="result-skills">
+                <span class="result-skills-label">Nice to have</span>
+                <div class="result-skill-list">
+                  @for (s of result.niceToHaveSkills; track s) {
+                    <span class="skill-chip skill-chip--nice">{{ s }}</span>
+                  }
+                </div>
+              </div>
+            }
+
+            @if (!settingsStore.settings()?.resume) {
+              <a class="result-nudge" routerLink="/settings">
+                <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                Add your resume in Settings for a more accurate match
+              </a>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="section-divider">
+        <span>Application details</span>
+      </div>
+
+      <!-- ── Form fields ──────────────────────────────────────────────────── -->
       <div class="field">
         <label class="field-label" for="app-title"
           >Job title <span class="required">*</span></label
