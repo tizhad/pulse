@@ -54,12 +54,17 @@ export class SettingsStore {
       display_name: patch.displayName ?? prev?.displayName ?? null,
       accent: patch.accent ?? prev?.accent ?? 'indigo',
       ...(resumeValue !== undefined ? { resume: resumeValue } : {}),
-    }).select().single();
+    }, { onConflict: 'user_id' }).select().single();
 
     if (error) {
       this._settings.set(prev);
     } else if (data) {
-      this._settings.set(fromSettingsRow(data));
+      const fromDb = fromSettingsRow(data);
+      // PostgREST may return resume:null if its schema cache predates the
+      // migration that added the column. When that happens, keep the value
+      // we just saved rather than silently losing it.
+      const resumeLost = 'resume' in patch && patch.resume !== null && fromDb.resume === null;
+      this._settings.set(resumeLost ? { ...fromDb, resume: patch.resume! } : fromDb);
     }
   }
 
