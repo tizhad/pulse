@@ -677,47 +677,100 @@ select.field-input { cursor: pointer; }
   width: fit-content;
 }
 
-.result-skills {
+/* ── Skill checklist ─────────────────────────────────────────────────────── */
+
+.skill-section {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.result-skills-label {
-  font-size: 10.5px;
+.skill-section-label {
+  font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  margin-bottom: 2px;
+
+  &--required { color: var(--pipe-rejected); }
+  &--nice     { color: var(--text-muted); }
 }
 
-.result-skill-list {
+.skill-row {
   display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 0;
+
+  &--nice { opacity: 0.85; }
 }
 
-.skill-chip {
-  font-size: 11px;
+.skill-icon {
+  flex-shrink: 0;
+
+  &--found        { color: var(--status-done-text); }
+  &--missing      { color: var(--pipe-rejected); }
+  &--missing-soft { color: var(--text-muted); }
+}
+
+.skill-row-name {
+  flex: 1;
+  font-size: 12.5px;
+  color: var(--text);
   font-weight: 500;
-  border-radius: 4px;
-  padding: 2px 8px;
 
-  &--match {
-    background: var(--status-done-bg);
-    color: var(--status-done-text);
-  }
+  .skill-row--nice & { color: var(--text-secondary); }
+}
 
-  &--gap {
+.btn-add-study {
+  flex-shrink: 0;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  border: 0.5px solid var(--pipe-rejected);
+  background: transparent;
+  color: var(--pipe-rejected);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+
+  &:hover:not(:disabled) {
     background: var(--priority-critical-bg);
-    color: var(--priority-critical-text);
   }
+
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
 
   &--nice {
-    background: var(--surface-hover);
-    color: var(--text-secondary);
-    border: 0.5px solid var(--border);
+    border-color: var(--text-muted);
+    color: var(--text-muted);
+
+    &:hover:not(:disabled) {
+      background: var(--surface-hover);
+    }
   }
+}
+
+.skill-added {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--status-done-text);
+}
+
+.study-plan-toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--status-done-bg);
+  border: 0.5px solid color-mix(in srgb, var(--status-done-text) 30%, transparent);
+  font-size: 11.5px;
+  color: var(--status-done-text);
+  line-height: 1.4;
+
+  svg { flex-shrink: 0; margin-top: 1px; }
 }
 
 /* ── Resume nudge ────────────────────────────────────────────────────────── */

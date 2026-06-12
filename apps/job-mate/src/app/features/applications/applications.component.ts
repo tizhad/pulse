@@ -14,7 +14,8 @@ import {
 } from '@angular/forms';
 import { ApplicationStore } from '../../core/stores/application.store';
 import { SettingsStore } from '../../core/stores/settings.store';
-import { Application, AppStatus } from '../../core/models/jobmate.models';
+import { StudyStore } from '../../core/stores/study.store';
+import { Application, AppStatus, SubjectCategory } from '../../core/models/jobmate.models';
 import { JobAnalysisService, JobAnalysis } from '../../core/services/job-analysis.service';
 
 type SortKey = 'createdAt' | 'date' | 'updatedAt' | 'status' | 'title' | 'company';
@@ -40,6 +41,19 @@ const AVATAR_PALETTE: ReadonlyArray<{ bg: string; color: string }> = [
   { bg: '#A07C10', color: '#ffffff' },
 ];
 
+const SKILL_CATEGORY: Record<string, SubjectCategory> = {
+  'Angular': 'angular',   'RxJS': 'angular',
+  'React': 'react',       'Vue': 'react',
+  'JavaScript': 'javascript',
+  'TypeScript': 'typescript',
+  'CSS/SCSS': 'css',
+  'Testing': 'testing',
+  'Performance': 'performance',
+  'Accessibility': 'accessibility',
+  'System Design': 'system_design',
+  'Soft Skills': 'soft_skills', 'Agile/Scrum': 'soft_skills',
+};
+
 @Component({
   selector: 'app-applications',
   templateUrl: './applications.component.html',
@@ -50,6 +64,7 @@ const AVATAR_PALETTE: ReadonlyArray<{ bg: string; color: string }> = [
 export class ApplicationsComponent {
   readonly store = inject(ApplicationStore);
   readonly settingsStore = inject(SettingsStore);
+  private readonly studyStore = inject(StudyStore);
   private readonly analysisService = inject(JobAnalysisService);
 
   /* ── Sort ─────────────────────────────────────────────────────────────── */
@@ -124,6 +139,12 @@ export class ApplicationsComponent {
   readonly pasteMode = signal(false);
   readonly pasteText = new FormControl('', { nonNullable: true });
 
+  // Study plan state
+  readonly addedSkills = signal<ReadonlySet<string>>(new Set());
+  readonly addingSkill = signal<string | null>(null);
+  readonly studyPlanMessage = signal<string | null>(null);
+  private studyPlanTimer: ReturnType<typeof setTimeout> | null = null;
+
   readonly form = new FormGroup({
     title: new FormControl('', {
       nonNullable: true,
@@ -149,6 +170,9 @@ export class ApplicationsComponent {
     this.analyzing.set(false);
     this.pasteMode.set(false);
     this.pasteText.reset();
+    this.addedSkills.set(new Set());
+    this.addingSkill.set(null);
+    this.studyPlanMessage.set(null);
     this.showForm.set(true);
   }
 
@@ -191,6 +215,41 @@ export class ApplicationsComponent {
       this.form.controls.location.setValue(result.isRemote ? 'Remote' : result.location);
     if (result.salaryRange && !this.form.controls.salary.value)
       this.form.controls.salary.setValue(result.salaryRange);
+  }
+
+  /* ── Skill checklist helpers ───────────────────────────────────────────── */
+
+  isSkillFound(skillName: string): boolean {
+    const analysis = this.analysis();
+    if (analysis?.matchedSkills.some(m => m.name === skillName)) return true;
+    const resume = this.settingsStore.settings()?.resume;
+    if (resume) return resume.skills.includes(skillName);
+    return this.studyStore.subjects().some(
+      s => s.title.toLowerCase() === skillName.toLowerCase(),
+    );
+  }
+
+  async addToStudyPlan(skillName: string): Promise<void> {
+    if (this.addedSkills().has(skillName) || this.addingSkill()) return;
+    this.addingSkill.set(skillName);
+    const result = await this.studyStore.addSubject({
+      title: skillName,
+      summary: null,
+      category: SKILL_CATEGORY[skillName] ?? 'javascript',
+      priority: 'medium',
+      status: 'not_started',
+      confidenceScore: 0,
+      estimatedReadTime: null,
+      tags: [],
+      sourceUrl: null,
+    });
+    this.addingSkill.set(null);
+    if (result) {
+      this.addedSkills.update(s => new Set([...s, skillName]));
+      if (this.studyPlanTimer) clearTimeout(this.studyPlanTimer);
+      this.studyPlanMessage.set(skillName);
+      this.studyPlanTimer = setTimeout(() => this.studyPlanMessage.set(null), 5000);
+    }
   }
 
   recommendationLabel(rec: JobAnalysis['recommendation']): string {
