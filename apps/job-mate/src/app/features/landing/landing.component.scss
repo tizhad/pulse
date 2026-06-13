@@ -347,6 +347,24 @@
   &:hover { background: var(--surface); }
 }
 
+.ln-btn-disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.ln-soon-tag {
+  margin-left: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  background: var(--surface-hover);
+  border-radius: 999px;
+  padding: 2px 7px;
+}
+
 .ln-google-icon {
   width: 20px;
   height: 20px;
