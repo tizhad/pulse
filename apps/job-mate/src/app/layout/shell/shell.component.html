@@ -8,14 +8,14 @@
         <line x1="3" y1="18" x2="21" y2="18"/>
       </svg>
     </button>
-    <div class="mobile-logo">
+    <a class="mobile-logo" routerLink="/dashboard" (click)="closeSidebar()">
       <div class="logo-mark">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
         </svg>
       </div>
       <span class="logo-name">PULSE</span>
-    </div>
+    </a>
   </header>
 
   <!-- Backdrop (mobile only) -->
@@ -24,7 +24,7 @@
   }
 
   <aside class="sidebar" [class.open]="sidebarOpen()">
-    <div class="sidebar-logo">
+    <a class="sidebar-logo" routerLink="/dashboard" (click)="closeSidebar()">
       <div class="logo-mark">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
@@ -34,7 +34,7 @@
         <span class="logo-name">PULSE</span>
         <span class="logo-sub">INTERVIEW OS</span>
       </div>
-    </div>
+    </a>
 
     <nav class="sidebar-nav">
       <a routerLink="/dashboard" routerLinkActive="active" (click)="closeSidebar()">
