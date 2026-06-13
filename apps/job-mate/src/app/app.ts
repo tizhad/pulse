@@ -30,4 +30,8 @@ export class App {
   closeSidebar(): void {
     this.sidebarOpen.set(false);
   }
+
+  goHome(): void {
+    this.router.navigate(['/']);
+  }
 }

@@ -49,6 +49,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  cursor: pointer;
 }
 
 /* ── Sidebar backdrop (mobile only) ──────────────────────────────────────── */
@@ -93,6 +94,7 @@
   align-items: center;
   gap: 10px;
   padding: 0 0.5rem 1.5rem;
+  cursor: pointer;
 }
 
 .logo-mark {
