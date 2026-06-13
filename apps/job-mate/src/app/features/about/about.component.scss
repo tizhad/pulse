@@ -1,0 +1,395 @@
+.about {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 3rem 2rem 5rem;
+}
+
+/* ── Hero ────────────────────────────────────────────────────────────────── */
+
+.hero {
+  margin-bottom: 4rem;
+}
+
+.trail {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+}
+
+.hero-title {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 1.25rem;
+}
+
+.accent {
+  background: var(--gradient-warm);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bio {
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin-bottom: 1.5rem;
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  color: var(--text-secondary);
+}
+
+/* ── Section wrapper ─────────────────────────────────────────────────────── */
+
+.section {
+  margin-bottom: 3.5rem;
+}
+
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+}
+
+/* ── Work list ───────────────────────────────────────────────────────────── */
+
+.work-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.work-item {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 1.25rem;
+  padding: 1.5rem 0;
+  border-bottom: 0.5px solid var(--border);
+
+  &:first-child {
+    border-top: 0.5px solid var(--border);
+  }
+}
+
+.work-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding-top: 2px;
+}
+
+.work-year {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+}
+
+.case-link {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  white-space: nowrap;
+
+  &:hover { text-decoration: underline; }
+}
+
+.work-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.work-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+.work-desc {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+.metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.metric {
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--accent-light);
+  color: var(--accent);
+  font-family: 'SF Mono', 'Fira Code', monospace;
+}
+
+.tech-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tech {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--surface-hover);
+  border: 0.5px solid var(--border);
+  color: var(--text-muted);
+}
+
+/* ── Writing grid ────────────────────────────────────────────────────────── */
+
+.writing-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.writing-card {
+  padding: 1.25rem;
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+
+  &:hover {
+    border-color: var(--accent);
+    box-shadow: var(--shadow-soft);
+  }
+}
+
+.writing-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+}
+
+.writing-desc {
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+/* ── Stack table ─────────────────────────────────────────────────────────── */
+
+.stack-table {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.stack-row {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 1.5rem;
+  padding: 0.85rem 1.25rem;
+  border-bottom: 0.5px solid var(--border);
+
+  &:last-child { border-bottom: none; }
+
+  &:nth-child(odd) { background: var(--surface); }
+  &:nth-child(even) { background: var(--bg); }
+}
+
+.stack-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  align-self: center;
+}
+
+.stack-items {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  align-self: center;
+}
+
+/* ── Experience ──────────────────────────────────────────────────────────── */
+
+.exp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.exp-item {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 1.25rem;
+  padding: 1rem 0;
+  border-bottom: 0.5px solid var(--border);
+
+  &:first-child { border-top: 0.5px solid var(--border); }
+}
+
+.exp-years {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  white-space: nowrap;
+  align-self: center;
+}
+
+.exp-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.exp-role {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.exp-company {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ── CTA ─────────────────────────────────────────────────────────────────── */
+
+.cta {
+  margin-top: 4rem;
+  padding-top: 3rem;
+  border-top: 0.5px solid var(--border);
+  text-align: center;
+}
+
+.cta-title {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 0.75rem;
+}
+
+.cta-sub {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  max-width: 480px;
+  margin: 0 auto 2rem;
+}
+
+.cta-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-hire {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 22px;
+  border-radius: var(--radius-sm);
+  background: var(--text);
+  color: var(--bg);
+  font-size: 13px;
+  font-weight: 700;
+  transition: opacity var(--transition);
+
+  &:hover { opacity: 0.85; }
+}
+
+.btn-call {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 22px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  transition: border-color var(--transition);
+
+  &:hover { border-color: var(--text-secondary); }
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: color var(--transition);
+
+  &:hover { color: var(--text); }
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+
+@media (max-width: 600px) {
+  .about {
+    padding: 2rem 1.25rem 4rem;
+  }
+
+  .work-item {
+    grid-template-columns: 1fr;
+
+    .work-meta {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+
+  .writing-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stack-row {
+    grid-template-columns: 80px 1fr;
+    gap: 1rem;
+  }
+
+  .exp-item {
+    grid-template-columns: 90px 1fr;
+  }
+}

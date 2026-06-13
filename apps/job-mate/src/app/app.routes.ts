@@ -57,5 +57,10 @@ export const appRoutes: Route[] = [
     loadComponent: () =>
       import('./features/settings/settings.component').then(m => m.SettingsComponent),
   },
+  {
+    path: 'about',
+    loadComponent: () =>
+      import('./features/about/about.component').then(m => m.AboutComponent),
+  },
   { path: '**', redirectTo: 'dashboard' },
 ];
