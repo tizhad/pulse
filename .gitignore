@@ -3,6 +3,9 @@
 # Local learning notes — not for version control
 DECISIONS.md
 
+# Resume — keep off version control
+apps/job-mate/public/*.pdf
+
 # compiled output
 dist
 tmp
