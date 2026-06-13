@@ -18,4 +18,8 @@ export class ShellComponent {
   closeSidebar(): void {
     this.sidebarOpen.set(false);
   }
+
+  goHome(): void {
+    window.open('https://tizhad.com', '_blank', 'noopener,noreferrer');
+  }
 }
