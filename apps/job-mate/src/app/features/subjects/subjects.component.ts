@@ -19,6 +19,7 @@ import {
   SubjectPriority,
   SubjectStatus,
 } from '../../core/models/jobmate.models';
+import { PosthogService } from '../../core/services/posthog.service';
 
 type CategoryGroup = {
   readonly category: SubjectCategory;
@@ -38,6 +39,7 @@ type SortKey = 'title' | 'qa' | 'status' | 'priority' | 'potential';
 export class SubjectsComponent {
   readonly store = inject(StudyStore);
   private readonly router = inject(Router);
+  private readonly posthog = inject(PosthogService);
 
   readonly sortKey = signal<SortKey>('potential');
   readonly showForm = signal(false);
@@ -217,6 +219,12 @@ export class SubjectsComponent {
     });
     this.closeForm();
     if (subject) {
+      this.posthog.capture('subject_created', {
+        category,
+        priority,
+        status,
+        companies_count: this.companies().length,
+      });
       this.router.navigate(['/subjects', subject.id]);
     }
   }

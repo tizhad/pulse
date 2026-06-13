@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { PosthogService } from '../../core/services/posthog.service';
 
 @Component({
   selector: 'app-landing',
@@ -9,10 +10,17 @@ import { AuthService } from '../../core/services/auth.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink],
 })
-export class LandingComponent {
+export class LandingComponent implements OnInit {
   private readonly auth = inject(AuthService);
+  private readonly posthog = inject(PosthogService);
 
   readonly ctaRoute = computed(() => (this.auth.isAuthenticated() ? '/dashboard' : '/auth'));
+
+  ngOnInit(): void {
+    if (!this.auth.isAuthenticated()) {
+      this.posthog.capture('landing_page_viewed');
+    }
+  }
 
   readonly trustedBy = ['Stripe', 'Linear', 'Notion', 'Figma', 'Vercel', 'Airbnb', 'Datadog'];
 

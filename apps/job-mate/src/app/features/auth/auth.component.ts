@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { SupabaseService } from '../../core/services/supabase.service';
+import { PosthogService } from '../../core/services/posthog.service';
 
 @Component({
   selector: 'app-auth',
@@ -13,6 +14,7 @@ export class AuthComponent {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
   readonly supabase = inject(SupabaseService);
+  private readonly posthog = inject(PosthogService);
 
   readonly mode = signal<'signin' | 'signup'>('signin');
   readonly email = signal('');
@@ -45,6 +47,17 @@ export class AuthComponent {
     if (this.mode() === 'signup' && !this.auth.isAuthenticated()) {
       this.errorMessage.set('Check your email to confirm your account.');
       return;
+    }
+
+    const user = this.auth.user();
+    if (user) {
+      this.posthog.identify(user.id, { email: user.email });
+    }
+
+    if (this.mode() === 'signup') {
+      this.posthog.capture('user_signed_up', { email: this.email() });
+    } else {
+      this.posthog.capture('user_signed_in', { email: this.email() });
     }
 
     await this.router.navigate(['/dashboard']);

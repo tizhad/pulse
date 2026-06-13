@@ -5,6 +5,7 @@ import { SettingsStore } from '../../core/stores/settings.store';
 import { AuthService } from '../../core/services/auth.service';
 import { CodeThemeService, CODE_THEMES } from '../../core/services/code-theme.service';
 import { ResumeParserService } from '../../core/services/resume-parser.service';
+import { PosthogService } from '../../core/services/posthog.service';
 import type { UserSettings } from '../../core/models/jobmate.models';
 
 @Component({
@@ -19,6 +20,7 @@ export class SettingsComponent {
   readonly codeTheme = inject(CodeThemeService);
   private readonly router = inject(Router);
   private readonly resumeParser = inject(ResumeParserService);
+  private readonly posthog = inject(PosthogService);
 
   readonly resumeText = signal('');
   readonly resumeSaving = signal(false);
@@ -62,6 +64,10 @@ function schedule(score: number): Date {
     this.resumeSaving.set(true);
     const parsed = this.resumeParser.parse(text);
     await this.settingsStore.upsert({ resume: parsed });
+    this.posthog.capture('resume_uploaded', {
+      skills_count: parsed.skills.length,
+      experience_count: parsed.experience.length,
+    });
     this.resumeText.set('');
     this.resumeSaving.set(false);
   }
@@ -71,6 +77,8 @@ function schedule(score: number): Date {
   }
 
   async signOut(): Promise<void> {
+    this.posthog.capture('user_signed_out');
+    this.posthog.reset();
     await this.auth.signOut();
     await this.router.navigate(['/auth']);
   }

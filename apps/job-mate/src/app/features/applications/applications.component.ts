@@ -17,6 +17,7 @@ import { SettingsStore } from '../../core/stores/settings.store';
 import { StudyStore } from '../../core/stores/study.store';
 import { Application, AppStatus, SubjectCategory } from '../../core/models/jobmate.models';
 import { JobAnalysisService, JobAnalysis } from '../../core/services/job-analysis.service';
+import { PosthogService } from '../../core/services/posthog.service';
 
 type SortKey = 'createdAt' | 'date' | 'updatedAt' | 'status' | 'title' | 'company';
 type SortDir = 'asc' | 'desc';
@@ -66,6 +67,7 @@ export class ApplicationsComponent {
   readonly settingsStore = inject(SettingsStore);
   private readonly studyStore = inject(StudyStore);
   private readonly analysisService = inject(JobAnalysisService);
+  private readonly posthog = inject(PosthogService);
 
   /* ── Sort ─────────────────────────────────────────────────────────────── */
 
@@ -190,6 +192,13 @@ export class ApplicationsComponent {
       const result = await this.analysisService.fetchAndAnalyze(url);
       this.analysis.set(result);
       this.autofillForm(result);
+      this.posthog.capture('job_analyzed', {
+        source: 'url',
+        recommendation: result.recommendation,
+        match_score: result.matchScore,
+        required_skills_count: result.requiredSkills.length,
+        seniority_level: result.seniorityLevel,
+      });
     } catch {
       this.analyzeError.set('Could not fetch the job post. Try pasting the description below.');
     } finally {
@@ -204,6 +213,13 @@ export class ApplicationsComponent {
     this.analysis.set(result);
     this.autofillForm(result);
     this.analyzeError.set(null);
+    this.posthog.capture('job_analyzed', {
+      source: 'paste',
+      recommendation: result.recommendation,
+      match_score: result.matchScore,
+      required_skills_count: result.requiredSkills.length,
+      seniority_level: result.seniorityLevel,
+    });
   }
 
   private autofillForm(result: JobAnalysis): void {
@@ -249,6 +265,11 @@ export class ApplicationsComponent {
       if (this.studyPlanTimer) clearTimeout(this.studyPlanTimer);
       this.studyPlanMessage.set(skillName);
       this.studyPlanTimer = setTimeout(() => this.studyPlanMessage.set(null), 5000);
+      this.posthog.capture('skill_added_to_study_plan', {
+        skill_name: skillName,
+        job_title: this.form.controls.title.value || null,
+        company: this.form.controls.company.value || null,
+      });
     }
   }
 
@@ -295,6 +316,15 @@ export class ApplicationsComponent {
       salary: salary.trim() || null,
       url: this.linkedinUrl.value.trim() || null,
       tags: this.tags(),
+    });
+    this.posthog.capture('application_added', {
+      status,
+      company,
+      has_url: !!this.linkedinUrl.value.trim(),
+      has_salary: !!salary.trim(),
+      tags_count: this.tags().length,
+      via_job_analysis: !!this.analysis(),
+      match_score: this.analysis()?.matchScore ?? null,
     });
     this.saving.set(false);
     this.closeForm();
@@ -374,6 +404,13 @@ export class ApplicationsComponent {
       salary: salary.trim() || null,
       tags: this.editTags(),
     });
+    if (status !== app.status) {
+      this.posthog.capture('application_status_updated', {
+        previous_status: app.status,
+        new_status: status,
+        company: company.trim(),
+      });
+    }
     this.saving.set(false);
     this.closeModal();
   }

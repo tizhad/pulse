@@ -13,6 +13,7 @@ import { StudyStore } from '../../../core/stores/study.store';
 import type { SubjectPriority, SubjectStatus } from '../../../core/models/jobmate.models';
 import { RichEditorComponent } from '../../../shared/components/rich-editor/rich-editor.component';
 import { CodeThemeService } from '../../../core/services/code-theme.service';
+import { PosthogService } from '../../../core/services/posthog.service';
 
 type SubjectTab = 'notes' | 'qa';
 
@@ -28,6 +29,7 @@ export class SubjectDetailComponent {
   readonly store = inject(StudyStore);
   private readonly router = inject(Router);
   readonly codeTheme = inject(CodeThemeService);
+  private readonly posthog = inject(PosthogService);
 
   readonly subject = computed(() => this.store.getById(this.id()));
 
@@ -150,12 +152,22 @@ export class SubjectDetailComponent {
   }
 
   async saveEdit(): Promise<void> {
+    const sub = this.subject();
+    const newStatus = this.editStatus();
     await this.store.updateSubject(this.id(), {
       title: this.editTitle(),
       summary: this.editSummary() || null,
-      status: this.editStatus(),
+      status: newStatus,
       priority: this.editPriority(),
     });
+    if (sub && sub.status !== newStatus) {
+      this.posthog.capture('subject_status_updated', {
+        previous_status: sub.status,
+        new_status: newStatus,
+        subject_title: this.editTitle(),
+        priority: this.editPriority(),
+      });
+    }
     this.editMode.set(false);
   }
 
@@ -187,6 +199,12 @@ export class SubjectDetailComponent {
       question,
       answer,
       difficulty: this.qaDifficulty(),
+    });
+
+    this.posthog.capture('qa_added', {
+      difficulty: this.qaDifficulty(),
+      subject_title: this.subject()?.title ?? null,
+      total_qa_count: (this.subject()?.qa.length ?? 0) + 1,
     });
 
     this.qaQuestion.set('');

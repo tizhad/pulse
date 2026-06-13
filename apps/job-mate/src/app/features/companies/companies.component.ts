@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CompanyStore } from '../../core/stores/company.store';
+import { PosthogService } from '../../core/services/posthog.service';
 import type { Company, CompanyStatus } from '../../core/models/jobmate.models';
 
 const AVATAR_PALETTE: ReadonlyArray<{ bg: string; color: string }> = [
@@ -23,6 +24,7 @@ const AVATAR_PALETTE: ReadonlyArray<{ bg: string; color: string }> = [
 })
 export class CompaniesComponent {
   readonly store = inject(CompanyStore);
+  private readonly posthog = inject(PosthogService);
 
   readonly statusOptions: { value: CompanyStatus; label: string }[] = [
     { value: 'saved', label: 'Saved' },
@@ -66,6 +68,10 @@ export class CompaniesComponent {
     this.saving.set(true);
     const { name, category, status } = this.form.getRawValue();
     await this.store.addCompany(name.trim(), category, status);
+    this.posthog.capture('company_added', {
+      category,
+      status,
+    });
     this.saving.set(false);
     this.closeForm();
   }
@@ -98,6 +104,13 @@ export class CompaniesComponent {
     this.saving.set(true);
     const { name, status } = this.editForm.getRawValue();
     await this.store.updateCompany(company.id, { name: name.trim(), status });
+    if (status !== company.status) {
+      this.posthog.capture('company_status_updated', {
+        previous_status: company.status,
+        new_status: status,
+        company_name: name.trim(),
+      });
+    }
     this.saving.set(false);
     this.closeModal();
   }
