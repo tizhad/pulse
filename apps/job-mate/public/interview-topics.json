@@ -1,0 +1,1103 @@
+{
+  "meta": {
+    "title": "Frontend Engineer Interview Study Plan",
+    "version": "1.0.0",
+    "description": "Comprehensive interview topics for a Senior Frontend Engineer specialising in Angular",
+    "totalWeeks": 6,
+    "totalTopics": 26
+  },
+  "weeks": [
+    {
+      "id": "week-1-2",
+      "label": "Week 1–2",
+      "title": "Angular Deep Dive",
+      "theme": "purple",
+      "focus": "Consolidate your strongest area — be able to articulate the internals clearly, not just use them",
+      "topics": [
+        {
+          "id": "signals-zoneless",
+          "title": "Signals & Zoneless Change Detection",
+          "type": "strength",
+          "summary": "Signal graph, effect(), computed(), and why Zoneless is a performance win.",
+          "keyAPIs": ["signal()", "computed()", "effect()", "toSignal()", "toObservable()", "provideZonelessChangeDetection()"],
+          "interviewQuestions": [
+            "What problem do Signals solve that Zone.js didn't?",
+            "What's the difference between set(), update(), and mutate()?",
+            "Can you use Signals without Zoneless?",
+            "What happens if you forget to call a signal in a template — {{ count }} instead of {{ count() }}?"
+          ],
+          "talkingPoints": [
+            "Built Pulse in Angular 21 fully Zoneless from day one",
+            "Used toSignal() to bridge RxJS HTTP calls into the signal graph",
+            "Zero unnecessary re-renders — verifiable in DevTools"
+          ],
+          "concepts": [
+            {
+              "name": "Signal graph",
+              "detail": "Signals track who reads them and notify dependents when they change. Only affected components re-render."
+            },
+            {
+              "name": "Reactive contexts",
+              "detail": "Signals must be read inside a reactive context — template, computed(), or effect() — to be tracked."
+            },
+            {
+              "name": "toSignal / toObservable",
+              "detail": "Bridge between RxJS Observables and the Signals world. Used for async data from HTTP calls."
+            },
+            {
+              "name": "Zoneless bootstrapping",
+              "detail": "provideZonelessChangeDetection() removes Zone.js entirely. Requires OnPush or Signals for all updates."
+            }
+          ]
+        },
+        {
+          "id": "standalone-migration",
+          "title": "Angular 14–17 Migration Patterns",
+          "type": "strength",
+          "summary": "Standalone components, new control flow syntax (@if/@for/@switch), and deferrable views (@defer).",
+          "keyAPIs": ["standalone: true", "@if", "@for", "@switch", "@defer", "@placeholder", "@loading", "@empty", "loadComponent()", "loadChildren()"],
+          "interviewQuestions": [
+            "What's the main benefit of standalone components over NgModules?",
+            "Why is track mandatory in @for?",
+            "How does @defer differ from route-level lazy loading?",
+            "Can you use NgModules and standalone components in the same app?"
+          ],
+          "talkingPoints": [
+            "Migrated incrementally at ParkBee — leaf components first",
+            "Used @defer for below-the-fold content alongside route-based splitting",
+            "Circular import bugs surfaced and resolved during standalone migration"
+          ],
+          "concepts": [
+            {
+              "name": "Standalone components",
+              "detail": "Components that declare their own dependencies directly. No NgModule required. Enables tree-shaking per component."
+            },
+            {
+              "name": "Control flow syntax",
+              "detail": "@if, @for, @switch replace *ngIf, *ngFor, *ngSwitch. No CommonModule import needed. Better type narrowing."
+            },
+            {
+              "name": "@defer blocks",
+              "detail": "Declarative component-level lazy loading. Triggers: on viewport, on idle, on interaction, on timer, when condition."
+            },
+            {
+              "name": "Migration strategy",
+              "detail": "Leaf components first → feature modules → bootstrap migration → delete AppModule. ng generate @angular/core:standalone automates it."
+            }
+          ]
+        },
+        {
+          "id": "ssr-hydration",
+          "title": "SSR — Hydration, TransferState, SEO",
+          "type": "strength",
+          "summary": "How Angular Universal works, hydration mechanics, avoiding double data fetching, and common pitfalls.",
+          "keyAPIs": ["provideClientHydration()", "withHttpTransferCache()", "TransferState", "makeStateKey()", "isPlatformBrowser()", "isPlatformServer()", "DOCUMENT"],
+          "interviewQuestions": [
+            "What is hydration and why does it matter?",
+            "What causes hydration mismatches and how do you fix them?",
+            "What's the difference between SSR and prerendering?",
+            "How do you avoid fetching data twice — once on the server and once on the client?"
+          ],
+          "talkingPoints": [
+            "ParkBee SSR strategy for SEO and bounce rate improvement",
+            "Audited codebase for window/localStorage usage — wrapped with isPlatformBrowser",
+            "Implemented withHttpTransferCache to stop double data fetching"
+          ],
+          "concepts": [
+            {
+              "name": "Hydration",
+              "detail": "Angular reattaches event listeners to server-rendered HTML without destroying the DOM. Enabled via provideClientHydration()."
+            },
+            {
+              "name": "Hydration mismatches",
+              "detail": "Server and client render different HTML. Causes: window/localStorage access, Math.random(), Date.now(). Fix: isPlatformBrowser() guards."
+            },
+            {
+              "name": "TransferState",
+              "detail": "Passes server-fetched data to the client inside the HTML, preventing double API calls. withHttpTransferCache() automates HTTP calls."
+            },
+            {
+              "name": "SSR vs SSG vs prerendering",
+              "detail": "SSR: per-request. SSG: build-time. Prerendering: build-time for specified routes. Use SSR for personalised/dynamic data."
+            }
+          ]
+        },
+        {
+          "id": "change-detection",
+          "title": "Change Detection Internals",
+          "type": "gap",
+          "summary": "OnPush vs Default vs Zoneless, markForCheck vs detectChanges, detach/reattach, and reading flame graphs for CD issues.",
+          "keyAPIs": ["ChangeDetectionStrategy.OnPush", "ChangeDetectorRef", "markForCheck()", "detectChanges()", "detach()", "reattach()", "NgZone", "runOutsideAngular()"],
+          "interviewQuestions": [
+            "What's the difference between Default and OnPush change detection?",
+            "When would you use markForCheck() vs detectChanges()?",
+            "How does OnPush interact with Signals?",
+            "What causes ExpressionChangedAfterItHasBeenCheckedError?",
+            "How would you debug a performance problem caused by change detection?"
+          ],
+          "talkingPoints": [
+            "ParkBee: scroll listeners triggering CD cycles — fixed with runOutsideAngular()",
+            "Eliminating long tasks via CDP profiling — recurring ApplicationRef.tick() calls",
+            "Pulse: Zoneless from day one — no unnecessary CD cycles by design"
+          ],
+          "concepts": [
+            {
+              "name": "Default vs OnPush",
+              "detail": "Default checks every component on every CD cycle. OnPush skips unless: input reference changes, event fires, async pipe emits, or manual trigger."
+            },
+            {
+              "name": "markForCheck() vs detectChanges()",
+              "detail": "markForCheck(): schedules check next cycle, marks ancestors dirty. detectChanges(): synchronous and immediate, checks component and children."
+            },
+            {
+              "name": "runOutsideAngular()",
+              "detail": "Runs code without triggering Zone.js. Use for high-frequency events (scroll, mousemove). Use ngZone.run() when UI actually needs updating."
+            },
+            {
+              "name": "Flame graph for CD",
+              "detail": "Look for recurring ApplicationRef.tick() calls. checkAndUpdateView repeated = deep tree being fully checked. Zone catching high-frequency events."
+            }
+          ]
+        },
+        {
+          "id": "di-injectors",
+          "title": "DI System & Hierarchical Injectors",
+          "type": "gap",
+          "summary": "EnvironmentInjector vs ElementInjector, providedIn options, inject() function, InjectionToken, and provider types.",
+          "keyAPIs": ["inject()", "providedIn: 'root'", "InjectionToken", "@Self()", "@SkipSelf()", "@Host()", "@Optional()", "runInInjectionContext()", "DestroyRef"],
+          "interviewQuestions": [
+            "What is the difference between ElementInjector and EnvironmentInjector?",
+            "When would you scope a service to a component rather than root?",
+            "What's the difference between @Self(), @SkipSelf(), and @Host()?",
+            "Why is providedIn: 'root' preferred over NgModule providers arrays?",
+            "Where can you call inject() and where can't you?"
+          ],
+          "talkingPoints": [
+            "Cuurios: WebSocket service scoped to dashboard component — destroyed with component, no memory leak",
+            "Refactored root-scoped socket to component-scoped — fixed persistent open connection bug"
+          ],
+          "concepts": [
+            {
+              "name": "Injector tree",
+              "detail": "NullInjector → EnvironmentInjector (root) → EnvironmentInjector (lazy) → ElementInjector chain. Resolution walks upward."
+            },
+            {
+              "name": "providedIn options",
+              "detail": "'root': app-wide singleton, tree-shakeable. 'platform': across multiple Angular apps. Component providers: scoped to component subtree."
+            },
+            {
+              "name": "inject() function",
+              "detail": "Modern alternative to constructor injection. Works in field initialisers and injection contexts. Enables composable injection logic."
+            },
+            {
+              "name": "InjectionToken",
+              "detail": "For non-class dependencies: config objects, strings, functions. Typed with generics. Supports factory functions for default values."
+            },
+            {
+              "name": "Provider types",
+              "detail": "useClass: swap implementations. useValue: static values. useFactory: dynamic/conditional. useExisting: alias one token to another."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "week-2-3",
+      "label": "Week 2–3",
+      "title": "Performance Engineering",
+      "theme": "teal",
+      "focus": "Your strongest differentiator — package the Lighthouse 33→75 story and close the INP and memory leak gaps",
+      "topics": [
+        {
+          "id": "core-web-vitals",
+          "title": "Core Web Vitals",
+          "type": "strength",
+          "summary": "LCP, CLS, and INP — thresholds, causes, measurement, and Angular-specific fixes.",
+          "keyAPIs": ["NgOptimizedImage", "fetchpriority", "font-display", "aspect-ratio", "scheduler.yield()", "scheduler.postTask()"],
+          "interviewQuestions": [
+            "What are the three Core Web Vitals and their good thresholds?",
+            "What replaced FID and why?",
+            "What causes CLS and how do you prevent it?",
+            "How does NgOptimizedImage help LCP?"
+          ],
+          "talkingPoints": [
+            "ParkBee: CloudFront CDN reduced TTFB → improved LCP",
+            "Route-based code splitting reduced TTI",
+            "SSR improved FCP for first-time visitors"
+          ],
+          "concepts": [
+            {
+              "name": "LCP (Largest Contentful Paint)",
+              "detail": "Good: < 2.5s. Measures time until largest visible element renders. Fix: CDN, optimised images, fetchpriority='high', preconnect, SSR."
+            },
+            {
+              "name": "CLS (Cumulative Layout Shift)",
+              "detail": "Good: < 0.1. Measures unexpected layout movement. Fix: explicit image dimensions, aspect-ratio CSS, font-display: optional, reserved space for dynamic content."
+            },
+            {
+              "name": "INP (Interaction to Next Paint)",
+              "detail": "Good: < 200ms. Replaced FID in March 2024. Measures worst interaction delay across entire session. Fix: task chunking, scheduler.yield(), debouncing."
+            }
+          ]
+        },
+        {
+          "id": "code-splitting",
+          "title": "Code Splitting & Lazy Loading",
+          "type": "strength",
+          "summary": "Route-based, component-level (@defer), and dynamic import strategies. Preloading strategies.",
+          "keyAPIs": ["loadComponent()", "loadChildren()", "@defer", "import()", "PreloadAllModules", "withPreloading()", "IntersectionObserver"],
+          "interviewQuestions": [
+            "What are the three levels of code splitting in Angular?",
+            "How does @defer differ from loadComponent()?",
+            "When would you use a custom preloading strategy?",
+            "How do you lazy-load a third-party library?"
+          ],
+          "talkingPoints": [
+            "ParkBee: route-based code splitting was core to Lighthouse 33→75 improvement",
+            "@defer used for below-the-fold content — component-level splitting without TypeScript changes"
+          ],
+          "concepts": [
+            {
+              "name": "Route-based splitting",
+              "detail": "loadComponent() for standalone components, loadChildren() for route arrays. Separate bundle per route, downloaded on navigation."
+            },
+            {
+              "name": "Component-level splitting",
+              "detail": "@defer blocks — declarative lazy loading triggered by viewport, idle, interaction, timer, or condition."
+            },
+            {
+              "name": "Dynamic import",
+              "detail": "import('library') defers library loading until needed. Useful for heavy libs (xlsx, chart.js) only used on specific interactions."
+            },
+            {
+              "name": "Preloading strategies",
+              "detail": "PreloadAllModules: load all lazy chunks after initial load. Custom strategy: preload only routes marked with data.preload = true."
+            }
+          ]
+        },
+        {
+          "id": "cdp-flamegraph",
+          "title": "CDP & Flame Graph Analysis",
+          "type": "strength",
+          "summary": "Chrome DevTools Protocol profiling workflow, reading flame graphs, identifying CD issues and forced reflows.",
+          "keyAPIs": ["ApplicationRef.tick()", "checkAndUpdateView", "requestAnimationFrame()", "runOutsideAngular()"],
+          "interviewQuestions": [
+            "Walk me through how you'd profile a slow Angular app.",
+            "What does a CD performance problem look like in a flame graph?",
+            "What is a forced reflow and how do you avoid it?",
+            "How did you improve Lighthouse from 33 to 75?"
+          ],
+          "talkingPoints": [
+            "CDP recording revealed two problems: Zone.js catching scroll events + no code splitting",
+            "Flame graph showed recurring ApplicationRef.tick() from map integration scroll listeners",
+            "Batch DOM reads before writes to avoid forced reflow"
+          ],
+          "concepts": [
+            {
+              "name": "Performance recording workflow",
+              "detail": "CPU throttle 4x, Network Fast 3G → Record → identify long tasks (red) → drill into flame graph → find self time → fix → re-measure."
+            },
+            {
+              "name": "CD in flame graph",
+              "detail": "zone.js onInvokeTask → ApplicationRef.tick → checkAndUpdateView (repeated) = unnecessary full CD cycles. Move listeners outside zone."
+            },
+            {
+              "name": "Forced reflow",
+              "detail": "Reading layout properties (offsetHeight) after writing styles forces synchronous layout recalculation. Batch reads before writes."
+            }
+          ]
+        },
+        {
+          "id": "inp-optimisation",
+          "title": "INP Optimisation Patterns",
+          "type": "gap",
+          "summary": "Scheduler API, task chunking, requestAnimationFrame vs setTimeout, web workers, and debouncing heavy handlers.",
+          "keyAPIs": ["scheduler.yield()", "scheduler.postTask()", "setTimeout(fn, 0)", "requestAnimationFrame()", "Worker", "debounceTime()", "switchMap()"],
+          "interviewQuestions": [
+            "What is INP and how does it differ from FID?",
+            "How do you fix a heavy click handler that blocks paint?",
+            "What is the Scheduler API and when would you use it?",
+            "How would you move heavy computation off the main thread?"
+          ],
+          "talkingPoints": [
+            "Angular-specific: debounce filter input with RxJS, move filtering to web worker",
+            "runOutsideAngular() for high-frequency events connects directly to INP improvement"
+          ],
+          "concepts": [
+            {
+              "name": "INP measurement",
+              "detail": "Input delay + processing time + presentation delay for the worst interaction in a session. Threshold: < 200ms good, > 500ms poor."
+            },
+            {
+              "name": "scheduler.yield()",
+              "detail": "Pauses execution and yields to the browser, allowing paint and input handling. Resume after with await. Chunks long synchronous work."
+            },
+            {
+              "name": "scheduler.postTask()",
+              "detail": "Priority-based task scheduling: user-blocking, user-visible, background. Schedule non-urgent work as background to keep UI responsive."
+            },
+            {
+              "name": "Task chunking",
+              "detail": "Break large array processing into batches with setTimeout(fn, 0) between chunks. Browser can paint and handle input between chunks."
+            }
+          ]
+        },
+        {
+          "id": "memory-leaks",
+          "title": "Memory Leak Detection",
+          "type": "gap",
+          "summary": "The three common Angular leak types, takeUntilDestroyed, DestroyRef, heap snapshots in DevTools.",
+          "keyAPIs": ["takeUntilDestroyed()", "DestroyRef", "inject(DestroyRef)", "WeakRef", "async pipe", "ngOnDestroy()"],
+          "interviewQuestions": [
+            "What are the most common memory leaks in Angular?",
+            "How do you detect a memory leak using DevTools?",
+            "What is takeUntilDestroyed and how does it work?",
+            "When would you use WeakRef?"
+          ],
+          "talkingPoints": [
+            "Cuurios: WebSocket service leaked until scoped to component — destroyed on navigation",
+            "ParkBee: event listeners on window needed explicit removal in ngOnDestroy"
+          ],
+          "concepts": [
+            {
+              "name": "Unsubscribed observables",
+              "detail": "Subscriptions that outlive their component. Fix: takeUntilDestroyed(destroyRef) in Angular 16+, or async pipe which auto-unsubscribes."
+            },
+            {
+              "name": "Leaked event listeners",
+              "detail": "window/document listeners added in ngOnInit must be removed. Use DestroyRef.onDestroy() for clean registration/removal in one place."
+            },
+            {
+              "name": "Detached DOM nodes",
+              "detail": "Component destroyed but a reference prevents GC. Common in services holding component arrays. Use WeakRef to allow GC."
+            },
+            {
+              "name": "Heap snapshot workflow",
+              "detail": "Baseline snapshot → navigate to component → interact → navigate away → force GC → new snapshot → compare → look for Detached nodes."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "week-3-4",
+      "label": "Week 3–4",
+      "title": "Architecture & System Design",
+      "theme": "coral",
+      "focus": "Turn your Nx monorepo and micro-frontend experience into a structured design vocabulary",
+      "topics": [
+        {
+          "id": "micro-frontends",
+          "title": "Micro-Frontend Architecture",
+          "type": "strength",
+          "summary": "Module Federation, composition strategies, shared state patterns, routing in MFE, and Nx monorepo approach.",
+          "keyAPIs": ["ModuleFederationPlugin", "loadRemoteModule()", "nx affected", "nx enforce-module-boundaries", "CustomEvent", "window.dispatchEvent()"],
+          "interviewQuestions": [
+            "When do micro-frontends make sense and when don't they?",
+            "How do you handle shared state across micro-frontend boundaries?",
+            "How do you manage Angular version conflicts in Module Federation?",
+            "How does an Nx monorepo differ from full micro-frontend deployment independence?"
+          ],
+          "talkingPoints": [
+            "Cuurios: Nx monorepo with shared action schema across three micro-applications",
+            "Shared library versioning enforced via nx enforce-module-boundaries"
+          ],
+          "concepts": [
+            {
+              "name": "Module Federation",
+              "detail": "Webpack 5 feature. Shell (host) loads remote bundles at runtime. Shared dependencies (Angular core) declared to avoid loading twice."
+            },
+            {
+              "name": "Composition strategies",
+              "detail": "Build-time (npm packages), runtime (Module Federation), server-side (ESI fragments). Choose based on team autonomy and deployment needs."
+            },
+            {
+              "name": "Cross-MFE state",
+              "detail": "Prefer: CustomEvents on window (loose coupling), URL as shared truth, shared npm package for critical state. Avoid: shared NgRx store across boundaries."
+            },
+            {
+              "name": "Nx monorepo",
+              "detail": "MFE benefits (shared libs, module boundaries) without full deployment independence. nx affected only rebuilds/tests what changed."
+            }
+          ]
+        },
+        {
+          "id": "state-management",
+          "title": "State Management Trade-offs",
+          "type": "strength",
+          "summary": "Decision framework for signals vs NgRx, NgRx Signal Store, when classic NgRx is justified, and the comparison table.",
+          "keyAPIs": ["signal()", "signalStore()", "withState()", "withComputed()", "withMethods()", "patchState()", "createAction()", "createReducer()", "createEffect()"],
+          "interviewQuestions": [
+            "How would you decide between Signals and NgRx for a new feature?",
+            "What is NgRx Signal Store and how does it differ from classic NgRx?",
+            "When is the boilerplate of classic NgRx actually worth it?",
+            "How do you handle state that needs to be shared across a feature but not app-wide?"
+          ],
+          "talkingPoints": [
+            "Cuurios: NgRx for real-time KPI dashboard — complex async flows, multiple derived views",
+            "Pulse: Signals throughout — simpler app, no need for action audit trail"
+          ],
+          "concepts": [
+            {
+              "name": "Decision framework",
+              "detail": "Local UI state → signals. Feature state shared across components → service with signals + scoped provider. Complex async + devtools → NgRx Signal Store. Audit log needed → classic NgRx."
+            },
+            {
+              "name": "NgRx Signal Store",
+              "detail": "Modern NgRx (v17+). signalStore() with withState(), withComputed(), withMethods(). Much less boilerplate than classic NgRx. Has devtools support."
+            },
+            {
+              "name": "Classic NgRx",
+              "detail": "Actions as explicit events (audit log). Reducers as pure functions. Effects for async. Justified for large teams needing time-travel debugging or compliance audit trails."
+            },
+            {
+              "name": "Facade pattern",
+              "detail": "Injectable service that hides NgRx/signals behind a stable API. Components never import from @ngrx/store directly. Enables state implementation swaps."
+            }
+          ]
+        },
+        {
+          "id": "system-design",
+          "title": "Frontend System Design Interviews",
+          "type": "gap",
+          "summary": "The 40-minute framework, real-time dashboard design, autocomplete design, and edge case thinking.",
+          "keyAPIs": ["IntersectionObserver", "WebSocket", "CdkVirtualScrollViewport", "switchMap()", "debounceTime()", "Subject"],
+          "interviewQuestions": [
+            "Design a real-time KPI dashboard.",
+            "Design a search autocomplete component.",
+            "Design an infinite scroll list.",
+            "Design a notification system."
+          ],
+          "talkingPoints": [
+            "Cuurios real-time KPI dashboard: WebSocket + RxJS + NgRx, 25% reduction in analyst effort",
+            "Always lead with clarifying questions before jumping to implementation"
+          ],
+          "concepts": [
+            {
+              "name": "40-minute framework",
+              "detail": "0–5: clarify. 5–10: data model. 10–25: core architecture. 25–35: edge cases (errors, loading, offline). 35–40: performance and scale."
+            },
+            {
+              "name": "Real-time dashboard patterns",
+              "detail": "WebSocket + exponential backoff reconnection. Batch UI updates (throttle). runOutsideAngular() for socket messages. OnPush everywhere."
+            },
+            {
+              "name": "Autocomplete patterns",
+              "detail": "debounceTime(300) + distinctUntilChanged + switchMap (cancel in-flight). Min char threshold. Keyboard nav (arrow/enter/escape). ARIA combobox pattern."
+            },
+            {
+              "name": "Edge cases to always mention",
+              "detail": "Empty state, error state, loading skeleton, network offline, race conditions, keyboard accessibility, mobile responsiveness."
+            }
+          ]
+        },
+        {
+          "id": "design-patterns",
+          "title": "Design Patterns for Scale",
+          "type": "gap",
+          "summary": "Container/presentational, facade, command pattern, and when each applies in Angular.",
+          "keyAPIs": ["input()", "output()", "@Input()", "@Output()", "inject()"],
+          "interviewQuestions": [
+            "What is the container/presentational pattern and why does it matter?",
+            "When would you use the facade pattern?",
+            "How does the command pattern apply to configurable UI workflows?",
+            "What design patterns have you used in production Angular apps?"
+          ],
+          "talkingPoints": [
+            "Cuurios Workflow Actions system: command pattern for configurable operational flows",
+            "ParkBee: container/presentational separation made ANPR dashboard components individually testable"
+          ],
+          "concepts": [
+            {
+              "name": "Container/Presentational",
+              "detail": "Container: owns data fetching and state, connected to services/store. Presentational: OnPush, purely reactive to inputs, emits events via outputs. Independently testable."
+            },
+            {
+              "name": "Facade pattern",
+              "detail": "Injectable service hiding NgRx/signals complexity. Components get a clean API. Implementation can change without touching components."
+            },
+            {
+              "name": "Command pattern",
+              "detail": "Actions as data (JSON). Executor maps action types to handler classes. New action types added by registering handlers — open/closed principle."
+            },
+            {
+              "name": "Smart/dumb components",
+              "detail": "Alternative naming for container/presentational. Dumb components should be reusable across contexts. Smart components should be thin orchestrators."
+            }
+          ]
+        },
+        {
+          "id": "api-design",
+          "title": "API Design from a Frontend Perspective",
+          "type": "gap",
+          "summary": "REST vs GraphQL trade-offs, pagination patterns (offset vs cursor), optimistic updates, and error handling.",
+          "keyAPIs": ["HttpClient", "catchError()", "retry()", "switchMap()", "throwError()"],
+          "interviewQuestions": [
+            "When would you recommend GraphQL over REST?",
+            "What is cursor pagination and why is it better than offset for real-time data?",
+            "How do optimistic updates work and what's the rollback strategy?",
+            "How do you handle global error handling in Angular?"
+          ],
+          "talkingPoints": [
+            "ParkBee: GraphQL with Strapi CMS for marketing/SEO content — schema integrations in monorepo",
+            "Snapp! fintech: API design constraints informed by Iranian banking rail requirements"
+          ],
+          "concepts": [
+            {
+              "name": "REST vs GraphQL",
+              "detail": "REST: HTTP caching, CDN-friendly, simple. GraphQL: client-specified fields, no over/under-fetching, built-in schema, complex caching. Choose REST unless data complexity justifies GraphQL."
+            },
+            {
+              "name": "Cursor pagination",
+              "detail": "Stable cursor position regardless of inserts/deletes. No page drift. Response includes nextCursor and hasMore. Required for real-time or frequently updated data."
+            },
+            {
+              "name": "Optimistic updates",
+              "detail": "Update UI immediately, confirm with server async. On error: roll back to previous state and show error. Improves perceived performance for common actions."
+            },
+            {
+              "name": "Global error handling",
+              "detail": "Implement ErrorHandler. Log to Datadog/Sentry. Show user-friendly message. Never expose stack traces in production. Re-throw in development mode."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "week-4-5",
+      "label": "Week 4–5",
+      "title": "React & Breadth",
+      "theme": "blue",
+      "focus": "Understand React's mental model deeply enough to reason about it and frame your level honestly",
+      "topics": [
+        {
+          "id": "react-hooks",
+          "title": "React Hooks Mental Model",
+          "type": "gap",
+          "summary": "useState, useEffect, useCallback, useMemo, useRef, useReducer, and custom hooks. The stale closure problem.",
+          "keyAPIs": ["useState()", "useEffect()", "useCallback()", "useMemo()", "useRef()", "useReducer()", "useLayoutEffect()"],
+          "interviewQuestions": [
+            "What is the fundamental difference between Angular components and React function components?",
+            "What is the stale closure problem and how do you fix it?",
+            "When should you use useCallback and when is it overkill?",
+            "What is the difference between useEffect and useLayoutEffect?"
+          ],
+          "talkingPoints": [
+            "React function re-runs entirely on every render — closures capture values at render time",
+            "Angular class instance persists — this.count always current. React closure can be stale.",
+            "Custom hooks = Angular's injectable services with inject() pattern"
+          ],
+          "concepts": [
+            {
+              "name": "Component re-render model",
+              "detail": "React components are functions — called on every render. Hooks 'opt out' for specific values. Angular has persistent class instances. This difference explains stale closures."
+            },
+            {
+              "name": "Stale closure",
+              "detail": "useEffect with [] captures values at mount time. Counter inside setInterval will always see initial value. Fix: include in deps array, or use useRef to hold current value."
+            },
+            {
+              "name": "useMemo vs useCallback",
+              "detail": "useMemo: memoises a value (like computed()). useCallback: memoises a function reference. Use only when expensive or when referential equality matters for child re-renders."
+            },
+            {
+              "name": "Custom hooks",
+              "detail": "Extract reusable stateful logic. Equivalent to Angular's injectable services + inject() pattern. Convention: name starts with 'use'. Can use other hooks inside."
+            }
+          ]
+        },
+        {
+          "id": "react-state",
+          "title": "React State Management",
+          "type": "gap",
+          "summary": "useState vs useReducer vs Context vs Zustand vs React Query. When each applies.",
+          "keyAPIs": ["useState()", "useReducer()", "useContext()", "createContext()", "React.memo()", "useQuery()", "useMutation()", "create() (Zustand)"],
+          "interviewQuestions": [
+            "When would you use useReducer instead of useState?",
+            "What's the performance problem with overusing Context?",
+            "What is React Query and how does it differ from useState for server data?",
+            "How does Zustand compare to NgRx Signal Store?"
+          ],
+          "talkingPoints": [
+            "Zustand ≈ Injectable service with signals. No Provider needed. Minimal boilerplate.",
+            "React Query ≈ Angular's HTTP + async pipe + caching. Handles loading/error/stale states automatically.",
+            "Context performance: split by update frequency — auth context separate from theme context"
+          ],
+          "concepts": [
+            {
+              "name": "useState vs useReducer",
+              "detail": "useState for simple independent values. useReducer when multiple related values change together based on action types — mirrors NgRx reducer pattern."
+            },
+            {
+              "name": "Context limitations",
+              "detail": "Every consumer re-renders when any context value changes. Split contexts by update frequency. Not suitable for high-frequency state (use Zustand or local state instead)."
+            },
+            {
+              "name": "Zustand",
+              "detail": "Lightweight global state. create() returns a hook. No Provider. No boilerplate. Set state directly. Angular equivalent: Injectable service with signals."
+            },
+            {
+              "name": "React Query",
+              "detail": "Server state management: fetching, caching, background refresh, optimistic updates. useQuery for reads, useMutation for writes. Replaces manual loading/error useState patterns."
+            }
+          ]
+        },
+        {
+          "id": "react-concurrent",
+          "title": "Concurrent Features & Suspense",
+          "type": "gap",
+          "summary": "React 18 concurrent rendering, useTransition, Suspense boundaries, Error Boundaries.",
+          "keyAPIs": ["useTransition()", "startTransition()", "Suspense", "lazy()", "React.memo()", "ErrorBoundary"],
+          "interviewQuestions": [
+            "What does concurrent rendering mean in React 18?",
+            "When would you use useTransition?",
+            "How does Suspense compare to Angular's @defer?",
+            "Why are Error Boundaries still class components?"
+          ],
+          "talkingPoints": [
+            "Suspense ≈ Angular @defer — both provide declarative loading states for async content",
+            "useTransition ≈ scheduler.postTask() with user-visible priority — non-urgent updates can be interrupted"
+          ],
+          "concepts": [
+            {
+              "name": "Concurrent rendering",
+              "detail": "Rendering is interruptible in React 18. Browser can pause a render to handle urgent input, then resume. Enables prioritised updates without janky UI."
+            },
+            {
+              "name": "useTransition",
+              "detail": "Mark state updates as non-urgent. Urgent updates (typing) are not blocked by non-urgent renders (filtering results). isPending flag shows when transition is in progress."
+            },
+            {
+              "name": "Suspense",
+              "detail": "Declarative loading states. Component 'suspends' (throws a Promise), Suspense shows fallback until resolved. Nest Suspense boundaries for granular loading UI."
+            },
+            {
+              "name": "Error Boundaries",
+              "detail": "Class components that catch render errors in their subtree. getDerivedStateFromError() shows fallback. componentDidCatch() logs the error. No hook equivalent yet."
+            }
+          ]
+        },
+        {
+          "id": "nextjs",
+          "title": "Next.js Fundamentals",
+          "type": "gap",
+          "summary": "App Router, server vs client components, data fetching patterns (static/dynamic/revalidate), parallel fetching.",
+          "keyAPIs": ["'use client'", "async function Page()", "fetch() with cache options", "Promise.all()", "loading.tsx", "error.tsx", "layout.tsx"],
+          "interviewQuestions": [
+            "What is the difference between Server and Client components?",
+            "What does 'use client' actually do?",
+            "How does Next.js App Router handle caching for fetch calls?",
+            "How do you avoid waterfall data fetching in Next.js?"
+          ],
+          "talkingPoints": [
+            "Server components = Angular SSR with direct DB access, zero client bundle impact",
+            "Client components = Angular standalone components with browser APIs and hooks"
+          ],
+          "concepts": [
+            {
+              "name": "Server components (default)",
+              "detail": "Run only on server. Can access DB directly. Zero JS sent to client. Cannot use hooks or browser APIs. Best for data fetching and rendering."
+            },
+            {
+              "name": "Client components ('use client')",
+              "detail": "Opt-in with 'use client' directive. Can use hooks and browser APIs. Add interactivity at the leaves of the component tree. Minimise their use."
+            },
+            {
+              "name": "Fetch caching options",
+              "detail": "force-cache: static (like SSG). no-store: dynamic (like SSR per request). next.revalidate: ISR (cached, refresh every N seconds)."
+            },
+            {
+              "name": "Parallel data fetching",
+              "detail": "Promise.all([fetchA(), fetchB()]) fires both simultaneously. Sequential awaits create waterfall. Always parallelise independent data dependencies."
+            }
+          ]
+        },
+        {
+          "id": "react-positioning",
+          "title": "Framing Your React Level Honestly",
+          "type": "strength",
+          "summary": "The Angular→React translation table, React.memo vs OnPush, and the one-sentence positioning statement.",
+          "keyAPIs": ["React.memo()", "useCallback()", "key prop", "forwardRef()"],
+          "interviewQuestions": [
+            "How would you describe your React experience level?",
+            "How does React.memo relate to Angular's OnPush?",
+            "What would be your ramp-up plan joining a React codebase?",
+            "What are the biggest mental model shifts from Angular to React?"
+          ],
+          "talkingPoints": [
+            "Positioning: 'Primary depth is Angular. I understand React's hooks model and can ramp quickly because I think in components, reactivity, and state regardless of syntax.'",
+            "React.memo + stable useCallback references ≈ OnPush + immutable inputs"
+          ],
+          "concepts": [
+            {
+              "name": "Angular → React translation",
+              "detail": "signal() ↔ useState. computed() ↔ useMemo. effect() ↔ useEffect. inject(Service) ↔ custom hook. ngOnDestroy ↔ useEffect cleanup. OnPush ↔ React.memo."
+            },
+            {
+              "name": "Key mental model shift",
+              "detail": "Angular: class persists, change detection is external. React: function re-runs, closures capture state at render time. Stale closures are the most common trap."
+            },
+            {
+              "name": "React.memo",
+              "detail": "Prevents re-render if props haven't changed by reference. Requires stable prop references — use useCallback for functions passed as props to memo'd children."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "week-5",
+      "label": "Week 5",
+      "title": "Testing & Accessibility",
+      "theme": "amber",
+      "focus": "Deepen the 'why' behind your testing decisions and be ready to implement WCAG specifics live",
+      "topics": [
+        {
+          "id": "testing-philosophy",
+          "title": "Testing Philosophy",
+          "type": "strength",
+          "summary": "Testing trophy vs pyramid, behaviour vs implementation testing, decision framework for what to test.",
+          "keyAPIs": ["jest.fn()", "jest.spyOn()", "expect()", "describe()", "it()", "beforeEach()"],
+          "interviewQuestions": [
+            "What is the testing trophy and how does it influence your strategy?",
+            "What's the difference between testing behaviour and testing implementation?",
+            "What should you always test vs never test?",
+            "How do you balance test coverage with delivery speed?"
+          ],
+          "talkingPoints": [
+            "ParkBee: owned Jest unit coverage and reviewed all Playwright E2E specs",
+            "Testing trophy: integration tests give best ROI — test how components work together"
+          ],
+          "concepts": [
+            {
+              "name": "Testing trophy",
+              "detail": "Static (TypeScript/ESLint) → Unit (fast, isolated) → Integration (best ROI) → E2E (few, slow, high confidence). Integration tests are the investment focus."
+            },
+            {
+              "name": "Behaviour vs implementation",
+              "detail": "Test what users experience, not internal method calls. Tests that survive refactoring are testing the right thing. Avoid spying on private methods."
+            },
+            {
+              "name": "What to always test",
+              "detail": "Business logic, conditional rendering, user interactions, error states, accessibility. Never test: framework internals, third-party libraries, simple passthroughs."
+            }
+          ]
+        },
+        {
+          "id": "jest-angular",
+          "title": "Jest Patterns for Angular",
+          "type": "strength",
+          "summary": "TestBed, ComponentFixture, signals in tests, HttpTestingController, spy vs stub vs mock, snapshot testing.",
+          "keyAPIs": ["TestBed.configureTestingModule()", "ComponentFixture", "fixture.detectChanges()", "HttpTestingController", "jest.spyOn()", "jest.fn()", "By.css()"],
+          "interviewQuestions": [
+            "How do you test a component that uses HttpClient?",
+            "What's the difference between a spy, a stub, and a mock?",
+            "How do you test signal-based components?",
+            "When are snapshot tests useful and when are they harmful?"
+          ],
+          "talkingPoints": [
+            "Signals are synchronous — no async needed for state changes in tests",
+            "HttpTestingController: intercept → flush → verify pattern"
+          ],
+          "concepts": [
+            {
+              "name": "TestBed setup",
+              "detail": "configureTestingModule() with imports (standalone components) and providers (mocked services). fixture.detectChanges() triggers ngOnInit and initial render."
+            },
+            {
+              "name": "Spy vs stub vs mock",
+              "detail": "Spy: wraps real implementation, observe calls. Stub: replaces with controlled return value. Mock: complete replacement of dependency with jest.fn() object."
+            },
+            {
+              "name": "HttpTestingController",
+              "detail": "Intercepts HTTP calls in tests. Pattern: trigger call → expectOne(url) → flush(mockData) → verify(). Use afterEach to verify no unexpected requests."
+            },
+            {
+              "name": "Testing signals",
+              "detail": "Signals are synchronous — set signal values directly, call fixture.detectChanges(), assert DOM state. No fakeAsync needed for pure signal state changes."
+            }
+          ]
+        },
+        {
+          "id": "wcag",
+          "title": "WCAG 2.1 AA Applied",
+          "type": "gap",
+          "summary": "POUR principles, keyboard navigation implementation, ARIA attributes, focus management in modals, skip links, colour contrast.",
+          "keyAPIs": ["aria-expanded", "aria-haspopup", "aria-controls", "aria-label", "aria-labelledby", "aria-describedby", "role", "aria-live", "tabindex", "focus()", ":focus-visible"],
+          "interviewQuestions": [
+            "What ARIA attributes does a custom dropdown need?",
+            "How do you implement focus trapping in a modal?",
+            "What is the difference between aria-label and aria-labelledby?",
+            "What is :focus-visible and why use it instead of :focus?"
+          ],
+          "talkingPoints": [
+            "ParkBee: ANPR operator dashboard keyboard navigation — operators need to act in under 3 seconds",
+            "WCAG AA contrast ratio: 4.5:1 for normal text, 3:1 for large text and UI components"
+          ],
+          "concepts": [
+            {
+              "name": "POUR principles",
+              "detail": "Perceivable (alt text, contrast), Operable (keyboard nav, no seizure content), Understandable (clear language, predictable), Robust (valid HTML, ARIA, screen reader tested)."
+            },
+            {
+              "name": "Keyboard navigation",
+              "detail": "Tab: focus. Enter/Space: activate. Arrow keys: navigate within widgets. Escape: close/cancel. Home/End: jump to first/last. Every interaction must be keyboard-reachable."
+            },
+            {
+              "name": "Focus management",
+              "detail": "On modal open: save previous focus, move focus into modal. On modal close: return focus to trigger. Trap Tab/Shift+Tab within modal boundary."
+            },
+            {
+              "name": "aria-live regions",
+              "detail": "role='alert' / aria-live='assertive': immediate announcement (errors). aria-live='polite': waits for user idle (status updates). Use for dynamic content injected after page load."
+            },
+            {
+              "name": ":focus-visible",
+              "detail": "Shows focus ring only for keyboard navigation, not mouse clicks. Replace outline: none with :focus-visible custom style. Minimum 3:1 contrast ratio for focus indicator."
+            }
+          ]
+        },
+        {
+          "id": "async-testing",
+          "title": "Testing Async Code",
+          "type": "gap",
+          "summary": "fakeAsync/tick, flush(), testing Observables with done(), jest fake timers, testing NgRx effects.",
+          "keyAPIs": ["fakeAsync()", "tick()", "flush()", "flushMicrotasks()", "jest.useFakeTimers()", "jest.advanceTimersByTime()", "ReplaySubject", "provideMockActions()"],
+          "interviewQuestions": [
+            "What's the difference between fakeAsync/tick and done() in Angular tests?",
+            "How do you test a component with debounceTime?",
+            "How do you test that switchMap cancels previous requests?",
+            "How do you test NgRx effects?"
+          ],
+          "talkingPoints": [
+            "fakeAsync + tick(300) = precise debounce testing without waiting for real time",
+            "jest.useFakeTimers() for non-Angular async — retry logic, exponential backoff"
+          ],
+          "concepts": [
+            {
+              "name": "fakeAsync and tick()",
+              "detail": "Takes control of time in Angular tests. tick(ms) advances virtual time. flush() completes all pending timers. Deterministic and fast — no real waiting."
+            },
+            {
+              "name": "Testing debounced observables",
+              "detail": "Wrap test in fakeAsync(). Trigger input multiple times. tick(300) to advance past debounce. Assert search fired once with last value."
+            },
+            {
+              "name": "Jest fake timers",
+              "detail": "jest.useFakeTimers() in beforeEach, jest.useRealTimers() in afterEach. jest.advanceTimersByTime(ms) controls setTimeout/setInterval."
+            },
+            {
+              "name": "Testing NgRx effects",
+              "detail": "provideMockActions() injects a ReplaySubject as actions$. Dispatch action → subscribe to effect$ → assert dispatched action matches expected."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "week-6",
+      "label": "Week 6",
+      "title": "Interview Readiness",
+      "theme": "green",
+      "focus": "Consolidation — story prep, career break narrative, JS fundamentals, mock interviews, and polished questions",
+      "topics": [
+        {
+          "id": "star-stories",
+          "title": "STAR Stories",
+          "type": "strength",
+          "summary": "Five core stories fully structured: Lighthouse 33→75, ANPR delivery, User Migration, Cuurios Workflow, Snapp! fintech.",
+          "keyAPIs": [],
+          "interviewQuestions": [
+            "Tell me about yourself.",
+            "Describe your biggest technical challenge.",
+            "Tell me about a time you took full ownership.",
+            "Describe a system you designed.",
+            "Tell me about working at scale."
+          ],
+          "talkingPoints": [
+            "Story 1: Lighthouse 33→75 — CDP profiling → runOutsideAngular + code splitting + CloudFront",
+            "Story 2: ANPR integration — sole FE, on-site testing, WebSocket with backoff",
+            "Story 3: User Migration — state machine + AI tooling, 30% mobile adoption, ahead of schedule",
+            "Story 4: Workflow Actions — command pattern, Nx shared schema, non-technical user empowerment",
+            "Story 5: Snapp! fintech — 50M users, A/B testing, Best PM 2020, Direct Debit industry first"
+          ],
+          "concepts": [
+            {
+              "name": "STAR framework",
+              "detail": "Situation (10%), Task (10%), Action (60%), Result (20%). Target: 90 seconds. Interviewers care about what you did and how you thought — not the backstory."
+            },
+            {
+              "name": "Story mapping",
+              "detail": "Performance challenge → Story 1. Ownership/delivery → Story 2. AI tooling/deadline → Story 3. System design → Story 4. Scale/leadership → Story 5."
+            },
+            {
+              "name": "Common mistakes",
+              "detail": "Over-investing in Situation, under-investing in Action. Using 'we' when you should say 'I'. Not quantifying the result. Going over 90 seconds."
+            }
+          ]
+        },
+        {
+          "id": "career-break",
+          "title": "Career Break Narrative",
+          "type": "gap",
+          "summary": "One-sentence delivery, follow-up responses, what not to say, and how to pivot to Pulse.",
+          "keyAPIs": [],
+          "interviewQuestions": [
+            "Can you explain the gap on your CV?",
+            "Are you fully ready to commit to a new role?",
+            "Were you doing anything technical during your break?"
+          ],
+          "talkingPoints": [
+            "One sentence: 'I took a career break from October 2025 to April 2026 for a personal health matter — fully resolved. I stayed active technically by building Pulse, an Angular 21 app with Zoneless change detection and live AI API integration.'",
+            "Deliver at normal pace. Then stop. Don't add more.",
+            "Pulse turns the gap into a positive signal — cutting-edge Angular 21 patterns"
+          ],
+          "concepts": [
+            {
+              "name": "Core principle",
+              "detail": "State it clearly, point to Pulse, move forward. The break is only as big a deal as you make it. Confidence signals there's nothing to worry about."
+            },
+            {
+              "name": "What not to do",
+              "detail": "Don't apologise. Don't over-explain the health situation. Don't say 'just taking time for myself' (too vague). Don't let it become the centre of the conversation."
+            },
+            {
+              "name": "The Pulse pivot",
+              "detail": "Angular 21, Zoneless, Signals, live AI API integration — these are genuinely cutting-edge. You may be more current on modern Angular than candidates in production codebases."
+            }
+          ]
+        },
+        {
+          "id": "js-ts-fundamentals",
+          "title": "JS/TS Fundamentals",
+          "type": "gap",
+          "summary": "Event loop, closures, prototypal inheritance, TypeScript utility types, discriminated unions, and common senior JS questions.",
+          "keyAPIs": ["Promise", "async/await", "WeakRef", "structuredClone()", "Object.create()", "Array.flat()"],
+          "interviewQuestions": [
+            "Explain the event loop — what order does this code execute?",
+            "What is a closure? Give an example of a bug it can cause.",
+            "What is prototypal inheritance?",
+            "What are TypeScript utility types? Name five.",
+            "What is the difference between null and undefined?"
+          ],
+          "talkingPoints": [
+            "Microtasks (Promises) always drain before macrotasks (setTimeout)",
+            "Stale closure in React useEffect = same mechanism as classic var loop bug",
+            "Discriminated unions + switch = exhaustive type checking at compile time"
+          ],
+          "concepts": [
+            {
+              "name": "Event loop order",
+              "detail": "Synchronous code → microtask queue (Promise.then, queueMicrotask) → macrotask (setTimeout, setInterval). Microtasks drain completely before next macrotask."
+            },
+            {
+              "name": "Closures",
+              "detail": "Function retains access to lexical scope after outer function returns. Bug: var in for loop — all callbacks share same i. Fix: let creates new binding per iteration."
+            },
+            {
+              "name": "TypeScript utility types",
+              "detail": "Partial<T>, Required<T>, Readonly<T>, Pick<T,K>, Omit<T,K>, Record<K,V>, NonNullable<T>, ReturnType<T>, Parameters<T>. Know how to implement them with mapped types."
+            },
+            {
+              "name": "Discriminated unions",
+              "detail": "Union type with a common literal field (status). Switch on the discriminant — TypeScript narrows the type in each branch. Exhaustive checking with never."
+            }
+          ]
+        },
+        {
+          "id": "live-coding",
+          "title": "Live Coding Practice",
+          "type": "gap",
+          "summary": "The meta-skill of narrating while coding, five practice exercises, and handling gaps out loud.",
+          "keyAPIs": ["debounceTime()", "switchMap()", "takeUntilDestroyed()", "IntersectionObserver", "retry()", "structuredClone()"],
+          "interviewQuestions": [
+            "Build a debounced search component in Angular.",
+            "Implement infinite scroll.",
+            "Write a retry with exponential backoff using RxJS.",
+            "Flatten a nested array without Array.flat().",
+            "Implement a deep clone function."
+          ],
+          "talkingPoints": [
+            "Narrate the entire time — interviewers assess thinking process, not just output",
+            "If stuck: 'I'm not sure of the exact API here — but the approach would be...'",
+            "State assumptions out loud before coding"
+          ],
+          "concepts": [
+            {
+              "name": "The meta-skill",
+              "detail": "Silence is deadly in live coding. Say what you're doing and why. If stuck, describe the approach. Interviewers can help if they know where you are."
+            },
+            {
+              "name": "Exercise 1: Debounced search",
+              "detail": "FormControl + valueChanges + debounceTime(300) + distinctUntilChanged + filter(len >= 2) + switchMap + takeUntilDestroyed. Signal for results and loading state."
+            },
+            {
+              "name": "Exercise 2: Infinite scroll",
+              "detail": "IntersectionObserver on sentinel element. Load next page when sentinel enters viewport. Signal for items[], loading, hasMore. Disconnect observer on destroy."
+            },
+            {
+              "name": "Exercise 3: Retry with backoff",
+              "detail": "RxJS retry({ count: 3, delay: (err, n) => timer(1000 * 2^(n-1)) }). Or retryWhen + scan + delayWhen. Note: in production use the built-in retry operator."
+            }
+          ]
+        },
+        {
+          "id": "interviewer-questions",
+          "title": "Questions to Ask Interviewers",
+          "type": "strength",
+          "summary": "Fifteen questions across five categories: technical health, team structure, growth, the interviewer personally, and the role.",
+          "keyAPIs": [],
+          "interviewQuestions": [],
+          "talkingPoints": [
+            "Technical health: 'What does your deployment pipeline look like — how long from commit to production?'",
+            "Team structure: 'How are technical decisions made — tech lead, consensus, RFC?'",
+            "Growth: 'What's the hardest frontend problem the team is dealing with right now?'",
+            "Personal: 'What made you join, and what's kept you here?'",
+            "Role: 'What's the biggest gap you're hoping this hire fills?'"
+          ],
+          "concepts": [
+            {
+              "name": "Why questions matter",
+              "detail": "The questions you ask reveal seniority. Junior: salary/benefits. Mid-level: tech stack. Senior: constraints, decisions, and problems. Two or three questions maximum."
+            },
+            {
+              "name": "Reading the room",
+              "detail": "Early startup → ownership and tech debt. Scale-up → structure and design system. Enterprise → autonomy and legacy. Technical interviewer → hardest problem question."
+            },
+            {
+              "name": "Questions to always have ready",
+              "detail": "'What would a strong first 90 days look like?' and 'What's the biggest gap this hire fills?' — these work in every context and signal business maturity."
+            }
+          ]
+        },
+        {
+          "id": "interview-loop",
+          "title": "The Full Interview Loop",
+          "type": "strength",
+          "summary": "What to expect at each stage, the CV walkthrough structure, and how to handle questions you don't know.",
+          "keyAPIs": [],
+          "interviewQuestions": [],
+          "talkingPoints": [
+            "CV walkthrough: identity (20s) → strongest experience anchor (60s) → career break (15s) → intent (15s)",
+            "5 stages: recruiter screen → hiring manager → technical → senior engineer deep dive → final values round",
+            "When stuck: describe the approach, don't go silent"
+          ],
+          "concepts": [
+            {
+              "name": "CV walkthrough structure",
+              "detail": "Don't narrate chronologically. Lead with identity → anchor to strongest work → career break one sentence → close with intent. Total: ~110 seconds."
+            },
+            {
+              "name": "Handling unknown questions",
+              "detail": "Don't know at all: reason from related knowledge. Partially know: be explicit about what you know and don't. Know but forgot syntax: describe the approach, say you'd check docs."
+            },
+            {
+              "name": "Stage goals",
+              "detail": "Recruiter: logistics. Hiring manager: make them want to go deeper. Technical: show thinking process. Deep dive: demonstrate senior depth. Final: values alignment."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
