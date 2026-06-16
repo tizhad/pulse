@@ -1,0 +1,72 @@
+[
+  {
+    "event": "user_signed_up",
+    "description": "User successfully created a new account. Top of retention funnel.",
+    "file": "apps/job-mate/src/app/features/auth/auth.component.ts"
+  },
+  {
+    "event": "user_signed_in",
+    "description": "User successfully signed in to their account.",
+    "file": "apps/job-mate/src/app/features/auth/auth.component.ts"
+  },
+  {
+    "event": "user_signed_out",
+    "description": "User explicitly signed out of their account.",
+    "file": "apps/job-mate/src/app/features/settings/settings.component.ts"
+  },
+  {
+    "event": "application_added",
+    "description": "User added a new job application to their pipeline. Core product action.",
+    "file": "apps/job-mate/src/app/features/applications/applications.component.ts"
+  },
+  {
+    "event": "application_status_updated",
+    "description": "User updated the status of an existing job application (e.g. saved → applied → interviewing). Key pipeline progression event.",
+    "file": "apps/job-mate/src/app/features/applications/applications.component.ts"
+  },
+  {
+    "event": "job_analyzed",
+    "description": "User analyzed a job posting via LinkedIn URL or pasted text to get skill match and recommendation.",
+    "file": "apps/job-mate/src/app/features/applications/applications.component.ts"
+  },
+  {
+    "event": "skill_added_to_study_plan",
+    "description": "User added a missing job skill to their study plan directly from a job analysis result.",
+    "file": "apps/job-mate/src/app/features/applications/applications.component.ts"
+  },
+  {
+    "event": "subject_created",
+    "description": "User added a new study subject to their preparation list.",
+    "file": "apps/job-mate/src/app/features/subjects/subjects.component.ts"
+  },
+  {
+    "event": "subject_status_updated",
+    "description": "User changed the status of a study subject (e.g. not_started → in_progress → mastered). Tracks study progress.",
+    "file": "apps/job-mate/src/app/features/subjects/subject-detail/subject-detail.component.ts"
+  },
+  {
+    "event": "qa_added",
+    "description": "User added a new Q&A pair to a study subject for interview practice.",
+    "file": "apps/job-mate/src/app/features/subjects/subject-detail/subject-detail.component.ts"
+  },
+  {
+    "event": "company_added",
+    "description": "User added a new company to their research list.",
+    "file": "apps/job-mate/src/app/features/companies/companies.component.ts"
+  },
+  {
+    "event": "company_status_updated",
+    "description": "User updated the status of a company they are tracking.",
+    "file": "apps/job-mate/src/app/features/companies/companies.component.ts"
+  },
+  {
+    "event": "resume_uploaded",
+    "description": "User pasted and saved a resume for skill matching. Enables job analysis matching against resume.",
+    "file": "apps/job-mate/src/app/features/settings/settings.component.ts"
+  },
+  {
+    "event": "landing_page_viewed",
+    "description": "User viewed the landing page. Top of acquisition funnel — precedes signup.",
+    "file": "apps/job-mate/src/app/features/landing/landing.component.ts"
+  }
+]
