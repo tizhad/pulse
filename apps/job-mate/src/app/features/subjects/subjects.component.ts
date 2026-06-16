@@ -19,6 +19,7 @@ import {
   SubjectPriority,
   SubjectStatus,
 } from '../../core/models/jobmate.models';
+import { AuthService } from '../../core/services/auth.service';
 import { PosthogService } from '../../core/services/posthog.service';
 
 type CategoryGroup = {
@@ -39,7 +40,14 @@ type SortKey = 'title' | 'qa' | 'status' | 'priority' | 'potential';
 export class SubjectsComponent {
   readonly store = inject(StudyStore);
   private readonly router = inject(Router);
+  private readonly auth = inject(AuthService);
   private readonly posthog = inject(PosthogService);
+
+  private requireAuth(): boolean {
+    if (this.auth.isAuthenticated()) return true;
+    this.router.navigate(['/auth']);
+    return false;
+  }
 
   readonly sortKey = signal<SortKey>('potential');
   readonly showForm = signal(false);
@@ -202,6 +210,7 @@ export class SubjectsComponent {
   }
 
   async submit(): Promise<void> {
+    if (!this.requireAuth()) return;
     this.form.markAllAsTouched();
     if (this.form.invalid) return;
 

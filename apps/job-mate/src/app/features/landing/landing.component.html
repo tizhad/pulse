@@ -30,9 +30,9 @@
       </div>
     </a>
     <nav class="ln-nav-links" aria-label="Site navigation">
-      <a href="#features">Features</a>
-      <a href="#workflow">Workflow</a>
-      <a href="#loved">Loved by</a>
+      <a [routerLink]="['/']" fragment="features">Features</a>
+      <a [routerLink]="['/']" fragment="workflow">Workflow</a>
+      <a [routerLink]="['/']" fragment="loved">Loved by</a>
       <a [routerLink]="['/about']">About creator</a>
     </nav>
     <a [routerLink]="ctaRoute()" class="ln-nav-cta">

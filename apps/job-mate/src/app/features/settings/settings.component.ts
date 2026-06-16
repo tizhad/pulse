@@ -37,6 +37,12 @@ function schedule(score: number): Date {
   return next;
 }`, { language: 'typescript' }).value;
 
+  private requireAuth(): boolean {
+    if (this.auth.isAuthenticated()) return true;
+    this.router.navigate(['/auth']);
+    return false;
+  }
+
   readonly displayName = signal(this.settingsStore.settings()?.displayName ?? '');
 
   readonly accents: { key: UserSettings['accent']; label: string; color: string }[] = [
@@ -46,10 +52,12 @@ function schedule(score: number): Date {
   ];
 
   async saveDisplayName(): Promise<void> {
+    if (!this.requireAuth()) return;
     await this.settingsStore.upsert({ displayName: this.displayName() ?? null });
   }
 
   async setAccent(key: UserSettings['accent']): Promise<void> {
+    if (!this.requireAuth()) return;
     await this.settingsStore.upsert({ accent: key });
   }
 
@@ -59,6 +67,7 @@ function schedule(score: number): Date {
   }
 
   async saveResume(): Promise<void> {
+    if (!this.requireAuth()) return;
     const text = this.resumeText().trim();
     if (!text) return;
     this.resumeSaving.set(true);

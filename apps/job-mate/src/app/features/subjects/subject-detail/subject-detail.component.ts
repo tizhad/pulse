@@ -13,6 +13,7 @@ import { StudyStore } from '../../../core/stores/study.store';
 import type { SubjectPriority, SubjectStatus } from '../../../core/models/jobmate.models';
 import { RichEditorComponent } from '../../../shared/components/rich-editor/rich-editor.component';
 import { CodeThemeService } from '../../../core/services/code-theme.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { PosthogService } from '../../../core/services/posthog.service';
 
 type SubjectTab = 'notes' | 'qa';
@@ -28,8 +29,15 @@ export class SubjectDetailComponent {
   readonly id = input.required<string>();
   readonly store = inject(StudyStore);
   private readonly router = inject(Router);
+  private readonly auth = inject(AuthService);
   readonly codeTheme = inject(CodeThemeService);
   private readonly posthog = inject(PosthogService);
+
+  private requireAuth(): boolean {
+    if (this.auth.isAuthenticated()) return true;
+    this.router.navigate(['/auth']);
+    return false;
+  }
 
   readonly subject = computed(() => this.store.getById(this.id()));
 
@@ -98,6 +106,7 @@ export class SubjectDetailComponent {
   }
 
   async saveNote(): Promise<void> {
+    if (!this.requireAuth()) return;
     const html = this.noteHtml();
     if (!html) return;
 
@@ -152,6 +161,7 @@ export class SubjectDetailComponent {
   }
 
   async saveEdit(): Promise<void> {
+    if (!this.requireAuth()) return;
     const sub = this.subject();
     const newStatus = this.editStatus();
     await this.store.updateSubject(this.id(), {
@@ -191,6 +201,7 @@ export class SubjectDetailComponent {
   readonly qaDifficulty = signal<'easy' | 'medium' | 'hard'>('medium');
 
   async submitQA(): Promise<void> {
+    if (!this.requireAuth()) return;
     const question = this.qaQuestion().trim();
     const answer = this.qaAnswer().trim();
     if (!question || !answer) return;
@@ -214,6 +225,7 @@ export class SubjectDetailComponent {
   }
 
   async removeQA(index: number): Promise<void> {
+    if (!this.requireAuth()) return;
     await this.store.removeQA(this.id(), index);
   }
 

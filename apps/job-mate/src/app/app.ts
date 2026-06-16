@@ -56,12 +56,17 @@ export class App implements OnInit {
 
   private static readonly noShellRoutes = ['/', '/auth', '/about'];
 
+  private static isShellRoute(url: string): boolean {
+    const path = url.split('#')[0].split('?')[0];
+    return !App.noShellRoutes.includes(path);
+  }
+
   readonly showShell = toSignal(
     this.router.events.pipe(
       filter((e): e is NavigationEnd => e instanceof NavigationEnd),
-      map(e => !App.noShellRoutes.includes(e.urlAfterRedirects)),
+      map(e => App.isShellRoute(e.urlAfterRedirects)),
     ),
-    { initialValue: !App.noShellRoutes.includes(this.router.url) },
+    { initialValue: App.isShellRoute(this.router.url) },
   );
 
   readonly sidebarOpen = signal(false);

@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CompanyStore } from '../../core/stores/company.store';
+import { AuthService } from '../../core/services/auth.service';
 import { PosthogService } from '../../core/services/posthog.service';
 import type { Company, CompanyStatus } from '../../core/models/jobmate.models';
 
@@ -24,7 +26,15 @@ const AVATAR_PALETTE: ReadonlyArray<{ bg: string; color: string }> = [
 })
 export class CompaniesComponent {
   readonly store = inject(CompanyStore);
+  private readonly auth = inject(AuthService);
+  private readonly router = inject(Router);
   private readonly posthog = inject(PosthogService);
+
+  private requireAuth(): boolean {
+    if (this.auth.isAuthenticated()) return true;
+    this.router.navigate(['/auth']);
+    return false;
+  }
 
   readonly statusOptions: { value: CompanyStatus; label: string }[] = [
     { value: 'saved', label: 'Saved' },
@@ -62,6 +72,7 @@ export class CompaniesComponent {
   }
 
   async submit(): Promise<void> {
+    if (!this.requireAuth()) return;
     this.form.markAllAsTouched();
     if (this.form.invalid) return;
 
@@ -95,6 +106,7 @@ export class CompaniesComponent {
   }
 
   async saveModal(): Promise<void> {
+    if (!this.requireAuth()) return;
     this.editForm.markAllAsTouched();
     if (this.editForm.invalid) return;
 

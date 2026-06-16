@@ -5,7 +5,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import {
   FormControl,
   FormGroup,
@@ -17,6 +17,7 @@ import { SettingsStore } from '../../core/stores/settings.store';
 import { StudyStore } from '../../core/stores/study.store';
 import { Application, AppStatus, SubjectCategory } from '../../core/models/jobmate.models';
 import { JobAnalysisService, JobAnalysis } from '../../core/services/job-analysis.service';
+import { AuthService } from '../../core/services/auth.service';
 import { PosthogService } from '../../core/services/posthog.service';
 
 type SortKey = 'createdAt' | 'date' | 'updatedAt' | 'status' | 'title' | 'company';
@@ -67,7 +68,15 @@ export class ApplicationsComponent {
   readonly settingsStore = inject(SettingsStore);
   private readonly studyStore = inject(StudyStore);
   private readonly analysisService = inject(JobAnalysisService);
+  private readonly auth = inject(AuthService);
+  private readonly router = inject(Router);
   private readonly posthog = inject(PosthogService);
+
+  private requireAuth(): boolean {
+    if (this.auth.isAuthenticated()) return true;
+    this.router.navigate(['/auth']);
+    return false;
+  }
 
   /* ── Sort ─────────────────────────────────────────────────────────────── */
 
@@ -246,6 +255,7 @@ export class ApplicationsComponent {
   }
 
   async addToStudyPlan(skillName: string): Promise<void> {
+    if (!this.requireAuth()) return;
     if (this.addedSkills().has(skillName) || this.addingSkill()) return;
     this.addingSkill.set(skillName);
     const result = await this.studyStore.addSubject({
@@ -302,6 +312,7 @@ export class ApplicationsComponent {
   }
 
   async submit(): Promise<void> {
+    if (!this.requireAuth()) return;
     this.form.markAllAsTouched();
     if (this.form.invalid) return;
     this.saving.set(true);
@@ -388,6 +399,7 @@ export class ApplicationsComponent {
   }
 
   async saveModal(): Promise<void> {
+    if (!this.requireAuth()) return;
     this.editForm.markAllAsTouched();
     if (this.editForm.invalid) return;
     const app = this.selectedApp();
