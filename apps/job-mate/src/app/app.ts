@@ -27,6 +27,9 @@ export class App implements OnInit {
   private readonly posthog = inject(PosthogService);
   private readonly auth = inject(AuthService);
 
+  readonly user = this.auth.user;
+  readonly isAuthenticated = this.auth.isAuthenticated;
+
   constructor() {
     effect(() => {
       const user = this.auth.user();

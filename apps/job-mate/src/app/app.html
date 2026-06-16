@@ -199,11 +199,14 @@
     </nav>
 
     <div class="sidebar-footer">
-      <div class="user-avatar">T</div>
-      <div class="user-info">
-        <span class="user-name">Tizhad</span>
-        <span class="user-email">tina&#64;example.com</span>
-      </div>
+      @if (isAuthenticated()) {
+        <div class="user-avatar">{{ (user()?.email ?? '?').charAt(0).toUpperCase() }}</div>
+        <div class="user-info">
+          <span class="user-email">{{ user()?.email }}</span>
+        </div>
+      } @else {
+        <a routerLink="/auth" class="sidebar-signin">Sign in</a>
+      }
     </div>
   </aside>
 
