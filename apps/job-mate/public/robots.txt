@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Allow: /about
+
+Disallow: /dashboard
+Disallow: /subjects
+Disallow: /companies
+Disallow: /applications
+Disallow: /ask
+Disallow: /settings
+Disallow: /auth
+
+Sitemap: https://pulse.tizhad.com/sitemap.xml

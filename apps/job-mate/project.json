@@ -25,7 +25,12 @@
             "output": "/"
           }
         ],
-        "styles": ["apps/job-mate/src/styles.scss"]
+        "styles": ["apps/job-mate/src/styles.scss"],
+        "server": "apps/job-mate/src/main.server.ts",
+        "ssr": {
+          "entry": "apps/job-mate/src/server.ts"
+        },
+        "prerender": true
       },
       "configurations": {
         "production": {

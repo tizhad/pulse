@@ -1,5 +1,6 @@
 export const environment = {
   production: false,
+  siteUrl: 'https://pulse.tizhad.com',
   supabase: {
     url: 'https://kmokerewodxljtywkwbi.supabase.co',
     anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imttb2tlcmV3b2R4bGp0eXdrd2JpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNDg1MDUsImV4cCI6MjA5MzcyNDUwNX0.8zRWzcH9pG8Dbyx0WWVrgy70cqmar-GgVJr5CjQuxKU',
