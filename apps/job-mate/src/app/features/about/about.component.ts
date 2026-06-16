@@ -16,20 +16,21 @@ export class AboutComponent implements OnInit {
   ngOnInit(): void {
     const url = `${environment.siteUrl}/about`;
     this.seo.set({
-      title: 'Frontend Engineer & Product Thinker',
+      title: 'Tina Rezanezhad — Frontend Engineer & Product Thinker',
       description: 'Frontend engineer with 5+ years shipping product-grade interfaces. Deep Angular expertise, PM background at a 50M-user super-app. Amsterdam-based.',
       url,
       type: 'profile',
     });
-    this.seo.addJsonLd({
+    this.seo.addJsonLd('about-person', {
       '@context': 'https://schema.org',
       '@type': 'Person',
-      name: 'Tizhad',
+      name: 'Tina Rezanezhad',
       jobTitle: 'Frontend Engineer',
       description: 'Frontend engineer with 5+ years of delivery experience and a background as a Technical Product Manager.',
       url,
       email: 'tiizhad@gmail.com',
       sameAs: [
+        'https://www.linkedin.com/in/trezanezhad/',
         'https://github.com/tizhad',
       ],
       address: { '@type': 'PostalAddress', addressLocality: 'Amsterdam', addressCountry: 'NL' },

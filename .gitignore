@@ -4,8 +4,7 @@
 DECISIONS.md
 
 # Resume and design assets — keep off version control
-apps/job-mate/public/*.pdf
-apps/job-mate/public/portfolio-page.png
+apps/job-mate/private/
 
 # Test artifacts
 playwright-report/

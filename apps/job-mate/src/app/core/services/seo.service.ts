@@ -49,9 +49,15 @@ export class SeoService {
     }
   }
 
-  addJsonLd(schema: Record<string, unknown>): void {
+  addJsonLd(id: string, schema: Record<string, unknown>): void {
+    const existing = this.doc.head.querySelector<HTMLScriptElement>(`script[data-ld="${id}"]`);
+    if (existing) {
+      existing.text = JSON.stringify(schema);
+      return;
+    }
     const script = this.doc.createElement('script');
     script.type = 'application/ld+json';
+    script.setAttribute('data-ld', id);
     script.text = JSON.stringify(schema);
     this.doc.head.appendChild(script);
   }

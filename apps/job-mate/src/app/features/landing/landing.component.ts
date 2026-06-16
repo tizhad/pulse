@@ -34,7 +34,7 @@ export class LandingComponent implements OnInit {
         'Track every subject, company and application. Build daily momentum and land the offer.',
       url: environment.siteUrl,
     });
-    this.seo.addJsonLd({
+    this.seo.addJsonLd('landing-app', {
       '@context': 'https://schema.org',
       '@type': 'WebApplication',
       name: 'Pulse',
