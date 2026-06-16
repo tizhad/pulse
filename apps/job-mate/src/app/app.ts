@@ -50,7 +50,7 @@ export class App implements OnInit {
       filter((e): e is NavigationEnd => e instanceof NavigationEnd),
       takeUntilDestroyed(this.destroyRef),
     ).subscribe(() => {
-      this.posthog.capture('$pageview', { $current_url: window.location.href });
+      this.posthog.capture('$pageview');
     });
   }
 

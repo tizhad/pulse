@@ -1,7 +1,15 @@
-import { ChangeDetectionStrategy, Component, OnInit, computed, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  computed,
+  inject,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { PosthogService } from '../../core/services/posthog.service';
+import { SeoService } from '../../core/services/seo.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-landing',
@@ -13,16 +21,35 @@ import { PosthogService } from '../../core/services/posthog.service';
 export class LandingComponent implements OnInit {
   private readonly auth = inject(AuthService);
   private readonly posthog = inject(PosthogService);
+  private readonly seo = inject(SeoService);
 
-  readonly ctaRoute = computed(() => (this.auth.isAuthenticated() ? '/dashboard' : '/auth'));
+  readonly ctaRoute = computed(() =>
+    this.auth.isAuthenticated() ? '/dashboard' : '/auth',
+  );
 
   ngOnInit(): void {
+    this.seo.set({
+      title: 'Interview OS for serious candidates',
+      description:
+        'Track every subject, company and application. Build daily momentum and land the offer.',
+      url: environment.siteUrl,
+    });
+    this.seo.addJsonLd({
+      '@context': 'https://schema.org',
+      '@type': 'WebApplication',
+      name: 'Pulse',
+      description:
+        'Interview preparation OS — track subjects, companies, and applications.',
+      url: environment.siteUrl,
+      applicationCategory: 'ProductivityApplication',
+      operatingSystem: 'Web',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    });
+
     if (!this.auth.isAuthenticated()) {
       this.posthog.capture('landing_page_viewed');
     }
   }
-
-  readonly trustedBy = ['Stripe', 'Linear', 'Notion', 'Figma', 'Vercel', 'Airbnb', 'Datadog'];
 
   readonly stars = [0, 1, 2, 3, 4];
   readonly year = new Date().getFullYear();
@@ -60,7 +87,7 @@ export class LandingComponent implements OnInit {
       iconName: 'zap',
       gradient: 'var(--gradient-primary)',
       title: 'Resume per company',
-      body: "Upload a tailored PDF for every application. Diff versions and never lose your best line again.",
+      body: 'Upload a tailored PDF for every application. Diff versions and never lose your best line again.',
       badge: 'PDF vault',
     },
     {
