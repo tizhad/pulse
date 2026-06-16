@@ -3,6 +3,7 @@ import hljs from 'highlight.js';
 import { Router } from '@angular/router';
 import { SettingsStore } from '../../core/stores/settings.store';
 import { AuthService } from '../../core/services/auth.service';
+import { AuthModalService } from '../../core/services/auth-modal.service';
 import { CodeThemeService, CODE_THEMES } from '../../core/services/code-theme.service';
 import { ResumeParserService } from '../../core/services/resume-parser.service';
 import { PosthogService } from '../../core/services/posthog.service';
@@ -17,6 +18,7 @@ import type { UserSettings } from '../../core/models/jobmate.models';
 export class SettingsComponent {
   readonly settingsStore = inject(SettingsStore);
   readonly auth = inject(AuthService);
+  private readonly authModal = inject(AuthModalService);
   readonly codeTheme = inject(CodeThemeService);
   private readonly router = inject(Router);
   private readonly resumeParser = inject(ResumeParserService);
@@ -39,7 +41,7 @@ function schedule(score: number): Date {
 
   private requireAuth(): boolean {
     if (this.auth.isAuthenticated()) return true;
-    this.router.navigate(['/auth']);
+    this.authModal.open();
     return false;
   }
 
@@ -89,6 +91,6 @@ function schedule(score: number): Date {
     this.posthog.capture('user_signed_out');
     this.posthog.reset();
     await this.auth.signOut();
-    await this.router.navigate(['/auth']);
+    await this.router.navigate(['/']);
   }
 }

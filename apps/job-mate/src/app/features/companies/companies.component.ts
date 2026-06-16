@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CompanyStore } from '../../core/stores/company.store';
 import { AuthService } from '../../core/services/auth.service';
+import { AuthModalService } from '../../core/services/auth-modal.service';
 import { PosthogService } from '../../core/services/posthog.service';
 import type { Company, CompanyStatus } from '../../core/models/jobmate.models';
 
@@ -27,12 +27,12 @@ const AVATAR_PALETTE: ReadonlyArray<{ bg: string; color: string }> = [
 export class CompaniesComponent {
   readonly store = inject(CompanyStore);
   private readonly auth = inject(AuthService);
-  private readonly router = inject(Router);
+  private readonly authModal = inject(AuthModalService);
   private readonly posthog = inject(PosthogService);
 
   private requireAuth(): boolean {
     if (this.auth.isAuthenticated()) return true;
-    this.router.navigate(['/auth']);
+    this.authModal.open();
     return false;
   }
 

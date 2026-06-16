@@ -20,6 +20,7 @@ import {
   SubjectStatus,
 } from '../../core/models/jobmate.models';
 import { AuthService } from '../../core/services/auth.service';
+import { AuthModalService } from '../../core/services/auth-modal.service';
 import { PosthogService } from '../../core/services/posthog.service';
 
 type CategoryGroup = {
@@ -41,11 +42,12 @@ export class SubjectsComponent {
   readonly store = inject(StudyStore);
   private readonly router = inject(Router);
   private readonly auth = inject(AuthService);
+  private readonly authModal = inject(AuthModalService);
   private readonly posthog = inject(PosthogService);
 
   private requireAuth(): boolean {
     if (this.auth.isAuthenticated()) return true;
-    this.router.navigate(['/auth']);
+    this.authModal.open();
     return false;
   }
 

@@ -7,11 +7,7 @@ export const appRoutes: Route[] = [
     loadComponent: () =>
       import('./features/landing/landing.component').then(m => m.LandingComponent),
   },
-  {
-    path: 'auth',
-    loadComponent: () =>
-      import('./features/auth/auth.component').then(m => m.AuthComponent),
-  },
+  { path: 'auth', redirectTo: '' },
   {
     path: 'dashboard',
     loadComponent: () =>

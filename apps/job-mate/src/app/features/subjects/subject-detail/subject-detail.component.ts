@@ -14,6 +14,7 @@ import type { SubjectPriority, SubjectStatus } from '../../../core/models/jobmat
 import { RichEditorComponent } from '../../../shared/components/rich-editor/rich-editor.component';
 import { CodeThemeService } from '../../../core/services/code-theme.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { AuthModalService } from '../../../core/services/auth-modal.service';
 import { PosthogService } from '../../../core/services/posthog.service';
 
 type SubjectTab = 'notes' | 'qa';
@@ -30,12 +31,13 @@ export class SubjectDetailComponent {
   readonly store = inject(StudyStore);
   private readonly router = inject(Router);
   private readonly auth = inject(AuthService);
+  private readonly authModal = inject(AuthModalService);
   readonly codeTheme = inject(CodeThemeService);
   private readonly posthog = inject(PosthogService);
 
   private requireAuth(): boolean {
     if (this.auth.isAuthenticated()) return true;
-    this.router.navigate(['/auth']);
+    this.authModal.open();
     return false;
   }
 

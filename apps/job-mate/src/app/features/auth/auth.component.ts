@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { AuthModalService } from '../../core/services/auth-modal.service';
 import { SupabaseService } from '../../core/services/supabase.service';
 import { PosthogService } from '../../core/services/posthog.service';
 
@@ -12,7 +12,7 @@ import { PosthogService } from '../../core/services/posthog.service';
 })
 export class AuthComponent {
   private readonly auth = inject(AuthService);
-  private readonly router = inject(Router);
+  private readonly authModal = inject(AuthModalService);
   readonly supabase = inject(SupabaseService);
   private readonly posthog = inject(PosthogService);
 
@@ -21,6 +21,10 @@ export class AuthComponent {
   readonly password = signal('');
   readonly errorMessage = signal<string | null>(null);
   readonly loading = signal(false);
+
+  close(): void {
+    this.authModal.close();
+  }
 
   toggleMode(): void {
     this.mode.update(m => m === 'signin' ? 'signup' : 'signin');
@@ -42,8 +46,6 @@ export class AuthComponent {
       return;
     }
 
-    // If already signed in after signup (email confirmation disabled), go straight to dashboard.
-    // Otherwise show the confirmation message.
     if (this.mode() === 'signup' && !this.auth.isAuthenticated()) {
       this.errorMessage.set('Check your email to confirm your account.');
       return;
@@ -54,12 +56,11 @@ export class AuthComponent {
       this.posthog.identify(user.id, { email: user.email });
     }
 
-    if (this.mode() === 'signup') {
-      this.posthog.capture('user_signed_up', { email: this.email() });
-    } else {
-      this.posthog.capture('user_signed_in', { email: this.email() });
-    }
+    this.posthog.capture(
+      this.mode() === 'signup' ? 'user_signed_up' : 'user_signed_in',
+      { email: this.email() },
+    );
 
-    await this.router.navigate(['/dashboard']);
+    this.authModal.close();
   }
 }

@@ -5,7 +5,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import {
   FormControl,
   FormGroup,
@@ -18,6 +18,7 @@ import { StudyStore } from '../../core/stores/study.store';
 import { Application, AppStatus, SubjectCategory } from '../../core/models/jobmate.models';
 import { JobAnalysisService, JobAnalysis } from '../../core/services/job-analysis.service';
 import { AuthService } from '../../core/services/auth.service';
+import { AuthModalService } from '../../core/services/auth-modal.service';
 import { PosthogService } from '../../core/services/posthog.service';
 
 type SortKey = 'createdAt' | 'date' | 'updatedAt' | 'status' | 'title' | 'company';
@@ -69,12 +70,12 @@ export class ApplicationsComponent {
   private readonly studyStore = inject(StudyStore);
   private readonly analysisService = inject(JobAnalysisService);
   private readonly auth = inject(AuthService);
-  private readonly router = inject(Router);
+  private readonly authModal = inject(AuthModalService);
   private readonly posthog = inject(PosthogService);
 
   private requireAuth(): boolean {
     if (this.auth.isAuthenticated()) return true;
-    this.router.navigate(['/auth']);
+    this.authModal.open();
     return false;
   }
 
