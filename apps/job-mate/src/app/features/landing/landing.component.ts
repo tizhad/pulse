@@ -2,11 +2,9 @@ import {
   ChangeDetectionStrategy,
   Component,
   OnInit,
-  computed,
   inject,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { AuthService } from '../../core/services/auth.service';
 import { PosthogService } from '../../core/services/posthog.service';
 import { SeoService } from '../../core/services/seo.service';
 import { environment } from '../../../environments/environment';
@@ -19,13 +17,8 @@ import { environment } from '../../../environments/environment';
   imports: [RouterLink],
 })
 export class LandingComponent implements OnInit {
-  private readonly auth = inject(AuthService);
   private readonly posthog = inject(PosthogService);
   private readonly seo = inject(SeoService);
-
-  readonly ctaRoute = computed(() =>
-    this.auth.isAuthenticated() ? '/dashboard' : '/auth',
-  );
 
   ngOnInit(): void {
     this.seo.set({
@@ -46,9 +39,7 @@ export class LandingComponent implements OnInit {
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     });
 
-    if (!this.auth.isAuthenticated()) {
-      this.posthog.capture('landing_page_viewed');
-    }
+    this.posthog.capture('landing_page_viewed');
   }
 
   readonly stars = [0, 1, 2, 3, 4];
