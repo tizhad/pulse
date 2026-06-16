@@ -54,12 +54,14 @@ export class App implements OnInit {
     });
   }
 
+  private static readonly noShellRoutes = ['/', '/auth', '/about'];
+
   readonly showShell = toSignal(
     this.router.events.pipe(
       filter((e): e is NavigationEnd => e instanceof NavigationEnd),
-      map(e => e.urlAfterRedirects !== '/' && e.urlAfterRedirects !== '/auth'),
+      map(e => !App.noShellRoutes.includes(e.urlAfterRedirects)),
     ),
-    { initialValue: this.router.url !== '/' && this.router.url !== '/auth' },
+    { initialValue: !App.noShellRoutes.includes(this.router.url) },
   );
 
   readonly sidebarOpen = signal(false);

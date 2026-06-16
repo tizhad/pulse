@@ -1,3 +1,48 @@
+/* ── Nav ─────────────────────────────────────────────────────────────────── */
+
+.about-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  border-bottom: 0.5px solid var(--border);
+  background: var(--sidebar-bg);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.about-nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--text);
+}
+
+.about-nav-logo {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background: var(--gradient-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.about-nav-cta {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+
+  &:hover { text-decoration: underline; }
+}
+
+/* ── Page ────────────────────────────────────────────────────────────────── */
+
 .about {
   max-width: 760px;
   margin: 0 auto;
