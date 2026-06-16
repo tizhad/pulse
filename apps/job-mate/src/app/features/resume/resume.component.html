@@ -1,0 +1,51 @@
+<div class="page">
+  <div class="page-header">
+    <h1 class="page-title">Resume</h1>
+    <p class="page-subtitle">Used to match your skills against job postings.</p>
+  </div>
+
+  <div class="resume-card card">
+    @if (settingsStore.settings()?.resume; as resume) {
+      <div class="resume-status resume-status--saved">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        <span>Resume saved — {{ resume.skills.length }} skills detected</span>
+        <button class="resume-clear" (click)="clearResume()" aria-label="Remove resume">Remove</button>
+      </div>
+
+      @if (resume.skills.length) {
+        <div class="resume-skills">
+          @for (skill of resume.skills; track skill) {
+            <span class="skill-chip">{{ skill }}</span>
+          }
+        </div>
+      }
+
+      <p class="resume-update-hint">To update, paste a new version below and save.</p>
+    } @else {
+      <div class="resume-status resume-status--empty">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <span>No resume added yet</span>
+      </div>
+    }
+
+    <textarea
+      class="resume-textarea"
+      placeholder="Paste your resume text here…"
+      rows="12"
+      [value]="resumeText()"
+      (input)="resumeText.set($any($event.target).value)"
+    ></textarea>
+
+    <button
+      class="btn-primary"
+      [disabled]="resumeSaving() || !resumeText().trim()"
+      (click)="saveResume()"
+    >
+      {{ resumeSaving() ? 'Saving…' : 'Save resume' }}
+    </button>
+  </div>
+</div>

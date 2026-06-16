@@ -5,7 +5,6 @@ import { SettingsStore } from '../../core/stores/settings.store';
 import { AuthService } from '../../core/services/auth.service';
 import { AuthModalService } from '../../core/services/auth-modal.service';
 import { CodeThemeService, CODE_THEMES } from '../../core/services/code-theme.service';
-import { ResumeParserService } from '../../core/services/resume-parser.service';
 import { PosthogService } from '../../core/services/posthog.service';
 import type { UserSettings } from '../../core/models/jobmate.models';
 
@@ -21,11 +20,7 @@ export class SettingsComponent {
   private readonly authModal = inject(AuthModalService);
   readonly codeTheme = inject(CodeThemeService);
   private readonly router = inject(Router);
-  private readonly resumeParser = inject(ResumeParserService);
   private readonly posthog = inject(PosthogService);
-
-  readonly resumeText = signal('');
-  readonly resumeSaving = signal(false);
 
   readonly codeThemes = CODE_THEMES;
 
@@ -66,25 +61,6 @@ function schedule(score: number): Date {
   initial(): string {
     const name = this.settingsStore.settings()?.displayName ?? this.auth.user()?.email ?? '?';
     return name.charAt(0).toUpperCase();
-  }
-
-  async saveResume(): Promise<void> {
-    if (!this.requireAuth()) return;
-    const text = this.resumeText().trim();
-    if (!text) return;
-    this.resumeSaving.set(true);
-    const parsed = this.resumeParser.parse(text);
-    await this.settingsStore.upsert({ resume: parsed });
-    this.posthog.capture('resume_uploaded', {
-      skills_count: parsed.skills.length,
-      experience_count: parsed.experience.length,
-    });
-    this.resumeText.set('');
-    this.resumeSaving.set(false);
-  }
-
-  async clearResume(): Promise<void> {
-    await this.settingsStore.upsert({ resume: null });
   }
 
   async signOut(): Promise<void> {

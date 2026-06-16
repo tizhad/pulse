@@ -12,8 +12,8 @@
         <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
       </svg>
     </div>
-    <h2 class="auth-title">{{ mode() === 'signin' ? 'Welcome back' : 'Create account' }}</h2>
-    <p class="auth-subtitle">{{ mode() === 'signin' ? 'Sign in to save your progress' : 'Start tracking your interview prep' }}</p>
+    <h2 class="auth-title">{{ mode() === 'signin' ? 'Sign in' : 'Create account' }}</h2>
+    <p class="auth-subtitle">For saving your progress, you need to have an account.</p>
   </div>
 
   @if (!supabase.isConfigured) {

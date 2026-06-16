@@ -41,6 +41,11 @@ export const appRoutes: Route[] = [
       import('./features/ask-ai/ask-ai.component').then(m => m.AskAiComponent),
   },
   {
+    path: 'resume',
+    loadComponent: () =>
+      import('./features/resume/resume.component').then(m => m.ResumeComponent),
+  },
+  {
     path: 'settings',
     loadComponent: () =>
       import('./features/settings/settings.component').then(m => m.SettingsComponent),
