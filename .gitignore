@@ -3,8 +3,14 @@
 # Local learning notes — not for version control
 DECISIONS.md
 
-# Resume — keep off version control
+# Resume and design assets — keep off version control
 apps/job-mate/public/*.pdf
+apps/job-mate/public/portfolio-page.png
+
+# Test artifacts
+playwright-report/
+test-results/
+screenshot.cjs
 
 # compiled output
 dist
@@ -60,3 +66,4 @@ vitest.config.*.timestamp*
 .nx/self-healing
 __screenshots__/
 package-lock.json
+.env
