@@ -1,7 +1,16 @@
 <header class="about-nav">
   <a [routerLink]="['/']" class="about-nav-brand">
     <div class="about-nav-logo">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="white"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
         <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
       </svg>
     </div>
@@ -10,233 +19,213 @@
 </header>
 
 <article class="about">
-
-  <!-- ── Hero ──────────────────────────────────────────────────────────── -->
+  <!-- ── Executive Summary / Philosophy ───────────────────────────────── -->
   <section class="hero">
-    <p class="trail">Frontend Engineer → Technical Product Manager → Frontend Engineer</p>
+    <p class="trail">PHILOSOPHY &amp; APPROACH</p>
     <h1 class="hero-title">
       I build product-grade interfaces.
-      <span class="accent">Measured against the metric that actually matters.</span>
+      <br />
+      <span class="accent"
+        >Measured against the metrics that actually move the business.</span
+      >
     </h1>
     <p class="bio">
-      Frontend engineer with 5+ years of delivery experience and a rare background as a
-      Technical Product Manager at a 50M-user super-app. I don't just implement features —
-      I ask whether we're building the right thing, shape the solution, then ship and own it
-      in production. Deep in Angular (14–21, Zoneless, Signals, SSR) and comfortable across React.
+      I am a frontend engineer who doesn't just look at Jira tickets; I look at
+      the product strategy. With over 5 years of hands-on delivery experience
+      and a rare background managing high-scale products for a 50M-user
+      super-app, I close the gap between business intent and technical
+      execution.
     </p>
-    <div class="tag-row">
-      <span class="tag">Angular (14–21)</span>
-      <span class="tag">React</span>
-      <span class="tag">TypeScript</span>
-      <span class="tag">RxJS / Signals</span>
-      <span class="tag">Nx Monorepos</span>
-      <span class="tag">Amsterdam</span>
+    <p class="bio-sub">
+      My sweet spot is taking complex, ambiguous problems—whether it's raw
+      performance bottlenecks or greenfield feature engines—shaping the
+      technical solution, and owning the execution end-to-end.
+    </p>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- ── Core Competencies ─────────────────────────────────────────────── -->
+  <section class="section">
+    <p class="section-label">WHAT I BRING TO THE TABLE</p>
+
+    <div class="capabilities-grid">
+      <div class="capability-card">
+        <h3>Cutting-Edge Angular &amp; Performance Engineering</h3>
+        <p>
+          Deep specialization in modern Angular architectures (v14–v21). I stay
+          ahead of the framework's trajectory—leveraging Zoneless change
+          detection, Signals, defer blocks, and robust Server-Side Rendering
+          (SSR). I don't guess at performance; I profiles runtimes via Chrome
+          DevTools Protocol to eliminate long tasks and drop Core Web Vitals
+          metrics.
+        </p>
+      </div>
+
+      <div class="capability-card">
+        <h3>The Product Manager's Mindset</h3>
+        <p>
+          Having run a fintech squad at scale, I understand feature ROI, A/B
+          testing methodologies, and user migration risks. When I build a
+          feature, I naturally validate edge cases, prioritize user adoption
+          patterns, and ensure the engineering effort aligns strictly with
+          product goals.
+        </p>
+      </div>
+
+      <div class="capability-card">
+        <h3>System Architecture &amp; Scale</h3>
+        <p>
+          Comfortable inside large-scale codebases, Nx Monorepos, and Module
+          Federation environments. I build testable code backed by Playwright
+          and Jest, ensuring that high-velocity shipping doesn't come at the
+          cost of production stability or accessibility (WCAG 2.1 AA).
+        </p>
+      </div>
     </div>
   </section>
 
-  <!-- ── Selected work ─────────────────────────────────────────────────── -->
+  <!-- ── Track Record & Achievements ───────────────────────────────────── -->
   <section class="section">
-    <p class="section-label">// SELECTED WORK</p>
-
-    <div class="work-list">
-
-      <div class="work-item">
-        <div class="work-meta">
-          <span class="work-year">2024</span>
+    <p class="section-label">PROVEN TRACK RECORD</p>
+    <div class="narrative-timeline">
+      <div class="narrative-block">
+        <div class="block-header">
+          <h3>Optimizing Technical Foundations</h3>
+          <span class="location">Amsterdam</span>
         </div>
-        <div class="work-body">
-          <h3 class="work-title">Lighthouse performance — ParkBee</h3>
-          <p class="work-desc">Sole frontend engineer for 6 months. Raised Lighthouse score from 33 → 75 through deep runtime profiling via Chrome DevTools Protocol: eliminated long tasks, implemented route-based code-splitting, and led a CloudFront CDN rollout with DevOps to cut LCP and global latency.</p>
-          <div class="metrics">
-            <span class="metric">33 → 75 Lighthouse</span>
-            <span class="metric">LCP ↓ via CDN</span>
-          </div>
-          <div class="tech-tags">
-            <span class="tech">Angular</span>
-            <span class="tech">CDP</span>
-            <span class="tech">CloudFront</span>
-            <span class="tech">SSR</span>
-            <span class="tech">Datadog</span>
-          </div>
-        </div>
+        <p>
+          I have a proven track record of taking complete frontend ownership to
+          salvage and optimize legacy web applications. In my previous work, I
+          drove deep runtime profiling and modernized asset pipelines to
+          successfully push a critical platform's
+          <strong>Lighthouse score from 33 to 75</strong>. By collaborating
+          directly with infrastructure teams to design and roll out custom
+          CloudFront CDN architectures, I specialized in drastically reducing
+          Largest Contentful Paint (LCP) and cutting global latency.
+        </p>
+        <p>
+          Beyond runtime optimizations, I own features from physical realities
+          to digital execution. I have designed and shipped complex,
+          hardware-integrated workflows—such as automated number plate
+          recognition (ANPR) systems—from zero to production, including on-site
+          validation. By owning the accompanying product strategy and user
+          migration paths, I directly drove a
+          <strong>30% uplift in mobile application adoption</strong>.
+        </p>
       </div>
 
-      <div class="work-item">
-        <div class="work-meta">
-          <span class="work-year">2024</span>
+      <div class="narrative-block" style="margin-top: 3rem">
+        <div class="block-header">
+          <h3>Architecting Complex Enterprise Engines</h3>
+          <span class="location">Delft</span>
         </div>
-        <div class="work-body">
-          <h3 class="work-title">ANPR integration — ParkBee</h3>
-          <p class="work-desc">Delivered Automated Number Plate Recognition from zero to production as the sole frontend owner. Included on-site validation at physical garages before launch, and owned the User Migration Epic that drove a 30% increase in mobile app adoption.</p>
-          <div class="metrics">
-            <span class="metric">+30% mobile adoption</span>
-            <span class="metric">0 → production</span>
-          </div>
-          <div class="tech-tags">
-            <span class="tech">Angular</span>
-            <span class="tech">Playwright</span>
-            <span class="tech">Jest</span>
-            <span class="tech">Claude / Cursor</span>
-          </div>
-        </div>
+        <p>
+          I engineer highly configurable, multi-application frontend
+          architectures capable of orchestrating complex business logic. I
+          previously built a custom Workflow Actions engine using Angular, RxJS,
+          and NgRx inside an Nx Monorepo environment. This framework empowered
+          non-technical operators to orchestrate mission-critical asset
+          scheduling and shift tasks across separate micro-frontends, resulting
+          in a measurable
+          <strong>25% reduction in manual operational overhead</strong>.
+        </p>
+        <p class="capabilities-add">
+          <strong>What I can do for your codebase:</strong> I am equipped to
+          audit and eliminate complex memory leaks, restructure monolithic
+          applications into maintainable monorepos or micro-frontends, implement
+          predictable state management models, and design reactive, future-proof
+          interfaces that non-technical users can easily configure.
+        </p>
       </div>
 
-      <div class="work-item">
-        <div class="work-meta">
-          <span class="work-year">2022</span>
+      <div class="narrative-block">
+        <div class="block-header">
+          <h3>Product Leadership at Scale</h3>
+          <span class="location">Tehran</span>
         </div>
-        <div class="work-body">
-          <h3 class="work-title">Workflow Actions engine — Cuurios</h3>
-          <p class="work-desc">Engineered a configurable Workflow Actions system for an industrial platform serving offshore crew scheduling and helicopter shift management. Enabled non-technical users to build and trigger custom operational flows across multiple micro-applications.</p>
-          <div class="metrics">
-            <span class="metric">−25% analyst effort</span>
-            <span class="metric">multi-app</span>
-          </div>
-          <div class="tech-tags">
-            <span class="tech">Angular</span>
-            <span class="tech">RxJS</span>
-            <span class="tech">NgRx</span>
-            <span class="tech">Nx</span>
-          </div>
-        </div>
+        <p>
+          Before committing fully back to engineering, I led the fintech squad
+          at Snapp!, a ride-hailing super-app managing 50 million users and 6
+          million daily transactions. I steered the end-to-end regulatory
+          alignment and launch of Direct Debit—a consumer industry first in the
+          country. I also spearheaded a comprehensive VAT compliance project
+          that insulated the business with a
+          <strong>20% savings in tax overhead</strong>, earning me the Best PM
+          award.
+        </p>
       </div>
-
-      <div class="work-item">
-        <div class="work-meta">
-          <span class="work-year">2019</span>
-        </div>
-        <div class="work-body">
-          <h3 class="work-title">Direct Debit &amp; E-Wallet — Snapp!</h3>
-          <p class="work-desc">Led the fintech squad at Iran's largest super-app (50M users, 6M daily rides). Launched Direct Debit — the first of its kind in Iran's consumer industry — end-to-end, from regulatory alignment to production. Followed by Snapp E-Wallet and a VAT compliance project that saved the business 20% in tax.</p>
-          <div class="metrics">
-            <span class="metric">50M users</span>
-            <span class="metric">20% tax savings</span>
-            <span class="metric">Best PM 2020</span>
-          </div>
-          <div class="tech-tags">
-            <span class="tech">Product</span>
-            <span class="tech">A/B testing</span>
-            <span class="tech">Fintech</span>
-            <span class="tech">At scale</span>
-          </div>
-        </div>
-      </div>
-
     </div>
   </section>
 
-  <!-- ── Personal project ───────────────────────────────────────────────── -->
+  <!-- ── Active R&D / R&D Sandbox ──────────────────────────────────────── -->
   <section class="section">
-    <p class="section-label">// PERSONAL PROJECT</p>
+    <p class="section-label">ACTIVE R&amp;D SANDBOX</p>
     <div class="project-card">
       <div class="project-header">
         <div>
           <h3 class="project-title">Pulse</h3>
-          <p class="project-sub">Personal finance &amp; career management tool — Apr 2026 – present</p>
+          <p class="project-sub">
+            Personal Finance &amp; Career Management Architecture
+          </p>
         </div>
-        <a href="https://github.com/tizhad/pulse" target="_blank" rel="noopener noreferrer" class="project-link">GitHub ↗</a>
+        <a
+          href="https:github.com/tizhad/pulse"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="project-link"
+          >Explore Codebase ↗</a
+        >
       </div>
-      <p class="project-desc">Built from scratch to stay ahead of where Angular is going — not catch up to it. Explores Zoneless change detection, defer blocks for lazy rendering, and live Anthropic API integration. Active development.</p>
+      <p class="project-desc">
+        I maintain an active production-grade sandbox to experiment with
+        paradigm shifts in the frontend ecosystem before they hit the mainstream
+        enterprise market. Pulse is built to push the limits of modern Angular,
+        featuring an entirely
+        <strong>Zoneless application architecture</strong>, reactive state
+        primitives via <strong>Signals</strong>, localized deferred rendering, a
+        <strong>Supabase</strong> backend, and live
+        <strong>Anthropic API integrations</strong>.
+      </p>
       <div class="tech-tags">
         <span class="tech">Angular 21</span>
         <span class="tech">Signals</span>
         <span class="tech">Zoneless</span>
-        <span class="tech">Anthropic API</span>
-        <span class="tech">Nx</span>
-        <span class="tech">Supabase</span>
+        <span class="tech">LLM Integration</span>
+        <span class="tech">Nx Monorepo</span>
       </div>
     </div>
   </section>
 
-  <!-- ── Stack ──────────────────────────────────────────────────────────── -->
+  <!-- ── Toolkit ───────────────────────────────────────────────────────── -->
   <section class="section">
-    <p class="section-label">// STACK</p>
+    <p class="section-label">TECHNICAL TOOLKIT</p>
     <div class="stack-table">
       <div class="stack-row">
-        <span class="stack-label">Core</span>
-        <span class="stack-items">Angular (14–21) · React · TypeScript · JavaScript (ES6+) · SSR · REST APIs</span>
+        <span class="stack-label">Core Ecosystem</span>
+        <span class="stack-items"
+          >Angular (14–21) · React · TypeScript · JavaScript (ES6+) · SSR · REST
+          &amp; GraphQL</span
+        >
       </div>
       <div class="stack-row">
-        <span class="stack-label">State</span>
-        <span class="stack-items">Signals (Zoneless) · RxJS · NgRx · Redux Toolkit · WebSockets</span>
+        <span class="stack-label">State &amp; Async</span>
+        <span class="stack-items"
+          >Signals (Zoneless) · RxJS · NgRx · Redux Toolkit · WebSockets</span
+        >
       </div>
       <div class="stack-row">
-        <span class="stack-label">Testing</span>
-        <span class="stack-items">Jest · Playwright · Accessibility (WCAG 2.1 AA)</span>
+        <span class="stack-label">Architecture &amp; Ops</span>
+        <span class="stack-items"
+          >Nx Monorepos · Module Federation · CI/CD Pipelines · Strapi CMS</span
+        >
       </div>
       <div class="stack-row">
-        <span class="stack-label">Arch</span>
-        <span class="stack-items">Nx Monorepos · Module Federation · CI/CD (Azure DevOps) · GraphQL · Strapi CMS</span>
-      </div>
-      <div class="stack-row">
-        <span class="stack-label">Perf</span>
-        <span class="stack-items">Chrome DevTools Protocol · Flamegraph · Lighthouse · Core Web Vitals · Datadog</span>
-      </div>
-      <div class="stack-row">
-        <span class="stack-label">AI</span>
-        <span class="stack-items">Claude Code · GitHub Copilot · Cursor</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Experience ─────────────────────────────────────────────────────── -->
-  <section class="section">
-    <p class="section-label">// EXPERIENCE</p>
-    <div class="exp-list">
-
-      <div class="exp-item">
-        <span class="exp-years">Dec 2025 – Jan 2026</span>
-        <div class="exp-detail">
-          <span class="exp-role">Frontend Engineer</span>
-          <span class="exp-company">Backbase · Amsterdam</span>
-        </div>
-      </div>
-
-      <div class="exp-item">
-        <span class="exp-years">Jan 2024 – Oct 2025</span>
-        <div class="exp-detail">
-          <span class="exp-role">Frontend Engineer</span>
-          <span class="exp-company">ParkBee · Amsterdam</span>
-        </div>
-      </div>
-
-      <div class="exp-item">
-        <span class="exp-years">Jan 2021 – Dec 2023</span>
-        <div class="exp-detail">
-          <span class="exp-role">Frontend Engineer</span>
-          <span class="exp-company">Cuurios · Delft</span>
-        </div>
-      </div>
-
-      <div class="exp-item">
-        <span class="exp-years">Mar 2018 – Jan 2021</span>
-        <div class="exp-detail">
-          <span class="exp-role">Senior Technical Product Manager</span>
-          <span class="exp-company">Snapp! (Rocket Internet) · Tehran</span>
-        </div>
-      </div>
-
-      <div class="exp-item">
-        <span class="exp-years">Mar 2014 – Mar 2018</span>
-        <div class="exp-detail">
-          <span class="exp-role">Product Manager</span>
-          <span class="exp-company">VADA House of Mobile · Tehran</span>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ── Education ──────────────────────────────────────────────────────── -->
-  <section class="section">
-    <p class="section-label">// EDUCATION</p>
-    <div class="exp-list">
-      <div class="exp-item">
-        <span class="exp-years">2016</span>
-        <div class="exp-detail">
-          <span class="exp-role">BSc. Information Technology</span>
-          <span class="exp-company">Ghadr University of Technology · Graduated 1st in class, GPA 9.5/10</span>
-        </div>
+        <span class="stack-label">Performance &amp; Quality</span>
+        <span class="stack-items"
+          >Chrome DevTools Protocol · Flamegraph Profiling · Lighthouse ·
+          Playwright · Jest · WCAG 2.1 AA</span
+        >
       </div>
     </div>
   </section>
@@ -244,12 +233,20 @@
   <!-- ── CTA ───────────────────────────────────────────────────────────── -->
   <section class="cta">
     <h2 class="cta-title">Let's build something worth shipping.</h2>
-    <p class="cta-sub">Looking for a product-focused frontend role where shipping the right thing matters as much as shipping it well. Amsterdam-based, no sponsorship required.</p>
+    <p class="cta-sub">
+      I'm based in Amsterdam (no sponsorship required) and look for complex
+      frontend or product-engineer initiatives where shipping the right
+      interface impacts the bottom line.
+    </p>
     <div class="cta-actions">
-      <a href="mailto:tiizhad@gmail.com" class="btn-hire">hire me →</a>
-      <a href="https://www.linkedin.com/in/trezanezhad/" target="_blank" rel="noopener noreferrer" class="btn-call">LinkedIn ↗</a>
-      <a href="https://github.com/tizhad" target="_blank" rel="noopener noreferrer" class="btn-ghost">GitHub ↗</a>
+      <a href="mailto:tiizhad@gmail.com" class="btn-hire">Get in touch →</a>
+      <a
+        href="https:github.com/tizhad"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn-ghost"
+        >GitHub ↗</a
+      >
     </div>
   </section>
-
 </article>

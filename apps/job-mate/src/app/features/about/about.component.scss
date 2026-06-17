@@ -33,13 +33,11 @@
   flex-shrink: 0;
 }
 
-
 /* ── Page ────────────────────────────────────────────────────────────────── */
 
 .about {
-  max-width: 760px;
   margin: 0 auto;
-  padding: 3rem 2rem 5rem;
+  padding: 3rem 5rem 5rem;
 }
 
 /* ── Hero ────────────────────────────────────────────────────────────────── */
@@ -49,8 +47,8 @@
 }
 
 .trail {
-  font-size: 12px;
-  font-weight: 600;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 800;
   letter-spacing: 0.04em;
   color: var(--text-muted);
   text-transform: uppercase;
@@ -74,10 +72,10 @@
 }
 
 .bio {
-  font-size: 15px;
+  font-size: 22px;
   line-height: 1.75;
   color: var(--text-secondary);
-  max-width: 600px;
+  max-width: 800px;
   margin-bottom: 1.5rem;
 }
 
@@ -104,8 +102,8 @@
 }
 
 .section-label {
-  font-size: 11px;
-  font-weight: 700;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 800;
   letter-spacing: 0.1em;
   color: var(--text-muted);
   text-transform: uppercase;
@@ -155,7 +153,9 @@
   color: var(--accent);
   white-space: nowrap;
 
-  &:hover { text-decoration: underline; }
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .work-body {
@@ -253,7 +253,9 @@
   white-space: nowrap;
   flex-shrink: 0;
 
-  &:hover { text-decoration: underline; }
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 /* ── Writing grid ────────────────────────────────────────────────────────── */
@@ -308,10 +310,16 @@
   padding: 0.85rem 1.25rem;
   border-bottom: 0.5px solid var(--border);
 
-  &:last-child { border-bottom: none; }
+  &:last-child {
+    border-bottom: none;
+  }
 
-  &:nth-child(odd) { background: var(--surface); }
-  &:nth-child(even) { background: var(--bg); }
+  &:nth-child(odd) {
+    background: var(--surface);
+  }
+  &:nth-child(even) {
+    background: var(--bg);
+  }
 }
 
 .stack-label {
@@ -346,7 +354,9 @@
   padding: 1rem 0;
   border-bottom: 0.5px solid var(--border);
 
-  &:first-child { border-top: 0.5px solid var(--border); }
+  &:first-child {
+    border-top: 0.5px solid var(--border);
+  }
 }
 
 .exp-years {
@@ -419,7 +429,9 @@
   font-weight: 700;
   transition: opacity var(--transition);
 
-  &:hover { opacity: 0.85; }
+  &:hover {
+    opacity: 0.85;
+  }
 }
 
 .btn-call {
@@ -434,7 +446,9 @@
   font-weight: 600;
   transition: border-color var(--transition);
 
-  &:hover { border-color: var(--text-secondary); }
+  &:hover {
+    border-color: var(--text-secondary);
+  }
 }
 
 .btn-ghost {
@@ -446,7 +460,9 @@
   color: var(--text-muted);
   transition: color var(--transition);
 
-  &:hover { color: var(--text); }
+  &:hover {
+    color: var(--text);
+  }
 }
 
 /* ── Responsive ──────────────────────────────────────────────────────────── */
