@@ -1,157 +1,144 @@
 <div class="ct-root">
 
-  <!-- ── Decorative background elements ──────────────────────────────────── -->
-  <div class="ct-bg-map" aria-hidden="true"></div>
-
-  <!-- ── Header banner ────────────────────────────────────────────────────── -->
-  <header class="ct-header">
-    <div class="ct-header-rope ct-header-rope--left" aria-hidden="true"></div>
-    <div class="ct-header-inner">
-      <span class="ct-header-skull" aria-hidden="true">☠</span>
-      <h1 class="ct-header-title">Contact the Tizhad Crew</h1>
-      <span class="ct-header-skull" aria-hidden="true">☠</span>
+  <!-- ── Top dark band + title ────────────────────────────────────────────── -->
+  <div class="ct-top-band">
+    <div class="ct-title-sign">
+      <div class="ct-title-sign-inner">
+        <h1 class="ct-title">Contact the Tizhad Crew</h1>
+      </div>
     </div>
-    <div class="ct-header-rope ct-header-rope--right" aria-hidden="true"></div>
-  </header>
+  </div>
 
-  <!-- ── Main content ─────────────────────────────────────────────────────── -->
-  <main class="ct-body">
+  <!-- ── Main parchment area ──────────────────────────────────────────────── -->
+  <main class="ct-main">
+    <div class="ct-grid">
 
-    <!-- Left: form -->
-    <section class="ct-panel ct-panel--form">
-      <h2 class="ct-panel-title">Drop us a Message</h2>
-
-      <form class="ct-form" (submit)="$event.preventDefault(); send()">
-        <div class="ct-field">
-          <label class="ct-label" for="ct-name">Pirate Name</label>
-          <input
-            id="ct-name"
-            class="ct-input"
-            type="text"
-            placeholder="Name"
-            [value]="name()"
-            (input)="name.set($any($event.target).value)"
-            autocomplete="name"
-            required
-          />
+      <!-- Left: form -->
+      <section class="ct-panel">
+        <div class="ct-panel-header">
+          <h2 class="ct-panel-title">Drop us a Message</h2>
         </div>
+        <div class="ct-panel-body">
 
-        <div class="ct-field">
-          <label class="ct-label" for="ct-email">Den Den Mushi ID</label>
-          <input
-            id="ct-email"
-            class="ct-input"
-            type="email"
-            placeholder="Email"
-            [value]="email()"
-            (input)="email.set($any($event.target).value)"
-            autocomplete="email"
-            required
-          />
+          <form class="ct-form" (submit)="$event.preventDefault(); send()">
+            <div class="ct-field">
+              <label class="ct-label" for="ct-name">Pirate Name</label>
+              <input
+                id="ct-name"
+                class="ct-input"
+                type="text"
+                placeholder="Name"
+                [value]="name()"
+                (input)="name.set($any($event.target).value)"
+                autocomplete="name"
+              />
+            </div>
+
+            <div class="ct-field">
+              <label class="ct-label" for="ct-email">Den Den Mushi ID</label>
+              <input
+                id="ct-email"
+                class="ct-input"
+                type="email"
+                placeholder="Email"
+                [value]="email()"
+                (input)="email.set($any($event.target).value)"
+                autocomplete="email"
+              />
+            </div>
+
+            <div class="ct-field">
+              <label class="ct-label" for="ct-subject">Subject</label>
+              <input
+                id="ct-subject"
+                class="ct-input"
+                type="text"
+                placeholder="e.g. Grand Line Query"
+                [value]="subject()"
+                (input)="subject.set($any($event.target).value)"
+              />
+            </div>
+
+            <div class="ct-field">
+              <label class="ct-label" for="ct-message">Message</label>
+              <textarea
+                id="ct-message"
+                class="ct-input ct-textarea"
+                placeholder="Write your log here…"
+                rows="4"
+                [value]="message()"
+                (input)="message.set($any($event.target).value)"
+              ></textarea>
+            </div>
+
+            @if (sent()) {
+              <p class="ct-success">⚓ Message received! We'll reply by the next tide.</p>
+            }
+
+            <button class="ct-btn-send" type="submit" [disabled]="!isValid()">
+              <span class="ct-btn-skull">☠</span>
+              Send Message
+            </button>
+          </form>
+
         </div>
+      </section>
 
-        <div class="ct-field">
-          <label class="ct-label" for="ct-subject">Subject</label>
-          <input
-            id="ct-subject"
-            class="ct-input"
-            type="text"
-            placeholder="e.g. Grand Line Query"
-            [value]="subject()"
-            (input)="subject.set($any($event.target).value)"
-          />
+      <!-- Right: contact info -->
+      <section class="ct-panel">
+        <div class="ct-panel-header">
+          <h2 class="ct-panel-title">Choose your Transmission</h2>
         </div>
+        <div class="ct-panel-body ct-panel-body--info">
 
-        <div class="ct-field">
-          <label class="ct-label" for="ct-message">Message</label>
-          <textarea
-            id="ct-message"
-            class="ct-input ct-textarea"
-            placeholder="Write your log here…"
-            rows="5"
-            [value]="message()"
-            (input)="message.set($any($event.target).value)"
-            required
-          ></textarea>
+          <a class="ct-contact-row" href="mailto:captain@app.tizhad.com">
+            <div class="ct-contact-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+              </svg>
+            </div>
+            <div class="ct-contact-text">
+              <span class="ct-contact-label">Den Den Mushi</span>
+              <span class="ct-contact-value">captain&#64;app.tizhad.com</span>
+            </div>
+          </a>
+
+          <a class="ct-contact-row" href="https://twitter.com/tizhad_dev" target="_blank" rel="noopener noreferrer">
+            <div class="ct-contact-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.258 5.63 5.906-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+              </svg>
+            </div>
+            <div class="ct-contact-text">
+              <span class="ct-contact-label">Twitter Bounty</span>
+              <span class="ct-contact-value">&#64;tizhad_dev</span>
+            </div>
+          </a>
+
+          <div class="ct-contact-row">
+            <div class="ct-contact-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+            </div>
+            <div class="ct-contact-text">
+              <span class="ct-contact-label">Visit our Base</span>
+              <span class="ct-contact-value">Digital Ocean, Global</span>
+            </div>
+          </div>
+
         </div>
+      </section>
 
-        @if (sent()) {
-          <p class="ct-success">⚓ Message sent! We'll reply by the next tide.</p>
-        }
-
-        <button class="ct-btn-send" type="submit" [disabled]="!isValid()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
-          </svg>
-          Send Message
-        </button>
-      </form>
-    </section>
-
-    <!-- Right: contact info -->
-    <section class="ct-panel ct-panel--info">
-      <h2 class="ct-panel-title">Choose your Transmission</h2>
-
-      <div class="ct-contacts">
-        <a class="ct-contact-item" href="mailto:captain@app.tizhad.com">
-          <div class="ct-contact-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
-            </svg>
-          </div>
-          <div class="ct-contact-text">
-            <span class="ct-contact-label">Den Den Mushi</span>
-            <span class="ct-contact-value">captain&#64;app.tizhad.com</span>
-          </div>
-        </a>
-
-        <a class="ct-contact-item" href="https://twitter.com/tizhad_dev" target="_blank" rel="noopener noreferrer">
-          <div class="ct-contact-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.258 5.63 5.906-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-            </svg>
-          </div>
-          <div class="ct-contact-text">
-            <span class="ct-contact-label">Twitter Bounty</span>
-            <span class="ct-contact-value">&#64;tizhad_dev</span>
-          </div>
-        </a>
-
-        <div class="ct-contact-item">
-          <div class="ct-contact-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
-            </svg>
-          </div>
-          <div class="ct-contact-text">
-            <span class="ct-contact-label">Visit our Base</span>
-            <span class="ct-contact-value">Digital Ocean, Global</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Decorative compass -->
-      <div class="ct-compass" aria-hidden="true">
-        <div class="ct-compass-ring">
-          <span class="ct-compass-n">N</span>
-          <span class="ct-compass-s">S</span>
-          <span class="ct-compass-e">E</span>
-          <span class="ct-compass-w">W</span>
-          <div class="ct-compass-needle"></div>
-        </div>
-      </div>
-    </section>
-
+    </div>
   </main>
 
-  <!-- ── Footer ───────────────────────────────────────────────────────────── -->
-  <footer class="ct-footer">
+  <!-- ── Bottom dark band + footer ────────────────────────────────────────── -->
+  <div class="ct-bottom-band">
     <p class="ct-footer-copy">© 2024 app.tizhad.com — All rights reserved on the Grand Line</p>
-    <div class="ct-footer-links">
-      <a [routerLink]="['/']">Home</a>
-      <a href="mailto:captain@app.tizhad.com">Email</a>
-      <a href="https://twitter.com/tizhad_dev" target="_blank" rel="noopener noreferrer">Twitter</a>
-    </div>
-  </footer>
+  </div>
 
 </div>
