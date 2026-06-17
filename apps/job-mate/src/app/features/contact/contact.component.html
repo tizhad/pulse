@@ -1,171 +1,104 @@
 <div class="ct-root">
-
-  <!-- ── Skull watermarks (export from Canva → /contact/skull.png, place here) ── -->
-  <!-- <img class="ct-skull ct-skull--tl"  src="/contact/skull.png" alt="" aria-hidden="true"> -->
-  <!-- <img class="ct-skull ct-skull--ml"  src="/contact/skull.png" alt="" aria-hidden="true"> -->
-  <!-- <img class="ct-skull ct-skull--mr"  src="/contact/skull.png" alt="" aria-hidden="true"> -->
-  <!-- <img class="ct-barrel ct-barrel--bl" src="/contact/barrel.png" alt="" aria-hidden="true"> -->
-  <!-- <img class="ct-barrel ct-barrel--br" src="/contact/barrel.png" alt="" aria-hidden="true"> -->
-
-  <!-- ── Hanging sign header ────────────────────────────────────────────────── -->
   <header class="ct-header">
-    <div class="ct-sign-wrapper">
-      <div class="ct-rope ct-rope--left"></div>
-      <div class="ct-rope ct-rope--right"></div>
-      <div class="ct-sign">
-        <h1 class="ct-title">Contact the Tizhad Crew</h1>
-      </div>
-    </div>
+    <h1 class="ct-title">Contact the Tizhad Crew</h1>
   </header>
 
-  <!-- ── Main two-column layout ────────────────────────────────────────────── -->
   <main class="ct-main">
-
     <!-- Left: form -->
     <section class="ct-col ct-col--form">
-      <div class="ct-scroll-banner">
-        <h2 class="ct-section-title">Drop us a Message</h2>
-      </div>
+      <h2 class="ct-section-title">Drop us a Message</h2>
 
-      <div class="ct-frame">
-        <div class="ct-frame-inner">
-          <form class="ct-form" (submit)="$event.preventDefault(); send()">
-
-            <div class="ct-field">
-              <input
-                id="ct-name"
-                class="ct-input"
-                type="text"
-                [value]="name()"
-                (input)="name.set($any($event.target).value)"
-                autocomplete="name"
-              />
-              <label class="ct-label" for="ct-name">
-                <strong>PIRATE NAME</strong>&nbsp;<span>(Name)</span>
-              </label>
-            </div>
-
-            <div class="ct-field">
-              <input
-                id="ct-email"
-                class="ct-input"
-                type="email"
-                [value]="email()"
-                (input)="email.set($any($event.target).value)"
-                autocomplete="email"
-              />
-              <label class="ct-label" for="ct-email">
-                <strong>DEN DEN MUSHI ID</strong>&nbsp;<span>(Email)</span>
-              </label>
-            </div>
-
-            <div class="ct-field">
-              <input
-                id="ct-subject"
-                class="ct-input"
-                type="text"
-                [value]="subject()"
-                (input)="subject.set($any($event.target).value)"
-              />
-              <label class="ct-label" for="ct-subject">
-                <strong>SUBJECT</strong>&nbsp;<span>(e.g., Grand Line Query)</span>
-              </label>
-            </div>
-
-            <div class="ct-field">
-              <textarea
-                id="ct-message"
-                class="ct-input ct-textarea"
-                rows="4"
-                [value]="message()"
-                (input)="message.set($any($event.target).value)"
-              ></textarea>
-              <label class="ct-label" for="ct-message">
-                <strong>MESSAGE</strong>&nbsp;<span>(Write your log here...)</span>
-              </label>
-            </div>
-
-            @if (sent()) {
-              <p class="ct-success">⚓ Message received! We'll reply by the next tide.</p>
-            }
-
-            <div class="ct-btn-wrap">
-              <button class="ct-btn-send" type="submit" [disabled]="!isValid()">
-                <div class="ct-coin">☠</div>
-                <span class="ct-btn-label">Send Message</span>
-              </button>
-            </div>
-
-          </form>
+      <form class="ct-form" (submit)="$event.preventDefault(); send()">
+        <div class="ct-field">
+          <input
+            id="ct-name"
+            class="ct-input"
+            type="text"
+            placeholder=" "
+            [value]="name()"
+            (input)="name.set($any($event.target).value)"
+            autocomplete="name"
+          />
+          <label class="ct-label" for="ct-name">
+            <strong>PIRATE NAME</strong>&nbsp;<span>(Name)</span>
+          </label>
         </div>
-      </div>
+
+        <div class="ct-field">
+          <input
+            id="ct-email"
+            class="ct-input"
+            type="email"
+            placeholder=" "
+            [value]="email()"
+            (input)="email.set($any($event.target).value)"
+            autocomplete="email"
+          />
+          <label class="ct-label" for="ct-email">
+            <strong>DEN DEN MUSHI ID</strong>&nbsp;<span>(Email)</span>
+          </label>
+        </div>
+
+        <div class="ct-field">
+          <input
+            id="ct-subject"
+            class="ct-input"
+            type="text"
+            placeholder=" "
+            [value]="subject()"
+            (input)="subject.set($any($event.target).value)"
+          />
+          <label class="ct-label" for="ct-subject">
+            <strong>SUBJECT</strong>&nbsp;<span>(e.g., Grand Line Query)</span>
+          </label>
+        </div>
+
+        <div class="ct-field ct-field--textarea">
+          <textarea
+            id="ct-message"
+            class="ct-input ct-textarea"
+            rows="4"
+            placeholder=" "
+            [value]="message()"
+            (input)="message.set($any($event.target).value)"
+          ></textarea>
+          <label class="ct-label" for="ct-message">
+            <strong>MESSAGE</strong>&nbsp;<span>(Write your log here...)</span>
+          </label>
+        </div>
+
+        @if (sent()) {
+          <p class="ct-success">
+            ⚓ Message received! We'll reply by the next tide.
+          </p>
+        }
+
+        <div class="ct-btn-wrap">
+          <button class="ct-btn-send" type="submit" [disabled]="!isValid()">
+            Send Message
+          </button>
+        </div>
+      </form>
     </section>
 
     <!-- Right: contact info -->
     <section class="ct-col ct-col--info">
-      <div class="ct-scroll-banner">
-        <h2 class="ct-section-title">Choose your Transmission</h2>
-      </div>
+      <h2 class="ct-section-title">Choose your Transmission</h2>
 
-      <div class="ct-map-panel">
-        <!-- Compass rose: export from Canva → /contact/compass.png -->
-        <!-- <img class="ct-compass" src="/contact/compass.png" alt="" aria-hidden="true"> -->
-        <div class="ct-compass-emoji" aria-hidden="true">🧭</div>
-
-        <div class="ct-contact-list">
-          <a class="ct-contact-item" href="mailto:captain@app.tizhad.com">
-            <!-- <img class="ct-contact-img" src="/contact/snail.png" alt=""> -->
-            <div class="ct-contact-emoji" aria-hidden="true">🐌</div>
-            <div class="ct-contact-text">
-              <span class="ct-contact-name">Den Den Mushi</span>
-              <span class="ct-contact-val">captain&#64;app.tizhad.com</span>
-            </div>
-          </a>
-
-          <a class="ct-contact-item" href="https://twitter.com/tizhad_dev" target="_blank" rel="noopener noreferrer">
-            <!-- <img class="ct-contact-img" src="/contact/bird.png" alt=""> -->
-            <div class="ct-contact-emoji" aria-hidden="true">🐦</div>
-            <div class="ct-contact-text">
-              <span class="ct-contact-name">Twitter Bounty</span>
-              <span class="ct-contact-val">&#64;tizhad_dev</span>
-            </div>
-          </a>
-
-          <div class="ct-contact-item">
-            <!-- <img class="ct-contact-img" src="/contact/map-book.png" alt=""> -->
-            <div class="ct-contact-emoji" aria-hidden="true">🗺️</div>
-            <div class="ct-contact-text">
-              <span class="ct-contact-name">Visit our Base</span>
-              <span class="ct-contact-val">Digital Ocean, Global</span>
-            </div>
+      <div class="ct-contact-list">
+        <a class="ct-contact-item" href="mailto:captain@app.tizhad.com">
+          <div class="ct-contact-text">
+            <span class="ct-contact-name">Den Den Mushi</span>
+            <span class="ct-contact-val">captain&#64;app.tizhad.com</span>
           </div>
-        </div>
+        </a>
       </div>
     </section>
-
   </main>
 
-  <!-- ── Footer ────────────────────────────────────────────────────────────── -->
   <footer class="ct-footer">
-    <p class="ct-footer-copy">© 2024 APP.TIZHAD.COM — ALL RIGHTS RESERVED ON THE GRAND LINE</p>
-    <div class="ct-social">
-      <a href="#" aria-label="Link" class="ct-social-icon">🔗</a>
-      <a href="#" aria-label="Instagram" class="ct-social-icon">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path fill="none" stroke="var(--ct-footer-bg)" stroke-width="2" d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line fill="none" stroke="var(--ct-footer-bg)" stroke-width="2" x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-      </a>
-      <a href="https://twitter.com/tizhad_dev" aria-label="X / Twitter" class="ct-social-icon">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.258 5.63 5.906-5.63z"/></svg>
-      </a>
-      <a href="#" aria-label="Facebook" class="ct-social-icon">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-      </a>
-      <a href="#" aria-label="YouTube" class="ct-social-icon">
-        <svg width="16" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon fill="var(--ct-footer-bg)" points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
-      </a>
-      <a href="#" aria-label="TikTok" class="ct-social-icon">
-        <svg width="14" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg>
-      </a>
-    </div>
+    <p class="ct-footer-copy">
+      © 2024 APP.TIZHAD.COM — ALL RIGHTS RESERVED ON THE GRAND LINE
+    </p>
   </footer>
-
 </div>
