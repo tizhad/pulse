@@ -1,6 +1,8 @@
 User-agent: *
 Allow: /
 Allow: /about
+Allow: /resume
+Allow: /contact
 
 Disallow: /dashboard
 Disallow: /subjects
@@ -10,4 +12,4 @@ Disallow: /ask
 Disallow: /settings
 Disallow: /auth
 
-Sitemap: https://pulse.tizhad.com/sitemap.xml
+Sitemap: https://tizhad.com/sitemap.xml
