@@ -60,5 +60,10 @@ export const appRoutes: Route[] = [
     loadComponent: () =>
       import('./features/contact/contact.component').then(m => m.ContactComponent),
   },
+  {
+    path: 'starter-kit',
+    loadComponent: () =>
+      import('./features/starter-kit/starter-kit.component').then(m => m.StarterKitComponent),
+  },
   { path: '**', redirectTo: '' },
 ];
