@@ -1,0 +1,167 @@
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.dl-root {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.dl-bg-blobs {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: -10;
+}
+
+.dl-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+}
+
+.dl-blob--tl {
+  top: -160px;
+  left: -160px;
+  width: 480px;
+  height: 480px;
+  background: var(--gradient-cool);
+  opacity: 0.45;
+}
+
+.dl-blob--br {
+  bottom: -160px;
+  right: -160px;
+  width: 420px;
+  height: 420px;
+  background: var(--gradient-primary);
+  opacity: 0.35;
+}
+
+.dl-card {
+  width: 100%;
+  max-width: 480px;
+  border-radius: 2rem;
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  padding: 2.5rem;
+  box-shadow: var(--shadow-pop);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+/* ── Icon states ─────────────────────────────────────────────────────────── */
+
+.dl-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.dl-icon--loading {
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  color: var(--accent);
+}
+
+.dl-icon--done {
+  background: color-mix(in srgb, var(--mint) 18%, transparent);
+  color: var(--mint);
+}
+
+.dl-icon--error {
+  background: color-mix(in srgb, var(--coral) 15%, transparent);
+  color: var(--coral);
+}
+
+.dl-spinner {
+  animation: spin 0.9s linear infinite;
+}
+
+.dl-h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--text);
+  margin: 0 0 0.75rem;
+}
+
+.dl-desc {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  margin: 0 0 2rem;
+}
+
+.dl-link {
+  color: var(--accent);
+  text-decoration: none;
+
+  &:hover { text-decoration: underline; }
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+
+.dl-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  padding: 0 24px;
+  border-radius: 0.875rem;
+  background: var(--gradient-primary);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: var(--shadow-pop);
+  margin-bottom: 10px;
+  transition: opacity var(--transition);
+
+  &:hover { opacity: 0.88; }
+}
+
+.dl-btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  padding: 0 24px;
+  border-radius: 0.875rem;
+  border: 1px solid var(--border);
+  background: var(--surface-hover);
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background var(--transition);
+
+  &:hover { background: var(--surface); }
+}
+
+.dl-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  padding: 0 20px;
+  border-radius: 0.875rem;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  margin-top: 4px;
+  transition: color var(--transition);
+
+  &:hover { color: var(--text); }
+}

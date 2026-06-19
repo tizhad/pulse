@@ -1,12 +1,15 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  DOCUMENT,
   OnInit,
   inject,
+  signal,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { PosthogService } from '../../core/services/posthog.service';
 import { SeoService } from '../../core/services/seo.service';
+import { CheckoutService } from '../../core/services/checkout.service';
 import { environment } from '../../../environments/environment';
 
 @Component({
@@ -19,11 +22,29 @@ import { environment } from '../../../environments/environment';
 export class StarterKitComponent implements OnInit {
   private readonly posthog = inject(PosthogService);
   private readonly seo = inject(SeoService);
+  private readonly checkout = inject(CheckoutService);
+  private readonly doc = inject(DOCUMENT);
 
   readonly year = new Date().getFullYear();
+  readonly checkoutLoading = signal(false);
+  readonly checkoutError = signal('');
 
-  // TODO: Replace with your Gumroad product URL
-  readonly gumroadUrl = '#buy';
+  startCheckout(): void {
+    if (this.checkoutLoading()) return;
+    this.checkoutLoading.set(true);
+    this.checkoutError.set('');
+    this.posthog.capture('starter_kit_checkout_started');
+
+    this.checkout.createCheckoutSession().subscribe({
+      next: ({ url }) => {
+        this.doc.location.href = url;
+      },
+      error: () => {
+        this.checkoutError.set('Could not start checkout. Please try again.');
+        this.checkoutLoading.set(false);
+      },
+    });
+  }
 
   ngOnInit(): void {
     this.seo.set({

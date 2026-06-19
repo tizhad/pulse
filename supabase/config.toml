@@ -1,0 +1,5 @@
+project_id = "kmokerewodxljtywkwbi"
+
+# stripe-webhook must be public — Stripe doesn't send a JWT
+[functions.stripe-webhook]
+verify_jwt = false

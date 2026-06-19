@@ -1,0 +1,48 @@
+<div class="dl-root">
+  <div class="dl-bg-blobs" aria-hidden="true">
+    <div class="dl-blob dl-blob--tl"></div>
+    <div class="dl-blob dl-blob--br"></div>
+  </div>
+
+  <div class="dl-card">
+    @switch (state()) {
+
+      @case ('loading') {
+        <div class="dl-icon dl-icon--loading" aria-hidden="true">
+          <svg class="dl-spinner" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+          </svg>
+        </div>
+        <h1 class="dl-h1">Starting your download…</h1>
+        <p class="dl-desc">Validating your link and preparing the file. This takes just a second.</p>
+      }
+
+      @case ('done') {
+        <div class="dl-icon dl-icon--done" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <h1 class="dl-h1">Download started!</h1>
+        <p class="dl-desc">
+          Your file is downloading. If it didn't start automatically,
+          <a class="dl-link" [routerLink]="[]" (click)="$event.preventDefault()">check your downloads folder</a>.
+        </p>
+        <a [routerLink]="['/starter-kit']" class="dl-btn-outline">Back to starter kit</a>
+      }
+
+      @case ('error') {
+        <div class="dl-icon dl-icon--error" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        </div>
+        <h1 class="dl-h1">Something went wrong</h1>
+        <p class="dl-desc">{{ errorMessage() }}</p>
+        <a href="mailto:hello@tizhad.com" class="dl-btn-primary">Email me for help</a>
+        <a [routerLink]="['/starter-kit']" class="dl-btn-ghost">Back to starter kit</a>
+      }
+
+    }
+  </div>
+</div>

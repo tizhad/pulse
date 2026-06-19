@@ -65,5 +65,15 @@ export const appRoutes: Route[] = [
     loadComponent: () =>
       import('./features/starter-kit/starter-kit.component').then(m => m.StarterKitComponent),
   },
+  {
+    path: 'thank-you',
+    loadComponent: () =>
+      import('./features/thank-you/thank-you.component').then(m => m.ThankYouComponent),
+  },
+  {
+    path: 'download',
+    loadComponent: () =>
+      import('./features/download/download.component').then(m => m.DownloadComponent),
+  },
   { path: '**', redirectTo: '' },
 ];

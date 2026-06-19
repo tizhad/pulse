@@ -1,0 +1,49 @@
+<div class="ty-root">
+  <div class="ty-bg-blobs" aria-hidden="true">
+    <div class="ty-blob ty-blob--tl"></div>
+    <div class="ty-blob ty-blob--br"></div>
+  </div>
+
+  <div class="ty-card">
+    <!-- Icon -->
+    <div class="ty-icon" aria-hidden="true">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
+
+    <h1 class="ty-h1">You're all set!</h1>
+    <p class="ty-desc">
+      Check your email — your download link is on its way. It's a single-use
+      link, so click it when you're ready to download.
+    </p>
+
+    <div class="ty-divider" aria-hidden="true"></div>
+
+    <h2 class="ty-next-title">What to do next</h2>
+    <ol class="ty-steps">
+      <li>
+        <span class="ty-step-num">1</span>
+        <span>Click the download link in your email</span>
+      </li>
+      <li>
+        <span class="ty-step-num">2</span>
+        <span>Unzip and open in your IDE</span>
+      </li>
+      <li>
+        <span class="ty-step-num">3</span>
+        <span>Follow the <code>README.md</code> — you'll be running in under 5 minutes</span>
+      </li>
+    </ol>
+
+    <div class="ty-actions">
+      <a [routerLink]="['/starter-kit']" class="ty-btn-outline">Back to starter kit</a>
+      <a [routerLink]="['/']" class="ty-btn-ghost">Go to Job Mate</a>
+    </div>
+
+    <p class="ty-note">
+      Didn't get the email? Check spam, or
+      <a href="mailto:hello@tizhad.com">reply here</a> and I'll sort it out.
+    </p>
+  </div>
+</div>

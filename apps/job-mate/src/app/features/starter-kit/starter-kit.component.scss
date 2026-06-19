@@ -171,17 +171,20 @@
   align-items: center;
   gap: 8px;
   background: var(--gradient-primary);
-  color: #fff !important;
+  color: #fff;
+  border: none;
   border-radius: 0.75rem;
   padding: 9px 18px;
   font-size: 14px;
   font-weight: 600;
+  font-family: inherit;
   box-shadow: var(--shadow-soft);
-  text-decoration: none;
+  cursor: pointer;
   transition: opacity var(--transition);
   white-space: nowrap;
 
-  &:hover { opacity: 0.88; }
+  &:hover:not(:disabled) { opacity: 0.88; }
+  &:disabled { opacity: 0.55; cursor: not-allowed; }
 }
 
 /* ── Hero ────────────────────────────────────────────────────────────────── */
@@ -294,17 +297,41 @@
   color: #fff;
   font-size: 1rem;
   font-weight: 700;
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
   box-shadow: var(--shadow-pop);
   text-decoration: none;
   white-space: nowrap;
   transition: opacity var(--transition);
 
-  &:hover { opacity: 0.88; }
+  &:hover:not(:disabled) { opacity: 0.88; }
+  &:disabled { cursor: not-allowed; }
 }
 
 .sk-btn-full {
   width: 100%;
   justify-content: center;
+}
+
+.sk-btn-loading {
+  opacity: 0.75;
+  cursor: not-allowed;
+}
+
+.sk-checkout-error {
+  font-size: 13px;
+  color: var(--coral);
+  margin-top: 0.75rem;
+}
+
+@keyframes sk-spin {
+  to { transform: rotate(360deg); }
+}
+
+.sk-spinner {
+  animation: sk-spin 0.9s linear infinite;
+  flex-shrink: 0;
 }
 
 .sk-btn-outline {
