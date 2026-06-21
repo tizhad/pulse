@@ -3,6 +3,14 @@
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
+
+  @media (max-width: 768px) {
+    padding: 1.5rem 1rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 1.25rem 0.75rem;
+  }
 }
 
 .page-header {
@@ -30,6 +38,11 @@
   border-radius: 1.5rem;
   padding: 2rem;
   box-shadow: var(--shadow-card, 0 2px 12px rgba(0,0,0,.06));
+
+  @media (max-width: 480px) {
+    padding: 1.25rem;
+    border-radius: 1.25rem;
+  }
 }
 
 /* ── Top row ─────────────────────────────────────────────────────────────── */
@@ -39,6 +52,14 @@
   grid-template-columns: 1fr 1fr 1fr;
   gap: 1.25rem;
   margin-bottom: 1.25rem;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Card meta row */
@@ -80,6 +101,12 @@
   display: flex;
   align-items: center;
   gap: 1.5rem;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
 }
 
 .ring-wrap {
@@ -87,6 +114,12 @@
   width: 140px;
   height: 140px;
   flex-shrink: 0;
+
+  @media (max-width: 600px) {
+    width: 120px;
+    height: 120px;
+    align-self: center;
+  }
 }
 
 .ring-svg {
@@ -123,6 +156,13 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+
+  @media (max-width: 600px) {
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 8px 0;
+  }
 }
 
 .legend-row {
@@ -241,6 +281,10 @@
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 1.25rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .section-header {
