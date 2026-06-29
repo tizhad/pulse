@@ -16,6 +16,11 @@
     </div>
     <span>PULSE</span>
   </a>
+  <nav class="about-nav-links" aria-label="External projects">
+    <a href="https://www.moneycho.com" target="_blank" rel="noopener noreferrer" class="about-nav-link">
+      MoneyCho ↗
+    </a>
+  </nav>
 </header>
 
 <article class="about">
@@ -160,7 +165,7 @@
 
   <!-- ── Active R&D / R&D Sandbox ──────────────────────────────────────── -->
   <section class="section">
-    <p class="section-label">ACTIVE R&amp;D SANDBOX</p>
+    <p class="section-label">MY CURRENT OBSESSIONS</p>
     <div class="project-card">
       <div class="project-header">
         <div>
@@ -193,6 +198,66 @@
         <span class="tech">Zoneless</span>
         <span class="tech">LLM Integration</span>
         <span class="tech">Nx Monorepo</span>
+      </div>
+    </div>
+
+    <div class="project-card" style="margin-top: 1.5rem">
+      <div class="project-header">
+        <div>
+          <h3 class="project-title">Angular 21 SaaS Starter Kit</h3>
+          <p class="project-sub">
+            Skip the boilerplate. Ship your product.
+          </p>
+        </div>
+        <a
+          [routerLink]="['/starter-kit']"
+          class="project-link"
+          >See the Kit ↗</a
+        >
+      </div>
+      <p class="project-desc">
+        A production-ready Angular 21 foundation sold as a one-time purchase.
+        Full auth flow, light/dark/system theme, SSR, NgRx SignalStore with
+        Supabase CRUD, PostHog analytics, SEO service, AI chat UI, and a
+        responsive sidebar — all wired together and ready to fork.
+      </p>
+      <div class="tech-tags">
+        <span class="tech">Angular 21</span>
+        <span class="tech">Supabase</span>
+        <span class="tech">SSR</span>
+        <span class="tech">NgRx Signals</span>
+        <span class="tech">€69 one-time</span>
+      </div>
+    </div>
+
+    <div class="project-card" style="margin-top: 1.5rem">
+      <div class="project-header">
+        <div>
+          <h3 class="project-title">MoneyCho</h3>
+          <p class="project-sub">
+            Free Financial Tools — No Registration Required
+          </p>
+        </div>
+        <a
+          href="https://www.moneycho.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="project-link"
+          >Visit MoneyCho ↗</a
+        >
+      </div>
+      <p class="project-desc">
+        A transparent, bias-free personal finance toolkit built for Dutch
+        speakers. Six production-ready calculators — budgeting, compound
+        interest, debt payoff, mortgage, savings goals, and credit card
+        payments — all backed by visible formulas and monthly-updated rates.
+        No affiliate pressure, no accounts, no friction.
+      </p>
+      <div class="tech-tags">
+        <span class="tech">Financial Tools</span>
+        <span class="tech">Dutch</span>
+        <span class="tech">No Registration</span>
+        <span class="tech">Open Formulas</span>
       </div>
     </div>
   </section>

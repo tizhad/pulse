@@ -1,15 +1,12 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  DOCUMENT,
   OnInit,
   inject,
-  signal,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { PosthogService } from '../../core/services/posthog.service';
 import { SeoService } from '../../core/services/seo.service';
-import { CheckoutService } from '../../core/services/checkout.service';
 import { environment } from '../../../environments/environment';
 
 @Component({
@@ -22,35 +19,19 @@ import { environment } from '../../../environments/environment';
 export class StarterKitComponent implements OnInit {
   private readonly posthog = inject(PosthogService);
   private readonly seo = inject(SeoService);
-  private readonly checkout = inject(CheckoutService);
-  private readonly doc = inject(DOCUMENT);
 
   readonly year = new Date().getFullYear();
-  readonly checkoutLoading = signal(false);
-  readonly checkoutError = signal('');
+  readonly checkoutUrl = 'https://tizhad.lemonsqueezy.com/checkout/buy/8fdc839b-9dd8-40cb-95e5-a398656980d1';
 
-  startCheckout(): void {
-    if (this.checkoutLoading()) return;
-    this.checkoutLoading.set(true);
-    this.checkoutError.set('');
+  trackCheckout(): void {
     this.posthog.capture('starter_kit_checkout_started');
-
-    this.checkout.createCheckoutSession().subscribe({
-      next: ({ url }) => {
-        this.doc.location.href = url;
-      },
-      error: () => {
-        this.checkoutError.set('Could not start checkout. Please try again.');
-        this.checkoutLoading.set(false);
-      },
-    });
   }
 
   ngOnInit(): void {
     this.seo.set({
       title: 'Angular 21 SaaS Starter Kit — Skip the boilerplate',
       description:
-        'Angular 21 + Supabase + Signals. Full auth, dark mode, SSR, PostHog analytics, AI chat UI and more. $59 one-time payment.',
+        'Angular 21 + Supabase + Signals. Full auth, dark mode, SSR, PostHog analytics, AI chat UI and more. €69 one-time payment.',
       url: `${environment.siteUrl}/starter-kit`,
     });
     this.seo.addJsonLd('starter-kit', {
@@ -62,8 +43,8 @@ export class StarterKitComponent implements OnInit {
       url: `${environment.siteUrl}/starter-kit`,
       offers: {
         '@type': 'Offer',
-        price: '59',
-        priceCurrency: 'USD',
+        price: '69',
+        priceCurrency: 'EUR',
         availability: 'https://schema.org/InStock',
       },
     });

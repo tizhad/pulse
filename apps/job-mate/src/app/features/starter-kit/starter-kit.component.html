@@ -23,9 +23,9 @@
     <nav class="sk-nav-links" aria-label="Site navigation">
       <a [routerLink]="['/']">Job Mate</a>
       <a [routerLink]="['/about']">About</a>
-      <button class="sk-nav-cta" (click)="startCheckout()" type="button" [disabled]="checkoutLoading()">
-        Get the kit — $59
-      </button>
+      <a class="sk-nav-cta" [href]="checkoutUrl" target="_blank" rel="noopener noreferrer" (click)="trackCheckout()">
+        Get the kit — €69
+      </a>
     </nav>
   </header>
 
@@ -48,7 +48,7 @@
       </p>
 
       <div class="sk-price-pill">
-        <span class="sk-price-amount">$59</span>
+        <span class="sk-price-amount">€69</span>
         <span class="sk-price-sep">·</span>
         <span>One-time</span>
         <span class="sk-price-sep">·</span>
@@ -58,33 +58,22 @@
       </div>
 
       <div class="sk-hero-actions">
-        <button
+        <a
           class="sk-btn-primary"
-          [class.sk-btn-loading]="checkoutLoading()"
-          [disabled]="checkoutLoading()"
-          (click)="startCheckout()"
-          type="button"
+          [href]="checkoutUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          (click)="trackCheckout()"
         >
-          @if (checkoutLoading()) {
-            <svg class="sk-spinner" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
-            </svg>
-            Redirecting…
-          } @else {
-            Get the starter kit
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
-            </svg>
-          }
-        </button>
+          Get the starter kit
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
+          </svg>
+        </a>
         <a class="sk-btn-outline" [routerLink]="['/starter-kit']" fragment="whats-included">
           See what's included
         </a>
       </div>
-
-      @if (checkoutError()) {
-        <p class="sk-checkout-error">{{ checkoutError() }}</p>
-      }
     </div>
 
     <!-- Hero visual: kit preview card -->
@@ -97,7 +86,7 @@
             </svg>
             Starter Kit v1
           </div>
-          <div class="sk-kit-price">$59</div>
+          <div class="sk-kit-price">€69</div>
         </div>
 
         <div class="sk-kit-rows">
@@ -282,7 +271,7 @@
             <div>
               <div class="sk-pricing-name">Angular 21 SaaS Starter Kit</div>
               <div class="sk-pricing-amount">
-                $59
+                €69
                 <span class="sk-pricing-once">one-time</span>
               </div>
             </div>
@@ -301,25 +290,18 @@
             }
           </ul>
 
-          <button
+          <a
             class="sk-btn-primary sk-btn-full"
-            [class.sk-btn-loading]="checkoutLoading()"
-            [disabled]="checkoutLoading()"
-            (click)="startCheckout()"
-            type="button"
+            [href]="checkoutUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            (click)="trackCheckout()"
           >
-            @if (checkoutLoading()) {
-              <svg class="sk-spinner" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
-              </svg>
-              Redirecting…
-            } @else {
-              Get the starter kit — $59
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
-              </svg>
-            }
-          </button>
+            Get the starter kit — €69
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
+            </svg>
+          </a>
 
           <p class="sk-pricing-note">
             Secure checkout · Instant download · No subscription
@@ -345,6 +327,7 @@
         <a [routerLink]="['/']">Job Mate</a>
         <a [routerLink]="['/about']">About</a>
         <a [routerLink]="['/contact']">Contact</a>
+        <a href="https://www.moneycho.com" target="_blank" rel="noopener noreferrer">MoneyCho ↗</a>
       </div>
     </div>
   </footer>
