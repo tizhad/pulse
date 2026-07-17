@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "build": "npx nx build job-mate --configuration=production"
+    "build": "npx nx build job-mate --configuration=production",
+    "fast": "npx nx serve job-mate --configuration=development"
   },
   "private": true,
   "dependencies": {
