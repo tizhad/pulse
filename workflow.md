@@ -112,6 +112,7 @@
 - `AuthModalService.open(mode, reason)` — now supports opening pre-selected on "Create account" with a contextual message (e.g. "You've added 3 free subjects — sign up to keep building your study plan."); existing no-arg call sites are unaffected
 - Small "N free left" hint added near each "Add" button, visible only to guests
 - Scope: create-only for guests. Editing/deleting still requires a full account (unchanged) — see DECISIONS.md D-030 for why
-- Follow-up: `GuestContentService` now seeds every first-time guest's Subjects list with 2 samples (RxJS, Signals) via `buildSampleSubjects()`; they count toward the 3-item limit like any real guest item, so a fresh guest starts with 1 free subject slot, not 3. Seeding only happens once (keyed on whether `guest_subjects` has ever been saved) and the samples migrate to Supabase on sign-up same as any other guest item.
+- Follow-up: `GuestContentService` now seeds every first-time guest's Subjects list with 2 samples (RxJS, Signals) via `buildSampleSubjects()`. Seeding only happens once (keyed on whether `guest_subjects` has ever been saved) and the samples migrate to Supabase on sign-up same as any other guest item.
+- Correction: the 2 sample subjects are free and do **not** count toward the 3-item limit — a fresh guest still gets the full 3 subject slots to use themselves, on top of the samples. Tracked via a separate `subjectsAddedCount` counter (persisted as `guest_subjects_added_count`) instead of the raw `subjects()` list length, so seeding never eats into the guest's real quota.
 - Projects affected: `job-mate`
-- Playwright test added: yes (`e2e/guest-limits.spec.ts` — sample subjects present on first visit, guest can add 1 more, next prompts sign-up, guest items persist across reload)
+- Playwright test added: yes (`e2e/guest-limits.spec.ts` — sample subjects present on first visit with 3 free slots shown, guest can add 3 more, 4th prompts sign-up, guest items persist across reload)

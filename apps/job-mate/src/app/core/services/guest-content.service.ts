@@ -21,8 +21,8 @@ function reviveSubject(subject: Subject): Subject {
 
 /**
  * Two sample subjects shown to every first-time guest so the Subjects page
- * isn't empty. They count toward GUEST_ITEM_LIMIT like any other guest item —
- * a fresh guest starts with 1 free subject left, not 3.
+ * isn't empty. They're free — every guest still gets the full
+ * GUEST_ITEM_LIMIT subjects to add themselves on top of these samples.
  */
 function buildSampleSubjects(): Subject[] {
   const now = new Date();
@@ -75,6 +75,9 @@ export class GuestContentService {
   private readonly storage = inject(StorageService);
 
   private readonly _subjects = signal<Subject[]>(this.loadOrSeedSubjects());
+  private readonly _subjectsAddedCount = signal<number>(
+    this.storage.load<number>('guest_subjects_added_count') ?? 0,
+  );
   private readonly _companies = signal<Company[]>(
     (this.storage.load<Company[]>('guest_companies') ?? []).map(reviveDated),
   );
@@ -86,6 +89,9 @@ export class GuestContentService {
   readonly companies = this._companies.asReadonly();
   readonly applications = this._applications.asReadonly();
 
+  /** Subjects the guest created themselves — excludes the 2 free sample subjects. */
+  readonly subjectsAddedCount = this._subjectsAddedCount.asReadonly();
+
   private loadOrSeedSubjects(): Subject[] {
     const stored = this.storage.load<Subject[]>('guest_subjects');
     if (stored) return stored.map(reviveSubject);
@@ -96,7 +102,7 @@ export class GuestContentService {
   }
 
   canAddSubject(): boolean {
-    return this._subjects().length < GUEST_ITEM_LIMIT;
+    return this._subjectsAddedCount() < GUEST_ITEM_LIMIT;
   }
 
   canAddCompany(): boolean {
@@ -110,6 +116,8 @@ export class GuestContentService {
   addSubject(subject: Subject): void {
     this._subjects.update(list => [subject, ...list]);
     this.storage.save('guest_subjects', this._subjects());
+    this._subjectsAddedCount.update(n => n + 1);
+    this.storage.save('guest_subjects_added_count', this._subjectsAddedCount());
   }
 
   addCompany(company: Company): void {
@@ -124,7 +132,9 @@ export class GuestContentService {
 
   clearSubjects(): void {
     this._subjects.set([]);
+    this._subjectsAddedCount.set(0);
     this.storage.clear('guest_subjects');
+    this.storage.clear('guest_subjects_added_count');
   }
 
   clearCompanies(): void {

@@ -64,7 +64,7 @@ export class SubjectsComponent {
   }
 
   readonly guestSubjectsRemaining = computed(() =>
-    Math.max(0, GUEST_ITEM_LIMIT - this.guestContent.subjects().length),
+    Math.max(0, GUEST_ITEM_LIMIT - this.guestContent.subjectsAddedCount()),
   );
 
   readonly isGuest = computed(() => !this.auth.isAuthenticated());

@@ -67,12 +67,17 @@ describe('GuestContentService', () => {
     expect(storage.load<Subject[]>('guest_subjects')).toHaveLength(2);
   });
 
-  it('counts the 2 seeded sample subjects toward the limit — a fresh guest has 1 free subject left', () => {
+  it('does not count the 2 seeded sample subjects toward the limit — a fresh guest gets the full 3 free subjects', () => {
     const { svc } = setup();
-    expect(svc.canAddSubject()).toBe(true);
-    svc.addSubject(makeSubject('s1'));
-    expect(svc.subjects()).toHaveLength(GUEST_ITEM_LIMIT);
+    expect(svc.subjectsAddedCount()).toBe(0);
+    for (let i = 0; i < GUEST_ITEM_LIMIT; i++) {
+      expect(svc.canAddSubject()).toBe(true);
+      svc.addSubject(makeSubject(`s${i}`));
+    }
     expect(svc.canAddSubject()).toBe(false);
+    expect(svc.subjectsAddedCount()).toBe(GUEST_ITEM_LIMIT);
+    // 2 samples + 3 guest-added
+    expect(svc.subjects()).toHaveLength(GUEST_ITEM_LIMIT + 2);
   });
 
   it('allows creation while under the limit and blocks at the limit', () => {
