@@ -4,22 +4,38 @@ import {
   OnInit,
   inject,
 } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { SeoService } from '../../core/services/seo.service';
 import { environment } from '../../../environments/environment';
 
+const NAV_SCROLL_OFFSET = 84;
+
 @Component({
-  selector: 'app-about',
-  templateUrl: './about.component.html',
-  styleUrl: './about.component.scss',
+  selector: 'app-portfolio',
+  templateUrl: './portfolio.component.html',
+  styleUrl: './portfolio.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink],
 })
-export class AboutComponent implements OnInit {
+export class PortfolioComponent implements OnInit {
   private readonly seo = inject(SeoService);
+  private readonly document = inject(DOCUMENT);
+
+  scrollToSection(event: Event, sectionId: string): void {
+    event.preventDefault();
+    const target = this.document.getElementById(sectionId);
+    const view = this.document.defaultView;
+    if (!target || !view) {
+      return;
+    }
+    const top = target.getBoundingClientRect().top + view.scrollY - NAV_SCROLL_OFFSET;
+    view.scrollTo({ top, behavior: 'smooth' });
+    view.history.replaceState(null, '', `/portfolio#${sectionId}`);
+  }
 
   ngOnInit(): void {
-    const url = `${environment.siteUrl}/about`;
+    const url = `${environment.siteUrl}/portfolio`;
     this.seo.set({
       title: 'Frontend Engineer & Product Thinker',
       description:

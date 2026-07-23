@@ -51,10 +51,11 @@ export const appRoutes: Route[] = [
       import('./features/settings/settings.component').then(m => m.SettingsComponent),
   },
   {
-    path: 'about',
+    path: 'portfolio',
     loadComponent: () =>
-      import('./features/about/about.component').then(m => m.AboutComponent),
+      import('./features/portfolio/portfolio.component').then(m => m.PortfolioComponent),
   },
+  { path: 'about', redirectTo: 'portfolio' },
   {
     path: 'contact',
     loadComponent: () =>
