@@ -196,7 +196,7 @@ test.describe('Accessibility', () => {
     await page.goto(SHELL_ROUTE);
     await page.getByRole('button', { name: 'Toggle menu' }).click();
     const links = page.locator('aside.sidebar nav a');
-    await expect(links).toHaveCount(6);
+    await expect(links).toHaveCount(7);
     for (const link of await links.all()) {
       await expect(link).toBeVisible();
     }
