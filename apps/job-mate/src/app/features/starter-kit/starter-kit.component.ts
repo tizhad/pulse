@@ -3,6 +3,7 @@ import {
   Component,
   OnInit,
   inject,
+  signal,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { PosthogService } from '../../core/services/posthog.service';
@@ -22,6 +23,16 @@ export class StarterKitComponent implements OnInit {
 
   readonly year = new Date().getFullYear();
   readonly checkoutUrl = 'https://tizhad.lemonsqueezy.com/checkout/buy/8fdc839b-9dd8-40cb-95e5-a398656980d1';
+
+  readonly mobileMenuOpen = signal(false);
+
+  toggleMobileMenu(): void {
+    this.mobileMenuOpen.update((open) => !open);
+  }
+
+  closeMobileMenu(): void {
+    this.mobileMenuOpen.set(false);
+  }
 
   trackCheckout(): void {
     this.posthog.capture('starter_kit_checkout_started');

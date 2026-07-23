@@ -116,3 +116,13 @@
 - Correction: the 2 sample subjects are free and do **not** count toward the 3-item limit — a fresh guest still gets the full 3 subject slots to use themselves, on top of the samples. Tracked via a separate `subjectsAddedCount` counter (persisted as `guest_subjects_added_count`) instead of the raw `subjects()` list length, so seeding never eats into the guest's real quota.
 - Projects affected: `job-mate`
 - Playwright test added: yes (`e2e/guest-limits.spec.ts` — sample subjects present on first visit with 3 free slots shown, guest can add 3 more, 4th prompts sign-up, guest items persist across reload)
+
+---
+
+## Mobile Nav Menu for Marketing Pages — completed 2026-07-23
+
+- Fixed: `.ln-nav-links` (landing) and `.sk-nav-links` (starter-kit) were `display: none` below the 768px breakpoint with no toggle to reveal them — nav links were simply unreachable on phones
+- Added a signal-based `mobileMenuOpen` toggle to `LandingComponent` and `StarterKitComponent`, each with its own hamburger button, slide-in mobile menu panel, and click-outside/Escape-to-close backdrop — same interaction pattern as the existing app-shell sidebar drawer (`app.ts`/`app.html`/`app.scss`), just not extracted into a shared component since these are two independent marketing headers, not app-shell nav
+- Bug found and fixed along the way: `/starter-kit` was missing from `App.noShellRoutes` (`app.ts`), so visiting it rendered the dashboard app-shell (sidebar + its own mobile hamburger) wrapped around the page's own marketing header — a stray fixed-position shell header was actually intercepting clicks meant for the new starter-kit mobile menu. Added `/starter-kit` to `noShellRoutes`.
+- Projects affected: `job-mate`
+- Playwright test added: yes (`e2e/marketing-mobile-nav.spec.ts` — desktop/mobile visibility for both pages, toggle open/close, backdrop close, link navigation closes menu)

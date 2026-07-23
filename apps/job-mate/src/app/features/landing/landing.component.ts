@@ -3,6 +3,7 @@ import {
   Component,
   OnInit,
   inject,
+  signal,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { PosthogService } from '../../core/services/posthog.service';
@@ -19,6 +20,16 @@ import { environment } from '../../../environments/environment';
 export class LandingComponent implements OnInit {
   private readonly posthog = inject(PosthogService);
   private readonly seo = inject(SeoService);
+
+  readonly mobileMenuOpen = signal(false);
+
+  toggleMobileMenu(): void {
+    this.mobileMenuOpen.update((open) => !open);
+  }
+
+  closeMobileMenu(): void {
+    this.mobileMenuOpen.set(false);
+  }
 
   ngOnInit(): void {
     this.seo.set({

@@ -60,7 +60,7 @@ export class App implements OnInit {
     });
   }
 
-  private static readonly noShellRoutes = ['/', '/portfolio', '/about', '/contact'];
+  private static readonly noShellRoutes = ['/', '/portfolio', '/about', '/contact', '/starter-kit'];
 
   private static isShellRoute(url: string): boolean {
     const path = url.split('#')[0].split('?')[0];
