@@ -19,6 +19,7 @@ import { Application, AppStatus, SubjectCategory } from '../../core/models/jobma
 import { JobAnalysisService, JobAnalysis } from '../../core/services/job-analysis.service';
 import { AuthService } from '../../core/services/auth.service';
 import { AuthModalService } from '../../core/services/auth-modal.service';
+import { GuestContentService, GUEST_ITEM_LIMIT } from '../../core/services/guest-content.service';
 import { PosthogService } from '../../core/services/posthog.service';
 
 type SortKey = 'createdAt' | 'date' | 'updatedAt' | 'status' | 'title' | 'company';
@@ -71,6 +72,7 @@ export class ApplicationsComponent {
   private readonly analysisService = inject(JobAnalysisService);
   private readonly auth = inject(AuthService);
   private readonly authModal = inject(AuthModalService);
+  private readonly guestContent = inject(GuestContentService);
   private readonly posthog = inject(PosthogService);
 
   private requireAuth(): boolean {
@@ -78,6 +80,32 @@ export class ApplicationsComponent {
     this.authModal.open();
     return false;
   }
+
+  private canCreateApplication(): boolean {
+    if (this.auth.isAuthenticated()) return true;
+    if (this.guestContent.canAddApplication()) return true;
+    this.authModal.open(
+      'signup',
+      `You've added ${GUEST_ITEM_LIMIT} free applications — sign up to track more.`,
+    );
+    return false;
+  }
+
+  private canCreateSubject(): boolean {
+    if (this.auth.isAuthenticated()) return true;
+    if (this.guestContent.canAddSubject()) return true;
+    this.authModal.open(
+      'signup',
+      `You've added ${GUEST_ITEM_LIMIT} free subjects — sign up to keep building your study plan.`,
+    );
+    return false;
+  }
+
+  readonly guestApplicationsRemaining = computed(() =>
+    Math.max(0, GUEST_ITEM_LIMIT - this.guestContent.applications().length),
+  );
+
+  readonly isGuest = computed(() => !this.auth.isAuthenticated());
 
   /* ── Sort ─────────────────────────────────────────────────────────────── */
 
@@ -256,7 +284,7 @@ export class ApplicationsComponent {
   }
 
   async addToStudyPlan(skillName: string): Promise<void> {
-    if (!this.requireAuth()) return;
+    if (!this.canCreateSubject()) return;
     if (this.addedSkills().has(skillName) || this.addingSkill()) return;
     this.addingSkill.set(skillName);
     const result = await this.studyStore.addSubject({
@@ -313,7 +341,7 @@ export class ApplicationsComponent {
   }
 
   async submit(): Promise<void> {
-    if (!this.requireAuth()) return;
+    if (!this.canCreateApplication()) return;
     this.form.markAllAsTouched();
     if (this.form.invalid) return;
     this.saving.set(true);

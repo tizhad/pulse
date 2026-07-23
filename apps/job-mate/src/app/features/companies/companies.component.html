@@ -3,6 +3,11 @@
     <div>
       <h1 class="page-title">Companies</h1>
       <p class="page-subtitle">Every company you've studied for or applied to.</p>
+      @if (isGuest()) {
+        <p class="guest-hint">
+          {{ guestCompaniesRemaining() }} free {{ guestCompaniesRemaining() === 1 ? 'company' : 'companies' }} left before sign-up.
+        </p>
+      }
     </div>
     <button class="btn-primary" (click)="openForm()">Add company</button>
   </div>

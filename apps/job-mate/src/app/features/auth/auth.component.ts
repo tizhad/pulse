@@ -12,11 +12,11 @@ import { PosthogService } from '../../core/services/posthog.service';
 })
 export class AuthComponent {
   private readonly auth = inject(AuthService);
-  private readonly authModal = inject(AuthModalService);
+  readonly authModal = inject(AuthModalService);
   readonly supabase = inject(SupabaseService);
   private readonly posthog = inject(PosthogService);
 
-  readonly mode = signal<'signin' | 'signup'>('signin');
+  readonly mode = signal<'signin' | 'signup'>(this.authModal.mode());
   readonly email = signal('');
   readonly password = signal('');
   readonly errorMessage = signal<string | null>(null);

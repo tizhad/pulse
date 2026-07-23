@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CompanyStore } from '../../core/stores/company.store';
 import { AuthService } from '../../core/services/auth.service';
 import { AuthModalService } from '../../core/services/auth-modal.service';
+import { GuestContentService, GUEST_ITEM_LIMIT } from '../../core/services/guest-content.service';
 import { PosthogService } from '../../core/services/posthog.service';
 import type { Company, CompanyStatus } from '../../core/models/jobmate.models';
 
@@ -28,6 +29,7 @@ export class CompaniesComponent {
   readonly store = inject(CompanyStore);
   private readonly auth = inject(AuthService);
   private readonly authModal = inject(AuthModalService);
+  private readonly guestContent = inject(GuestContentService);
   private readonly posthog = inject(PosthogService);
 
   private requireAuth(): boolean {
@@ -35,6 +37,22 @@ export class CompaniesComponent {
     this.authModal.open();
     return false;
   }
+
+  private canCreateCompany(): boolean {
+    if (this.auth.isAuthenticated()) return true;
+    if (this.guestContent.canAddCompany()) return true;
+    this.authModal.open(
+      'signup',
+      `You've added ${GUEST_ITEM_LIMIT} free companies — sign up to track more.`,
+    );
+    return false;
+  }
+
+  readonly guestCompaniesRemaining = computed(() =>
+    Math.max(0, GUEST_ITEM_LIMIT - this.guestContent.companies().length),
+  );
+
+  readonly isGuest = computed(() => !this.auth.isAuthenticated());
 
   readonly statusOptions: { value: CompanyStatus; label: string }[] = [
     { value: 'saved', label: 'Saved' },
@@ -72,7 +90,7 @@ export class CompaniesComponent {
   }
 
   async submit(): Promise<void> {
-    if (!this.requireAuth()) return;
+    if (!this.canCreateCompany()) return;
     this.form.markAllAsTouched();
     if (this.form.invalid) return;
 

@@ -1,13 +1,20 @@
 import { Injectable, inject, signal, effect } from '@angular/core';
 import { SupabaseService } from '../services/supabase.service';
 import { AuthService } from '../services/auth.service';
+import { GuestContentService } from '../services/guest-content.service';
 import { fromCompanyRow } from '../models/mappers';
 import type { Company, CompanyStatus } from '../models/jobmate.models';
+
+function buildGuestCompany(name: string, category: string, status: CompanyStatus): Company {
+  const now = new Date();
+  return { id: crypto.randomUUID(), userId: 'guest', name, category, status, createdAt: now, updatedAt: now };
+}
 
 @Injectable({ providedIn: 'root' })
 export class CompanyStore {
   private readonly supabase = inject(SupabaseService);
   private readonly auth = inject(AuthService);
+  private readonly guestContent = inject(GuestContentService);
 
   private readonly _companies = signal<Company[]>([]);
   private readonly _loaded = signal(false);
@@ -17,12 +24,29 @@ export class CompanyStore {
   constructor() {
     effect(() => {
       if (this.auth.user()) {
-        this.load();
+        this.onSignedIn();
       } else {
-        this._companies.set([]);
+        this._companies.set(this.guestContent.companies());
         this._loaded.set(false);
       }
     });
+  }
+
+  private async onSignedIn(): Promise<void> {
+    await this.migrateGuestCompanies();
+    await this.load();
+  }
+
+  private async migrateGuestCompanies(): Promise<void> {
+    const guests = this.guestContent.companies();
+    const userId = this.auth.user()?.id;
+    if (guests.length === 0 || !userId) return;
+
+    for (const guest of guests) {
+      await this.supabase.client.from('companies')
+        .insert({ user_id: userId, name: guest.name, category: guest.category, status: guest.status });
+    }
+    this.guestContent.clearCompanies();
   }
 
   async load(): Promise<void> {
@@ -39,7 +63,12 @@ export class CompanyStore {
 
   async addCompany(name: string, category: string, status: CompanyStatus = 'saved'): Promise<Company | null> {
     const userId = this.auth.user()?.id;
-    if (!userId) return null;
+    if (!userId) {
+      if (!this.guestContent.canAddCompany()) return null;
+      const company = buildGuestCompany(name, category, status);
+      this.guestContent.addCompany(company);
+      return company;
+    }
 
     const { data, error } = await this.supabase.client.from('companies')
       .insert({ user_id: userId, name, category, status })

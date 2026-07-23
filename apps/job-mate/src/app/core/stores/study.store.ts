@@ -1,6 +1,7 @@
 import { Injectable, inject, signal, computed, effect } from '@angular/core';
 import { SupabaseService } from '../services/supabase.service';
 import { AuthService } from '../services/auth.service';
+import { GuestContentService } from '../services/guest-content.service';
 import {
   fromSubjectRow, toSubjectInsert,
   fromCompanyTagRow, fromStudyNoteRow, fromCodeSampleRow, fromResourceRow,
@@ -10,10 +11,40 @@ import type { Database, Json } from '../models/database.types';
 
 const NEXT_REVIEW_DAYS: Record<number, number> = { 1: 1, 2: 3, 3: 7, 4: 14, 5: 30 };
 
+function buildGuestSubject(data: Parameters<typeof toSubjectInsert>[0]): Subject {
+  const now = new Date();
+  return {
+    id: crypto.randomUUID(),
+    userId: 'guest',
+    title: data.title,
+    summary: data.summary ?? null,
+    category: data.category,
+    priority: data.priority,
+    status: data.status,
+    confidenceScore: data.confidenceScore,
+    estimatedReadTime: data.estimatedReadTime ?? null,
+    tags: data.tags,
+    qa: [],
+    sourceUrl: data.sourceUrl ?? null,
+    aiSummary: null,
+    interviewedOn: [],
+    lastReviewedAt: null,
+    nextReviewAt: null,
+    isArchived: false,
+    createdAt: now,
+    updatedAt: now,
+    companyTags: [],
+    notes: [],
+    codeSamples: [],
+    resources: [],
+  };
+}
+
 @Injectable({ providedIn: 'root' })
 export class StudyStore {
   private readonly supabase = inject(SupabaseService);
   private readonly auth = inject(AuthService);
+  private readonly guestContent = inject(GuestContentService);
 
   private readonly _subjects = signal<Subject[]>([]);
   private readonly _loading = signal(false);
@@ -54,12 +85,39 @@ export class StudyStore {
   constructor() {
     effect(() => {
       if (this.auth.user()) {
-        this.load();
+        this.onSignedIn();
       } else {
-        this._subjects.set([]);
+        this._subjects.set(this.guestContent.subjects());
         this._loaded.set(false);
       }
     });
+  }
+
+  private async onSignedIn(): Promise<void> {
+    await this.migrateGuestSubjects();
+    await this.load();
+  }
+
+  private async migrateGuestSubjects(): Promise<void> {
+    const guests = this.guestContent.subjects();
+    const userId = this.auth.user()?.id;
+    if (guests.length === 0 || !userId) return;
+
+    for (const guest of guests) {
+      const payload = toSubjectInsert({
+        title: guest.title,
+        summary: guest.summary,
+        category: guest.category,
+        priority: guest.priority,
+        status: guest.status,
+        confidenceScore: guest.confidenceScore,
+        estimatedReadTime: guest.estimatedReadTime,
+        tags: guest.tags,
+        sourceUrl: guest.sourceUrl,
+      }, userId);
+      await this.supabase.client.from('study_subjects').insert(payload);
+    }
+    this.guestContent.clearSubjects();
   }
 
   async load(): Promise<void> {
@@ -97,7 +155,12 @@ export class StudyStore {
     data: Parameters<typeof toSubjectInsert>[0],
   ): Promise<Subject | null> {
     const userId = this.auth.user()?.id;
-    if (!userId) return null;
+    if (!userId) {
+      if (!this.guestContent.canAddSubject()) return null;
+      const subject = buildGuestSubject(data);
+      this.guestContent.addSubject(subject);
+      return subject;
+    }
 
     const payload = toSubjectInsert(data, userId);
     const { data: row, error } = await this.supabase.client.from('study_subjects').insert(payload).select().single();

@@ -3,6 +3,11 @@
     <div>
       <h1 class="page-title">Applications</h1>
       <p class="page-subtitle">Track every conversation, end-to-end.</p>
+      @if (isGuest()) {
+        <p class="guest-hint">
+          {{ guestApplicationsRemaining() }} free {{ guestApplicationsRemaining() === 1 ? 'application' : 'applications' }} left before sign-up.
+        </p>
+      }
     </div>
     <button class="btn-primary" (click)="openForm()">New application</button>
   </div>

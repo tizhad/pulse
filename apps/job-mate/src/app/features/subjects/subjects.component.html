@@ -5,6 +5,11 @@
       <p class="page-subtitle">
         Your study tree — sorted by interview priority.
       </p>
+      @if (isGuest()) {
+        <p class="guest-hint">
+          {{ guestSubjectsRemaining() }} free {{ guestSubjectsRemaining() === 1 ? 'subject' : 'subjects' }} left before sign-up.
+        </p>
+      }
     </div>
     <div class="header-actions">
       <button class="btn-grouping" [class.active]="grouping()" (click)="grouping.update(v => !v)">

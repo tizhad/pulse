@@ -13,7 +13,9 @@
       </svg>
     </div>
     <h2 class="auth-title">{{ mode() === 'signin' ? 'Sign in' : 'Create account' }}</h2>
-    <p class="auth-subtitle">For saving your progress, you need to have an account.</p>
+    <p class="auth-subtitle">
+      {{ authModal.reason() ?? 'For saving your progress, you need to have an account.' }}
+    </p>
   </div>
 
   @if (!supabase.isConfigured) {

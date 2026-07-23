@@ -100,3 +100,18 @@
 - Themes available: GitHub Dimmed (default), GitHub Dark, Atom One Dark, Tokyo Night, Monokai, Atom One Light
 - Projects affected: `job-mate`
 - Playwright test added: no
+
+---
+
+## Guest Trial Limit (3 free items before sign-up) — completed 2026-07-23
+
+- Signed-out visitors can now create up to 3 Subjects, 3 Companies, and 3 Applications before being prompted to sign up (previously every create action hard-blocked with a sign-in modal)
+- New `GuestContentService` (`core/services/guest-content.service.ts`) — localStorage-backed, holds up to `GUEST_ITEM_LIMIT` (3) full items per entity type, same `StorageService` pattern used elsewhere in the app
+- `StudyStore`/`CompanyStore`/`ApplicationStore` each gained a guest branch in their `addX` method and a `migrateGuest*` step that uploads local guest items to Supabase and clears local storage the moment the guest signs in/up — no data lost
+- Guest items render in the exact same list/filter/sort UI as real data (merged into the same store signal), so guests genuinely get to try the feature, not a stripped-down preview
+- `AuthModalService.open(mode, reason)` — now supports opening pre-selected on "Create account" with a contextual message (e.g. "You've added 3 free subjects — sign up to keep building your study plan."); existing no-arg call sites are unaffected
+- Small "N free left" hint added near each "Add" button, visible only to guests
+- Scope: create-only for guests. Editing/deleting still requires a full account (unchanged) — see DECISIONS.md D-030 for why
+- Follow-up: `GuestContentService` now seeds every first-time guest's Subjects list with 2 samples (RxJS, Signals) via `buildSampleSubjects()`; they count toward the 3-item limit like any real guest item, so a fresh guest starts with 1 free subject slot, not 3. Seeding only happens once (keyed on whether `guest_subjects` has ever been saved) and the samples migrate to Supabase on sign-up same as any other guest item.
+- Projects affected: `job-mate`
+- Playwright test added: yes (`e2e/guest-limits.spec.ts` — sample subjects present on first visit, guest can add 1 more, next prompts sign-up, guest items persist across reload)

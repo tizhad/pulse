@@ -21,6 +21,7 @@ import {
 } from '../../core/models/jobmate.models';
 import { AuthService } from '../../core/services/auth.service';
 import { AuthModalService } from '../../core/services/auth-modal.service';
+import { GuestContentService, GUEST_ITEM_LIMIT } from '../../core/services/guest-content.service';
 import { PosthogService } from '../../core/services/posthog.service';
 
 type CategoryGroup = {
@@ -43,6 +44,7 @@ export class SubjectsComponent {
   private readonly router = inject(Router);
   private readonly auth = inject(AuthService);
   private readonly authModal = inject(AuthModalService);
+  private readonly guestContent = inject(GuestContentService);
   private readonly posthog = inject(PosthogService);
 
   private requireAuth(): boolean {
@@ -50,6 +52,22 @@ export class SubjectsComponent {
     this.authModal.open();
     return false;
   }
+
+  private canCreateSubject(): boolean {
+    if (this.auth.isAuthenticated()) return true;
+    if (this.guestContent.canAddSubject()) return true;
+    this.authModal.open(
+      'signup',
+      `You've added ${GUEST_ITEM_LIMIT} free subjects — sign up to keep building your study plan.`,
+    );
+    return false;
+  }
+
+  readonly guestSubjectsRemaining = computed(() =>
+    Math.max(0, GUEST_ITEM_LIMIT - this.guestContent.subjects().length),
+  );
+
+  readonly isGuest = computed(() => !this.auth.isAuthenticated());
 
   readonly sortKey = signal<SortKey>('potential');
   readonly showForm = signal(false);
@@ -212,7 +230,7 @@ export class SubjectsComponent {
   }
 
   async submit(): Promise<void> {
-    if (!this.requireAuth()) return;
+    if (!this.canCreateSubject()) return;
     this.form.markAllAsTouched();
     if (this.form.invalid) return;
 
