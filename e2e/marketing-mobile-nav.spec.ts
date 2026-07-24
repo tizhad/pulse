@@ -12,7 +12,7 @@ test.describe('Landing page — desktop nav', () => {
 
   test('nav links are visible, toggle button is hidden', async ({ page }) => {
     await page.goto('/');
-    await expect(page.locator('.ln-nav-links')).toBeVisible();
+    await expect(page.locator('.mkt-nav-links')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Toggle navigation menu' })).toBeHidden();
   });
 });
@@ -22,14 +22,14 @@ test.describe('Landing page — mobile nav', () => {
 
   test('nav links are hidden, toggle button is visible', async ({ page }) => {
     await page.goto('/');
-    await expect(page.locator('.ln-nav-links')).toBeHidden();
+    await expect(page.locator('.mkt-nav-links')).toBeHidden();
     await expect(page.getByRole('button', { name: 'Toggle navigation menu' })).toBeVisible();
   });
 
   test('clicking the toggle opens the mobile menu with both links', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('button', { name: 'Toggle navigation menu' }).click();
-    const menu = page.locator('#ln-mobile-menu');
+    const menu = page.locator('#mkt-mobile-menu');
     await expect(menu).toBeVisible();
     await expect(menu.getByRole('link', { name: 'Features' })).toBeVisible();
     await expect(menu.getByRole('link', { name: 'About creator' })).toBeVisible();
@@ -38,15 +38,15 @@ test.describe('Landing page — mobile nav', () => {
   test('clicking the backdrop closes the mobile menu', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('button', { name: 'Toggle navigation menu' }).click();
-    await expect(page.locator('#ln-mobile-menu')).toBeVisible();
-    await page.locator('.ln-mobile-backdrop').click({ position: { x: 10, y: 10 } });
-    await expect(page.locator('#ln-mobile-menu')).toBeHidden();
+    await expect(page.locator('#mkt-mobile-menu')).toBeVisible();
+    await page.locator('.mkt-mobile-backdrop').click({ position: { x: 10, y: 10 } });
+    await expect(page.locator('#mkt-mobile-menu')).toBeHidden();
   });
 
   test('clicking a link in the mobile menu navigates and closes it', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('button', { name: 'Toggle navigation menu' }).click();
-    await page.locator('#ln-mobile-menu').getByRole('link', { name: 'About creator' }).click();
+    await page.locator('#mkt-mobile-menu').getByRole('link', { name: 'About creator' }).click();
     await expect(page).toHaveURL(/\/portfolio/);
   });
 });
@@ -58,7 +58,7 @@ test.describe('Starter kit page — desktop nav', () => {
 
   test('nav links are visible, toggle button is hidden', async ({ page }) => {
     await page.goto('/starter-kit');
-    await expect(page.locator('.sk-nav-links')).toBeVisible();
+    await expect(page.locator('.mkt-nav-links')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Toggle navigation menu' })).toBeHidden();
   });
 });
@@ -68,14 +68,14 @@ test.describe('Starter kit page — mobile nav', () => {
 
   test('nav links are hidden, toggle button is visible', async ({ page }) => {
     await page.goto('/starter-kit');
-    await expect(page.locator('.sk-nav-links')).toBeHidden();
+    await expect(page.locator('.mkt-nav-links')).toBeHidden();
     await expect(page.getByRole('button', { name: 'Toggle navigation menu' })).toBeVisible();
   });
 
   test('clicking the toggle opens the mobile menu with all links', async ({ page }) => {
     await page.goto('/starter-kit');
     await page.getByRole('button', { name: 'Toggle navigation menu' }).click();
-    const menu = page.locator('#sk-mobile-menu');
+    const menu = page.locator('#mkt-mobile-menu');
     await expect(menu).toBeVisible();
     await expect(menu.getByRole('link', { name: 'Job Mate' })).toBeVisible();
     await expect(menu.getByRole('link', { name: 'Portfolio' })).toBeVisible();
@@ -85,15 +85,15 @@ test.describe('Starter kit page — mobile nav', () => {
   test('clicking the backdrop closes the mobile menu', async ({ page }) => {
     await page.goto('/starter-kit');
     await page.getByRole('button', { name: 'Toggle navigation menu' }).click();
-    await expect(page.locator('#sk-mobile-menu')).toBeVisible();
-    await page.locator('.sk-mobile-backdrop').click({ position: { x: 10, y: 10 } });
-    await expect(page.locator('#sk-mobile-menu')).toBeHidden();
+    await expect(page.locator('#mkt-mobile-menu')).toBeVisible();
+    await page.locator('.mkt-mobile-backdrop').click({ position: { x: 10, y: 10 } });
+    await expect(page.locator('#mkt-mobile-menu')).toBeHidden();
   });
 
   test('clicking a link in the mobile menu navigates and closes it', async ({ page }) => {
     await page.goto('/starter-kit');
     await page.getByRole('button', { name: 'Toggle navigation menu' }).click();
-    await page.locator('#sk-mobile-menu').getByRole('link', { name: 'Portfolio' }).click();
+    await page.locator('#mkt-mobile-menu').getByRole('link', { name: 'Portfolio' }).click();
     await expect(page).toHaveURL(/\/portfolio/);
   });
 });

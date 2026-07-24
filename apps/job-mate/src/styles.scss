@@ -1,6 +1,9 @@
+@use 'styles/fonts';
+@use 'styles/tokens';
+
 :root {
   /* surfaces */
-  --bg:                 #F9F7F4;
+  --bg:                 #FAF8F2;
   --surface:            #FFFFFF;
   --surface-hover:      #F5F3F0;
   --border:             #EAE6E0;
@@ -8,8 +11,8 @@
   /* sidebar */
   --sidebar-bg:         #FFFFFF;
   --sidebar-width:      224px;
-  --nav-active-bg:      #EEECFF;
-  --nav-active-text:    #5B4FCF;
+  --nav-active-bg:      #F1E9D9;
+  --nav-active-text:    #8A6D42;
   --nav-text:           #4A4A68;
   --nav-text-hover:     #1C1C3A;
 
@@ -19,9 +22,9 @@
   --text-muted:         #9898B3;
 
   /* accent */
-  --accent:             #6C5CE7;
-  --accent-light:       #EEECFF;
-  --accent-hover:       #5A4BD1;
+  --accent:             #1A2E1F;
+  --accent-light:       #F1E9D9;
+  --accent-hover:       #2A4530;
   --accent-text:        #FFFFFF;
 
   /* status */
@@ -68,9 +71,9 @@
   --streak-to:        #FF5F87;
 
   /* gradients */
-  --gradient-primary: linear-gradient(135deg, #6C5CE7 0%, #FF5F87 100%);
+  --gradient-primary: linear-gradient(135deg, #1A2E1F 0%, #A8875A 100%);
   --gradient-warm:    linear-gradient(135deg, #FF8C52 0%, #FBBF24 100%);
-  --gradient-cool:    linear-gradient(135deg, #38BDF8 0%, #6C5CE7 100%);
+  --gradient-cool:    linear-gradient(135deg, #38BDF8 0%, #1A2E1F 100%);
 
   /* semantic colors */
   --mint:             #10B981;
@@ -92,31 +95,6 @@
   --transition:       140ms ease;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg:                #18181F;
-    --surface:           #24242E;
-    --surface-hover:     #2E2E3A;
-    --border:            #35354A;
-    --sidebar-bg:        #1E1E28;
-    --nav-active-bg:     #2D2A4A;
-    --nav-active-text:   #9B8EFF;
-    --nav-text:          #A0A0C0;
-    --nav-text-hover:    #FFFFFF;
-    --text:              #F0F0FA;
-    --text-secondary:    #A0A0C0;
-    --text-muted:        #6868A0;
-    --accent:            #8B7EFF;
-    --accent-light:      #2D2A4A;
-    --accent-hover:      #7A6EEE;
-    --shadow-sm:         0 1px 3px rgba(0,0,0,0.3);
-    --shadow:            0 4px 12px rgba(0,0,0,0.3);
-    --mint:              #34D399;
-    --mint-foreground:   #A7F3D0;
-    --amber:             #FCD34D;
-  }
-}
-
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -128,7 +106,7 @@ html, body {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+  font-family: var(--font-sans);
   background: var(--bg);
   color: var(--text);
   line-height: 1.5;
@@ -149,6 +127,60 @@ a {
 
 input, textarea {
   font-family: inherit;
+}
+
+/* ── Shared page header ──────────────────────────────────────────────────── */
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.page-title {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: var(--text-display-3);
+  color: var(--text);
+}
+
+.page-subtitle {
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+/* ── Shared empty state ──────────────────────────────────────────────────── */
+
+.empty-state {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 4rem 2rem;
+  gap: 0.75rem;
+}
+
+.empty-icon {
+  font-size: 2.5rem;
+}
+
+.empty-title {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 1.5rem;
+  color: var(--text);
+}
+
+.empty-body {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--text-muted);
+  max-width: 340px;
+  line-height: 1.5;
 }
 
 /* ── Shared badge utilities ──────────────────────────────────────────────── */
@@ -207,19 +239,24 @@ input, textarea {
   gap: 6px;
   background: var(--accent);
   color: var(--accent-text);
-  border-radius: var(--radius-sm);
-  padding: 8px 16px;
+  border-radius: 999px;
+  padding: 8px 18px;
   font-size: 13px;
   font-weight: 600;
   transition: background var(--transition);
 
   &:hover { background: var(--accent-hover); }
+
+  &.btn-arrow::after {
+    content: '→';
+    display: inline-block;
+  }
 }
 
 /* ── Code block ──────────────────────────────────────────────────────────── */
 
 .code-block {
-  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-family: var(--font-mono);
   font-size: 11.5px;
   background: var(--surface-hover);
   border: 0.5px solid var(--border);

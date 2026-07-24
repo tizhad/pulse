@@ -1,189 +1,138 @@
 :host {
   display: block;
+  min-height: 100vh;
+  background: var(--bg);
 }
 
 .ct-root {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  position: relative;
-  overflow: hidden;
-  gap: 6rem;
 }
 
-/* ── Header ───────────────────────────────────────────────────────────────── */
+/* ── Header ──────────────────────────────────────────────────────────────── */
 
 .ct-header {
-  display: flex;
-  justify-content: center;
-  padding: 1.5rem 0 0.5rem;
-  flex-shrink: 0;
+  padding: 4rem 1.5rem 2rem;
+  max-width: 960px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .ct-title {
-  font-size: clamp(1rem, 2.5vw, 1.6rem);
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #6d3281;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
-  margin: 0;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: var(--text-display-2);
+  color: var(--text);
+  margin: 0.75rem 0 0;
 }
 
-/* ── Main grid ────────────────────────────────────────────────────────────── */
+/* ── Main grid ───────────────────────────────────────────────────────────── */
 
 .ct-main {
   flex: 1;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  padding: 1rem 6rem;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 3rem;
+  padding: 0 1.5rem 4rem;
   max-width: 960px;
   width: 100%;
   margin: 0 auto;
   box-sizing: border-box;
-  min-height: 0;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .ct-col {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  min-height: 0;
+  gap: 1rem;
 }
 
 .ct-section-title {
-  font-size: 0.85rem;
-  font-weight: 400;
-  letter-spacing: 0.14em;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #3a1604;
+  color: var(--gold-deep);
   margin: 0;
 }
 
-/* ── Form ─────────────────────────────────────────────────────────────────── */
+/* ── Form ────────────────────────────────────────────────────────────────── */
 
 .ct-form {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  flex: 1;
-  min-height: 0;
+  gap: 1.1rem;
 }
 
 .ct-field {
-  position: relative;
-  min-height: 36px;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  gap: 0.375rem;
+}
 
-  &--textarea {
-    min-height: 100px;
-    align-items: flex-start;
-  }
+.ct-label {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
 }
 
 .ct-input {
   display: block;
   width: 100%;
-  padding: 0.4rem 0.6rem;
-  background: rgba(255, 245, 220, 0.6);
-  border: 1px solid rgba(90, 50, 10, 0.35);
-  border-radius: 3px;
+  padding: 0.65rem 0.875rem;
+  background: var(--surface-hover);
+  border: 1px solid var(--border);
+  border-radius: 0.625rem;
   outline: none;
-  color: #1a0800;
-  font-size: 0.82rem;
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
   box-sizing: border-box;
+  transition: border-color var(--transition), box-shadow var(--transition);
 
   &::placeholder {
-    color: transparent;
+    color: var(--text-muted);
   }
 
   &:focus {
-    background: rgba(255, 245, 220, 0.85);
-    border-color: rgba(90, 50, 10, 0.6);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 15%, transparent);
   }
-}
-
-.ct-label {
-  position: absolute;
-  left: 0.6rem;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-  font-size: 0.72rem;
-  color: #5a3208;
-  white-space: nowrap;
-  transition: opacity 0.1s;
-
-  strong {
-    font-weight: 700;
-  }
-  span {
-    font-weight: 400;
-    color: #7a5030;
-  }
-}
-
-.ct-field--textarea .ct-label {
-  top: 0.45rem;
-  transform: none;
-}
-
-.ct-input:focus + .ct-label,
-.ct-input:not(:placeholder-shown) + .ct-label {
-  opacity: 0;
 }
 
 .ct-textarea {
-  resize: none;
-  line-height: 1.45;
-  vertical-align: top;
-  padding-top: 0.4rem;
+  resize: vertical;
+  line-height: 1.5;
 }
 
 .ct-success {
-  font-size: 0.72rem;
-  font-style: italic;
-  color: #2d5a1e;
-  background: rgba(45, 90, 30, 0.12);
-  border: 1px solid rgba(45, 90, 30, 0.3);
-  border-radius: 3px;
-  padding: 0.25rem 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.825rem;
+  color: var(--mint-foreground);
+  background: color-mix(in srgb, var(--mint) 10%, transparent);
+  border-radius: 0.5rem;
+  padding: 0.6rem 0.875rem;
   margin: 0;
 }
 
-.ct-btn-wrap {
-  display: flex;
-  justify-content: center;
-  padding-top: 0.25rem;
-}
-
 .ct-btn-send {
-  padding: 0.5rem 2rem;
-  background: rgba(28, 74, 94, 0.85);
-  border: 2px solid rgba(28, 74, 94, 0.6);
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.95rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #f2e08a;
-  transition:
-    transform 0.12s,
-    filter 0.12s;
-
-  &:not(:disabled):hover {
-    transform: translateY(-2px);
-    filter: brightness(1.15);
-  }
+  align-self: flex-start;
+  margin-top: 0.25rem;
 
   &:disabled {
+    opacity: 0.5;
     cursor: not-allowed;
   }
 }
 
-/* ── Contact info ─────────────────────────────────────────────────────────── */
+/* ── Contact info ────────────────────────────────────────────────────────── */
 
 .ct-contact-list {
   display: flex;
@@ -206,33 +155,32 @@
 }
 
 .ct-contact-name {
-  font-size: 1rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #1a0800;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
 }
 
 .ct-contact-val {
-  font-size: 0.8rem;
-  color: #3a2010;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--text-secondary);
 }
 
-/* ── Footer ───────────────────────────────────────────────────────────────── */
+/* ── Footer ──────────────────────────────────────────────────────────────── */
 
 .ct-footer {
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.5rem 1rem;
+  padding: 1.5rem 1rem;
+  border-top: 1px solid var(--border);
 }
 
 .ct-footer-copy {
-  font-size: 0.55rem;
-  font-style: italic;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.75);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--text-muted);
   margin: 0;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
 }

@@ -1,104 +1,13 @@
 <div class="ln-root">
-  <!-- ── Ambient background blobs ──────────────────────────────────────────── -->
-  <div class="ln-bg-blobs" aria-hidden="true">
-    <div class="ln-blob ln-blob--tl"></div>
-    <div class="ln-blob ln-blob--tr"></div>
-    <div class="ln-blob ln-blob--bl"></div>
-  </div>
-
-  <!-- ── Nav ───────────────────────────────────────────────────────────────── -->
-  <header class="ln-nav">
-    <a [routerLink]="['/']" class="ln-brand">
-      <div class="ln-logo-mark">
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-        </svg>
-        <span class="ln-logo-ping"></span>
-      </div>
-      <div class="ln-logo-text">
-        <div class="ln-logo-name">PULSE</div>
-        <div class="ln-logo-sub">INTERVIEW OS</div>
-      </div>
-    </a>
-    <nav class="ln-nav-links" aria-label="Site navigation">
-      <a [routerLink]="['/']" fragment="features">Features</a>
-      <a [routerLink]="['/portfolio']">About creator</a>
-    </nav>
-    <button
-      type="button"
-      class="ln-menu-toggle"
-      aria-label="Toggle navigation menu"
-      [attr.aria-expanded]="mobileMenuOpen()"
-      aria-controls="ln-mobile-menu"
-      (click)="toggleMobileMenu()"
-    >
-      @if (!mobileMenuOpen()) {
-      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <line x1="3" y1="6" x2="21" y2="6" />
-        <line x1="3" y1="12" x2="21" y2="12" />
-        <line x1="3" y1="18" x2="21" y2="18" />
-      </svg>
-      } @else {
-      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <line x1="18" y1="6" x2="6" y2="18" />
-        <line x1="6" y1="6" x2="18" y2="18" />
-      </svg>
-      }
-    </button>
-  </header>
-
-  @if (mobileMenuOpen()) {
-  <div
-    class="ln-mobile-backdrop"
-    role="presentation"
-    tabindex="-1"
-    (click)="closeMobileMenu()"
-    (keydown.escape)="closeMobileMenu()"
-  ></div>
-  <nav id="ln-mobile-menu" class="ln-mobile-menu" aria-label="Mobile site navigation">
-    <a [routerLink]="['/']" fragment="features" (click)="closeMobileMenu()">Features</a>
-    <a [routerLink]="['/portfolio']" (click)="closeMobileMenu()">About creator</a>
-  </nav>
-  }
+  <app-marketing-nav logoSubtitle="INTERVIEW OS" [links]="navLinks" />
 
   <!-- ── Hero ──────────────────────────────────────────────────────────────── -->
   <section class="ln-hero">
     <div class="ln-hero-text">
-      <!-- Headline -->
+      <span class="eyebrow ln-eyebrow">Interview prep · built daily</span>
+
       <h1 class="ln-hero-h1">
-        Feel your
-        <span class="ln-momentum-wrap">
-          <span class="ln-text-gradient-primary">momentum</span>
-          <svg
-            class="ln-hero-underline"
-            viewBox="0 0 300 12"
-            fill="none"
-            preserveAspectRatio="none"
-          >
-            <path
-              d="M2 9 Q 75 2, 150 7 T 298 5"
-              stroke="url(#ug)"
-              stroke-width="4"
-              stroke-linecap="round"
-            />
-            <defs>
-              <linearGradient id="ug" x1="0" x2="1">
-                <stop offset="0" stop-color="#FF5F87" />
-                <stop offset="1" stop-color="#6C5CE7" />
-              </linearGradient>
-            </defs>
-          </svg>
-        </span>
-        build daily. Land the offer.
+        Feel your <span class="accent-swash">momentum</span> build daily. Land the offer.
       </h1>
 
       <p class="ln-hero-desc">
@@ -108,43 +17,8 @@
       </p>
 
       <div class="ln-hero-actions">
-        <a [routerLink]="['/dashboard']" class="ln-btn-primary-lg">
-          <!-- <svg
-            class="ln-google-icon"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fill="#4285F4"
-              d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-            />
-            <path
-              fill="#34A853"
-              d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-            />
-            <path
-              fill="#FBBC05"
-              d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-            />
-            <path
-              fill="#EA4335"
-              d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-            />
-          </svg> -->
+        <a [routerLink]="['/dashboard']" class="btn-primary btn-arrow ln-btn-lg">
           Continue with Pulse
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M5 12h14" />
-            <path d="m12 5 7 7-7 7" />
-          </svg>
         </a>
         <span class="ln-btn-outline-lg ln-btn-disabled"
           >Watch a 60s tour <span class="ln-soon-tag">Soon</span></span
@@ -197,8 +71,8 @@
           <svg viewBox="0 0 300 80" class="ln-sparkline">
             <defs>
               <linearGradient id="pulseFill" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0" stop-color="#6C5CE7" stop-opacity="0.4" />
-                <stop offset="1" stop-color="#6C5CE7" stop-opacity="0" />
+                <stop offset="0" stop-color="#A8875A" stop-opacity="0.35" />
+                <stop offset="1" stop-color="#A8875A" stop-opacity="0" />
               </linearGradient>
             </defs>
             <path
@@ -207,7 +81,7 @@
             />
             <path
               d="M0 50 L40 50 L55 30 L70 70 L85 20 L100 60 L130 50 L160 50 L175 35 L190 65 L205 45 L240 45 L260 25 L275 55 L300 45"
-              stroke="#6C5CE7"
+              stroke="#A8875A"
               stroke-width="2.5"
               fill="none"
               stroke-linecap="round"
@@ -229,7 +103,7 @@
             <div class="ln-stat-label">In progress</div>
           </div>
           <div class="ln-stat-tile">
-            <div class="ln-stat-bar" style="background: var(--violet)"></div>
+            <div class="ln-stat-bar" style="background: var(--gold)"></div>
             <div class="ln-stat-value">12</div>
             <div class="ln-stat-label">Applications</div>
           </div>
@@ -303,18 +177,17 @@
   <section class="ln-features" id="features">
     <div class="ln-section-inner">
       <div class="ln-features-header">
-        <div class="ln-eyebrow">Everything in one heartbeat</div>
+        <span class="eyebrow">Everything in one heartbeat</span>
         <h2 class="ln-features-h2">
-          Built for the way candidates
-          <em class="ln-text-gradient-warm">actually</em> prep.
+          Built for the way candidates <span class="accent-swash">actually</span> prep.
         </h2>
       </div>
 
-      <div class="ln-features-grid">
+      <div class="bento-grid ln-features-grid">
         @for (f of features; track f.title) {
-          <div class="ln-feature-card">
+          <div class="bento-card ln-feature-card" [class.bento-card--dark]="f.dark" [class.bento-card--cream]="!f.dark">
             <div class="ln-feature-card-top">
-              <div class="ln-feature-icon" [style.background]="f.gradient">
+              <div class="ln-feature-icon">
                 @switch (f.iconName) {
                   @case ('book-open') {
                     <svg
@@ -428,14 +301,11 @@
   <!-- ── Workflow ───────────────────────────────────────────────────────────── -->
   <section class="ln-workflow" id="workflow">
     <div class="ln-section-inner">
-      <div class="ln-workflow-card">
-        <div class="ln-workflow-blob" aria-hidden="true"></div>
+      <div class="bento-card bento-card--dark ln-workflow-card">
         <div class="ln-steps-grid">
           @for (step of steps; track step.num) {
             <div class="ln-step">
-              <div class="ln-step-num" [style.color]="step.tone">
-                {{ step.num }}
-              </div>
+              <div class="ln-step-num">{{ step.num }}</div>
               <div class="ln-step-title">{{ step.title }}</div>
               <p class="ln-step-body">{{ step.body }}</p>
             </div>
@@ -444,32 +314,17 @@
       </div>
     </div>
   </section>
-  <!-- ── Footer ─────────────────────────────────────────────────────────────── -->
-  <footer class="ln-footer">
-    <div class="ln-footer-inner">
-      <div class="ln-footer-brand">
-        <div class="ln-footer-logo">
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-          </svg>
-        </div>
-        <strong>Pulse</strong>
-        <span>· © {{ year }}</span>
-      </div>
-      <div class="ln-footer-links">
-        <a href="#">Privacy</a>
-        <a href="#">Terms</a>
-        <a href="#">Contact</a>
-      </div>
-    </div>
-  </footer>
+
+  <app-marketing-footer
+    eyebrow="Ready when you are"
+    headlinePrefix="Build your"
+    headlineAccent="momentum"
+    headlineSuffix=" today."
+    [cta]="{ label: 'Continue with Pulse', routerLink: ['/dashboard'] }"
+    [links]="[
+      { label: 'Privacy', href: '#' },
+      { label: 'Terms', href: '#' },
+      { label: 'Contact', routerLink: ['/contact'] },
+    ]"
+  />
 </div>

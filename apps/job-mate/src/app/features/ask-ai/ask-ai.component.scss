@@ -9,25 +9,11 @@
   max-width: 1200px;
 }
 
-.page-header { margin-bottom: 1.5rem; }
-
 .ai-page-title-row {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   margin-bottom: 4px;
-}
-
-.page-title {
-  font-size: 1.6rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--text);
-}
-
-.page-subtitle {
-  font-size: 13.5px;
-  color: var(--text-secondary);
 }
 
 /* ── Coming Soon badge ───────────────────────────────────────────────────── */

@@ -5,13 +5,13 @@ import { test, expect } from './fixtures';
 test.describe('Portfolio page', () => {
   test('renders role and bio', async ({ page }) => {
     await page.goto('/portfolio');
-    await expect(page.getByText('FRONTEND ENGINEER · ANGULAR MIGRATION SPECIALIST')).toBeVisible();
+    await expect(page.getByText('Frontend engineer · Amsterdam')).toBeVisible();
   });
 
   test('/about redirects to /portfolio', async ({ page }) => {
     await page.goto('/about');
     await expect(page).toHaveURL(/\/portfolio$/);
-    await expect(page.getByText('FRONTEND ENGINEER · ANGULAR MIGRATION SPECIALIST')).toBeVisible();
+    await expect(page.getByText('Frontend engineer · Amsterdam')).toBeVisible();
   });
 
   test('lists all three featured projects', async ({ page }) => {
@@ -23,7 +23,10 @@ test.describe('Portfolio page', () => {
 
   test('starter kit project links to /starter-kit', async ({ page }) => {
     await page.goto('/portfolio');
-    await page.getByRole('link', { name: 'See the Kit ↗' }).click();
+    await page
+      .locator('.pf-project-card', { hasText: 'Angular 21 SaaS Starter Kit' })
+      .getByRole('link', { name: 'View case study' })
+      .click();
     await expect(page).toHaveURL(/\/starter-kit/);
   });
 
@@ -37,9 +40,9 @@ test.describe('Portfolio page', () => {
 
   test('in-page nav anchors scroll to their sections', async ({ page }) => {
     await page.goto('/portfolio');
-    await page.getByRole('link', { name: '~/projects' }).click();
+    await page.getByRole('link', { name: 'Projects', exact: true }).click();
     await expect(page).toHaveURL(/#projects$/);
-    await page.getByRole('link', { name: '~/contact' }).click();
+    await page.getByRole('link', { name: 'Contact', exact: true }).click();
     await expect(page).toHaveURL(/#contact$/);
   });
 });

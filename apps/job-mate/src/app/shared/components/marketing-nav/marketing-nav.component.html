@@ -1,0 +1,73 @@
+<header class="mkt-nav">
+  <a [routerLink]="['/']" class="mkt-brand">
+    <div class="mkt-logo-mark">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+      </svg>
+      <span class="mkt-logo-ping"></span>
+    </div>
+    <div class="mkt-logo-text">
+      <div class="mkt-logo-name">PULSE</div>
+      <div class="mkt-logo-sub">{{ logoSubtitle() }}</div>
+    </div>
+  </a>
+
+  <nav class="mkt-nav-links" aria-label="Site navigation">
+    @for (link of links(); track link.label) {
+      <a [routerLink]="link.routerLink" [fragment]="link.fragment">{{ link.label }}</a>
+    }
+    @if (cta(); as c) {
+      <a class="mkt-nav-cta" [href]="c.href" target="_blank" rel="noopener noreferrer" (click)="ctaClick.emit()">
+        {{ c.label }}
+      </a>
+    }
+  </nav>
+
+  <button
+    type="button"
+    class="mkt-menu-toggle"
+    aria-label="Toggle navigation menu"
+    [attr.aria-expanded]="mobileMenuOpen()"
+    aria-controls="mkt-mobile-menu"
+    (click)="toggleMobileMenu()"
+  >
+    @if (!mobileMenuOpen()) {
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <line x1="3" y1="6" x2="21" y2="6" />
+        <line x1="3" y1="12" x2="21" y2="12" />
+        <line x1="3" y1="18" x2="21" y2="18" />
+      </svg>
+    } @else {
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <line x1="18" y1="6" x2="6" y2="18" />
+        <line x1="6" y1="6" x2="18" y2="18" />
+      </svg>
+    }
+  </button>
+</header>
+
+@if (mobileMenuOpen()) {
+  <div
+    class="mkt-mobile-backdrop"
+    role="presentation"
+    tabindex="-1"
+    (click)="closeMobileMenu()"
+    (keydown.escape)="closeMobileMenu()"
+  ></div>
+  <nav id="mkt-mobile-menu" class="mkt-mobile-menu" aria-label="Mobile site navigation">
+    @for (link of links(); track link.label) {
+      <a [routerLink]="link.routerLink" [fragment]="link.fragment" (click)="closeMobileMenu()">{{ link.label }}</a>
+    }
+    @if (cta(); as c) {
+      <a
+        class="mkt-nav-cta"
+        [href]="c.href"
+        target="_blank"
+        rel="noopener noreferrer"
+        (click)="ctaClick.emit(); closeMobileMenu()"
+      >
+        {{ c.label }}
+      </a>
+    }
+  </nav>
+}

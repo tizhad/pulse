@@ -8,6 +8,7 @@ import { DOCUMENT } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { SeoService } from '../../core/services/seo.service';
 import { environment } from '../../../environments/environment';
+import { MarketingFooterComponent } from '../../shared/components/marketing-footer/marketing-footer.component';
 
 const NAV_SCROLL_OFFSET = 84;
 
@@ -16,11 +17,24 @@ const NAV_SCROLL_OFFSET = 84;
   templateUrl: './portfolio.component.html',
   styleUrl: './portfolio.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink],
+  imports: [RouterLink, MarketingFooterComponent],
 })
 export class PortfolioComponent implements OnInit {
   private readonly seo = inject(SeoService);
   private readonly document = inject(DOCUMENT);
+
+  readonly techStack = [
+    'Angular',
+    'TypeScript',
+    'RxJS',
+    'Signals',
+    'NgRx',
+    'Nx Monorepo',
+    'GraphQL',
+    'Playwright',
+    'Jest',
+    'SCSS',
+  ] as const;
 
   scrollToSection(event: Event, sectionId: string): void {
     event.preventDefault();

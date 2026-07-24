@@ -1,82 +1,19 @@
 <div class="sk-root">
-  <!-- ── Ambient blobs ──────────────────────────────────────────────────────── -->
-  <div class="sk-bg-blobs" aria-hidden="true">
-    <div class="sk-blob sk-blob--tl"></div>
-    <div class="sk-blob sk-blob--tr"></div>
-    <div class="sk-blob sk-blob--bl"></div>
-  </div>
-
-  <!-- ── Nav ───────────────────────────────────────────────────────────────── -->
-  <header class="sk-nav">
-    <a [routerLink]="['/']" class="sk-brand">
-      <div class="sk-logo-mark">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-        </svg>
-        <span class="sk-logo-ping"></span>
-      </div>
-      <div class="sk-logo-text">
-        <div class="sk-logo-name">PULSE</div>
-        <div class="sk-logo-sub">BY TIZHAD</div>
-      </div>
-    </a>
-    <nav class="sk-nav-links" aria-label="Site navigation">
-      <a [routerLink]="['/']">Job Mate</a>
-      <a [routerLink]="['/portfolio']">Portfolio</a>
-      <a class="sk-nav-cta" [href]="checkoutUrl" target="_blank" rel="noopener noreferrer" (click)="trackCheckout()">
-        Get the kit — €69
-      </a>
-    </nav>
-    <button
-      type="button"
-      class="sk-menu-toggle"
-      aria-label="Toggle navigation menu"
-      [attr.aria-expanded]="mobileMenuOpen()"
-      aria-controls="sk-mobile-menu"
-      (click)="toggleMobileMenu()"
-    >
-      @if (!mobileMenuOpen()) {
-      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <line x1="3" y1="6" x2="21" y2="6" />
-        <line x1="3" y1="12" x2="21" y2="12" />
-        <line x1="3" y1="18" x2="21" y2="18" />
-      </svg>
-      } @else {
-      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <line x1="18" y1="6" x2="6" y2="18" />
-        <line x1="6" y1="6" x2="18" y2="18" />
-      </svg>
-      }
-    </button>
-  </header>
-
-  @if (mobileMenuOpen()) {
-  <div
-    class="sk-mobile-backdrop"
-    role="presentation"
-    tabindex="-1"
-    (click)="closeMobileMenu()"
-    (keydown.escape)="closeMobileMenu()"
-  ></div>
-  <nav id="sk-mobile-menu" class="sk-mobile-menu" aria-label="Mobile site navigation">
-    <a [routerLink]="['/']" (click)="closeMobileMenu()">Job Mate</a>
-    <a [routerLink]="['/portfolio']" (click)="closeMobileMenu()">Portfolio</a>
-    <a class="sk-nav-cta" [href]="checkoutUrl" target="_blank" rel="noopener noreferrer" (click)="trackCheckout(); closeMobileMenu()">
-      Get the kit — €69
-    </a>
-  </nav>
-  }
+  <app-marketing-nav
+    logoSubtitle="BY TIZHAD"
+    [links]="navLinks"
+    [cta]="navCta"
+    (ctaClick)="trackCheckout()"
+  />
 
   <!-- ── Hero ──────────────────────────────────────────────────────────────── -->
   <section class="sk-hero">
     <div class="sk-hero-text">
-      <div class="sk-eyebrow-wrap">
-        <span class="sk-eyebrow">Angular 21 SaaS Starter Kit</span>
-      </div>
+      <span class="eyebrow">Angular 21 SaaS Starter Kit</span>
 
       <h1 class="sk-hero-h1">
         Skip the boilerplate.<br />
-        <span class="sk-text-gradient">Ship your product.</span>
+        <span class="accent-swash">Ship your product.</span>
       </h1>
 
       <p class="sk-hero-desc">
@@ -97,16 +34,13 @@
 
       <div class="sk-hero-actions">
         <a
-          class="sk-btn-primary"
+          class="btn-primary btn-arrow sk-btn-lg"
           [href]="checkoutUrl"
           target="_blank"
           rel="noopener noreferrer"
           (click)="trackCheckout()"
         >
           Get the starter kit
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
-          </svg>
         </a>
         <a class="sk-btn-outline" [routerLink]="['/starter-kit']" fragment="whats-included">
           See what's included
@@ -116,7 +50,7 @@
 
     <!-- Hero visual: kit preview card -->
     <div class="sk-hero-visual">
-      <div class="sk-kit-card">
+      <div class="bento-card bento-card--cream sk-kit-card">
         <div class="sk-kit-card-header">
           <div class="sk-kit-badge">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -197,10 +131,9 @@
   <section class="sk-features" id="whats-included">
     <div class="sk-section-inner">
       <div class="sk-features-header">
-        <div class="sk-section-eyebrow">What's included</div>
+        <span class="eyebrow">What's included</span>
         <h2 class="sk-features-h2">
-          Everything your SaaS needs on day
-          <em class="sk-text-gradient-warm">one.</em>
+          Everything your SaaS needs on day <span class="accent-swash">one.</span>
         </h2>
         <p class="sk-features-sub">
           Nine production-quality features, all built the Angular 21 way — signals,
@@ -208,11 +141,11 @@
         </p>
       </div>
 
-      <div class="sk-features-grid">
+      <div class="bento-grid sk-features-grid">
         @for (f of features; track f.title) {
-          <div class="sk-feature-card">
+          <div class="bento-card sk-feature-card" [class.bento-card--dark]="f.dark" [class.bento-card--cream]="!f.dark">
             <div class="sk-feature-card-top">
-              <div class="sk-feature-icon" [style.background]="f.gradient">
+              <div class="sk-feature-icon">
                 @switch (f.iconName) {
                   @case ('lock') {
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -271,15 +204,20 @@
     </div>
   </section>
 
-  <!-- ── Tech stack ────────────────────────────────────────────────────────── -->
+  <!-- ── Tech stack marquee ────────────────────────────────────────────────── -->
   <section class="sk-stack-section">
     <div class="sk-section-inner">
       <div class="sk-stack-inner">
-        <span class="sk-stack-label">Built with</span>
-        <div class="sk-stack-pills">
-          @for (t of techStack; track t) {
-            <span class="sk-stack-pill">{{ t }}</span>
-          }
+        <span class="eyebrow">Built with</span>
+        <div class="marquee sk-stack-marquee">
+          <div class="marquee-track">
+            @for (t of techStack; track t + '-a') {
+              <span class="sk-stack-pill">{{ t }}</span>
+            }
+            @for (t of techStack; track t + '-b') {
+              <span class="sk-stack-pill" aria-hidden="true">{{ t }}</span>
+            }
+          </div>
         </div>
       </div>
     </div>
@@ -291,7 +229,7 @@
       <div class="sk-pricing-grid">
         <!-- Left: copy -->
         <div class="sk-pricing-copy">
-          <div class="sk-section-eyebrow">Pricing</div>
+          <span class="eyebrow">Pricing</span>
           <h2 class="sk-pricing-h2">One price. Everything included.</h2>
           <p class="sk-pricing-sub">
             Pay once, own it forever. Fork the repo, customize it, and ship as
@@ -304,7 +242,7 @@
         </div>
 
         <!-- Right: card -->
-        <div class="sk-pricing-card">
+        <div class="bento-card bento-card--dark sk-pricing-card">
           <div class="sk-pricing-card-header">
             <div>
               <div class="sk-pricing-name">Angular 21 SaaS Starter Kit</div>
@@ -329,16 +267,13 @@
           </ul>
 
           <a
-            class="sk-btn-primary sk-btn-full"
+            class="btn-primary btn-arrow sk-btn-full"
             [href]="checkoutUrl"
             target="_blank"
             rel="noopener noreferrer"
             (click)="trackCheckout()"
           >
             Get the starter kit — €69
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
-            </svg>
           </a>
 
           <p class="sk-pricing-note">
@@ -349,24 +284,17 @@
     </div>
   </section>
 
-  <!-- ── Footer ─────────────────────────────────────────────────────────────── -->
-  <footer class="sk-footer">
-    <div class="sk-footer-inner">
-      <div class="sk-footer-brand">
-        <div class="sk-footer-logo">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-          </svg>
-        </div>
-        <strong>Pulse</strong>
-        <span>· © {{ year }}</span>
-      </div>
-      <div class="sk-footer-links">
-        <a [routerLink]="['/']">Job Mate</a>
-        <a [routerLink]="['/portfolio']">Portfolio</a>
-        <a [routerLink]="['/contact']">Contact</a>
-        <a href="https://www.moneycho.com" target="_blank" rel="noopener noreferrer">MoneyCho ↗</a>
-      </div>
-    </div>
-  </footer>
+  <app-marketing-footer
+    eyebrow="Available now"
+    headlinePrefix="Skip the boilerplate."
+    headlineAccent="Ship"
+    headlineSuffix=" your product."
+    [cta]="{ label: 'Get the starter kit — €69', href: checkoutUrl, external: true }"
+    [links]="[
+      { label: 'Job Mate', routerLink: ['/'] },
+      { label: 'Portfolio', routerLink: ['/portfolio'] },
+      { label: 'Contact', routerLink: ['/contact'] },
+      { label: 'MoneyCho ↗', href: 'https://www.moneycho.com', external: true },
+    ]"
+  />
 </div>

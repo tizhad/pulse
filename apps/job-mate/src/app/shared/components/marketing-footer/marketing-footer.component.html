@@ -1,0 +1,40 @@
+<footer class="mkt-footer">
+  <div class="mkt-footer-inner">
+    <span class="eyebrow mkt-footer-eyebrow">{{ eyebrow() }}</span>
+    <h2 class="mkt-footer-headline">
+      {{ headlinePrefix() }} <span class="accent-swash">{{ headlineAccent() }}</span>{{ headlineSuffix() }}
+    </h2>
+
+    <div class="mkt-footer-actions">
+      @let c = cta();
+      @if (c.routerLink) {
+        <a class="btn-primary btn-arrow mkt-footer-cta" [routerLink]="c.routerLink">{{ c.label }}</a>
+      } @else if (c.href) {
+        <a
+          class="btn-primary btn-arrow mkt-footer-cta"
+          [href]="c.href"
+          [target]="c.external ? '_blank' : null"
+          [rel]="c.external ? 'noopener noreferrer' : null"
+        >
+          {{ c.label }}
+        </a>
+      }
+
+      @if (links().length) {
+        <nav class="mkt-footer-links" aria-label="Footer navigation">
+          @for (link of links(); track link.label) {
+            @if (link.routerLink) {
+              <a [routerLink]="link.routerLink">{{ link.label }}</a>
+            } @else if (link.href) {
+              <a [href]="link.href" [target]="link.external ? '_blank' : null" [rel]="link.external ? 'noopener noreferrer' : null">
+                {{ link.label }}
+              </a>
+            }
+          }
+        </nav>
+      }
+    </div>
+
+    <div class="mkt-footer-brand">Pulse · © {{ year }}</div>
+  </div>
+</footer>

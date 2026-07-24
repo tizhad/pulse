@@ -20,33 +20,18 @@
   filter: blur(80px);
 }
 
-.ty-blob--tl {
-  top: -160px;
-  left: -160px;
-  width: 480px;
-  height: 480px;
-  background: var(--gradient-primary);
-  opacity: 0.45;
-}
-
-.ty-blob--br {
-  bottom: -160px;
-  right: -160px;
-  width: 420px;
-  height: 420px;
-  background: var(--gradient-cool);
-  opacity: 0.35;
+.ty-bg-blobs {
+  display: none;
 }
 
 .ty-card {
   width: 100%;
   max-width: 520px;
-  border-radius: 2rem;
-  background: color-mix(in srgb, var(--surface) 92%, transparent);
-  backdrop-filter: blur(12px);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
   border: 1px solid var(--border);
   padding: 2.5rem;
-  box-shadow: var(--shadow-pop);
+  box-shadow: var(--shadow-card);
   text-align: center;
 }
 
@@ -62,9 +47,9 @@
 }
 
 .ty-h1 {
-  font-size: 1.75rem;
-  font-weight: 800;
-  letter-spacing: -0.025em;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: var(--text-display-3);
   color: var(--text);
   margin: 0 0 0.75rem;
 }
@@ -151,7 +136,7 @@
   justify-content: center;
   height: 48px;
   padding: 0 24px;
-  border-radius: 0.875rem;
+  border-radius: 999px;
   border: 1px solid var(--border);
   background: var(--surface-hover);
   color: var(--text);

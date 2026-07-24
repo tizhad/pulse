@@ -1,0 +1,176 @@
+.mkt-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1.25rem 1.5rem;
+
+  @media (min-width: 768px) {
+    padding: 1.25rem 2.5rem;
+  }
+}
+
+.mkt-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.mkt-logo-mark {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 1rem;
+  background: var(--forest);
+  color: var(--forest-text);
+  display: grid;
+  place-items: center;
+  box-shadow: var(--shadow-pop);
+  flex-shrink: 0;
+}
+
+.mkt-logo-ping {
+  position: absolute;
+  inset: 0;
+  border-radius: 1rem;
+  background: var(--forest);
+  opacity: 0.3;
+  animation: mkt-ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes mkt-ping {
+  75%, 100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+.mkt-logo-text {
+  line-height: 1.1;
+}
+
+.mkt-logo-name {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 20px;
+  color: var(--text);
+}
+
+.mkt-logo-sub {
+  font-family: var(--font-sans);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--gold-deep);
+  margin-top: 1px;
+}
+
+.mkt-nav-links {
+  display: none;
+  align-items: center;
+  gap: 2rem;
+
+  @media (min-width: 768px) {
+    display: flex;
+  }
+
+  a {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    transition: color var(--transition);
+    text-decoration: none;
+
+    &:hover { color: var(--text); }
+  }
+}
+
+.mkt-menu-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  flex-shrink: 0;
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+
+  &:hover {
+    background: var(--surface-hover);
+    color: var(--text);
+  }
+}
+
+.mkt-mobile-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 199;
+  background: rgba(0, 0, 0, 0.4);
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+}
+
+.mkt-mobile-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 200;
+  width: min(78vw, 300px);
+  background: var(--surface);
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 5rem 1rem 1.5rem;
+
+  a {
+    font-family: var(--font-sans);
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color var(--transition), background var(--transition);
+
+    &:hover {
+      background: var(--surface-hover);
+      color: var(--text);
+    }
+  }
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+}
+
+.mkt-nav-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--forest);
+  color: var(--forest-text);
+  border-radius: 999px;
+  padding: 9px 18px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: var(--shadow-soft);
+  text-decoration: none;
+  transition: opacity var(--transition);
+
+  &:hover { opacity: 0.88; }
+}

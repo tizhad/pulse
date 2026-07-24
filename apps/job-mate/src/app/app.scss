@@ -101,7 +101,8 @@
   width: 34px;
   height: 34px;
   border-radius: 9px;
-  background: var(--gradient-primary);
+  background: var(--forest);
+  color: var(--forest-text);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -223,7 +224,7 @@
   display: block;
   width: 100%;
   padding: 0.5rem 0.75rem;
-  border-radius: 8px;
+  border-radius: 999px;
   border: none;
   background: var(--accent);
   color: #fff;

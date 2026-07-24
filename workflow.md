@@ -126,3 +126,20 @@
 - Bug found and fixed along the way: `/starter-kit` was missing from `App.noShellRoutes` (`app.ts`), so visiting it rendered the dashboard app-shell (sidebar + its own mobile hamburger) wrapped around the page's own marketing header — a stray fixed-position shell header was actually intercepting clicks meant for the new starter-kit mobile menu. Added `/starter-kit` to `noShellRoutes`.
 - Projects affected: `job-mate`
 - Playwright test added: yes (`e2e/marketing-mobile-nav.spec.ts` — desktop/mobile visibility for both pages, toggle open/close, backdrop close, link navigation closes menu)
+
+---
+
+## Editorial Design System Rollout — completed 2026-07-23
+
+- Full-app visual redesign replacing three inconsistent design languages (cream/indigo CRUD UI, dark-terminal `/portfolio`, glassmorphism Landing/Starter-Kit) with one unified editorial system, commissioned from a Lovable-generated `/portfolio` reference and extended app-wide at the user's request. See `decision.md` for the full architectural rationale.
+- Self-hosted Instrument Serif + Work Sans (`apps/job-mate/public/fonts/`, `styles/_fonts.scss`), removed unused Google Fonts CDN links
+- New palette (cream `#FAF8F2` / forest `#1A2E1F` / gold `#A8875A`) and new global utilities (`.eyebrow`, `.bento-grid`/`.bento-card`, `.marquee`, pill `.btn-primary`) in `styles/_tokens.scss`
+- Rewrote Landing, Starter-Kit, and Portfolio to the new bento/editorial layout; extracted `MarketingNavComponent`/`MarketingFooterComponent` to remove `ln-*`/`sk-*` duplicated nav/footer markup
+- Re-skinned the root shell (`app.html`/`app.scss`) and auth modal — sidebar nav deliberately kept compact/sans-serif rather than editorial, per a density rule that reserves serif treatment for headlines/eyebrows/empty-states and keeps tables/badges/forms/nav dense
+- Applied the same density rule across Dashboard, Subjects (+ detail), Companies, Applications; promoted duplicated `.page-title`/`.page-header`/`.page-subtitle`/`.empty-state` rules (found identical across 7-9 components) to global utilities instead of editing each file
+- Retinted remaining surfaces (Settings, Resume, Ask AI, Thank-you, Download) via the token cascade plus targeted fixes (old indigo gradient tokens retargeted, no longer referencing `#6C5CE7`)
+- Rewrote `/contact` from its pre-existing One Piece-themed easter egg to the editorial system (user's explicit choice after I flagged it as a fourth, previously-unknown design language)
+- Dropped the `prefers-color-scheme: dark` auto dark-mode override tied to the retired indigo palette
+- Deleted the empty, unreferenced `shared/components/status-badge/` directory
+- Projects affected: `job-mate` (`wealth-mate` untouched, build verified unaffected)
+- Playwright test added: yes — rewrote `e2e/marketing-mobile-nav.spec.ts` and `e2e/portfolio.spec.ts` for the new markup/copy; full suite (`e2e/guest-limits.spec.ts`, `e2e/shell-navigation.spec.ts`, both rewritten specs) green across all 4 device projects (180 tests)

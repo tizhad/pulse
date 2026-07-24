@@ -1,0 +1,103 @@
+// Editorial design system foundation: fonts, type scale, and layout utilities
+// layered on top of the palette tokens defined in styles.scss's :root.
+
+:root {
+  /* editorial palette additions */
+  --forest:           #1A2E1F;
+  --forest-text:      #F5F1E8;
+  --gold:             #A8875A;
+  --gold-deep:        #8A6D42;
+  --gold-light:       #F1E9D9;
+  --gold-text:        #1A2E1F;
+
+  /* fonts */
+  --font-serif:       'Instrument Serif', ui-serif, Georgia, serif;
+  --font-sans:        'Work Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono:        'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+
+  /* display type scale (headlines only — never body/data/form text) */
+  --text-display-1:   clamp(2.5rem, 2rem + 2.5vw, 4.5rem);
+  --text-display-2:   clamp(1.75rem, 1.5rem + 1.4vw, 2.75rem);
+  --text-display-3:   clamp(1.25rem, 1.1rem + 0.7vw, 1.75rem);
+}
+
+/* ── Accent swash (italic serif emphasis word within a headline) ─────────── */
+
+.accent-swash {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--gold);
+}
+
+/* ── Eyebrow micro-label ─────────────────────────────────────────────────── */
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+}
+
+/* ── Bento grid primitives (marketing/portfolio surfaces only) ──────────── */
+
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bento-card {
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+
+  &--cream {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    color: var(--text);
+  }
+
+  &--dark {
+    background: var(--forest);
+    color: var(--forest-text);
+  }
+
+  &--span-2 {
+    grid-column: span 2;
+
+    @media (max-width: 768px) {
+      grid-column: span 1;
+    }
+  }
+}
+
+/* ── Marquee (tech-stack ticker) ─────────────────────────────────────────── */
+
+.marquee {
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 2.5rem;
+  animation: marquee-scroll 30s linear infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
