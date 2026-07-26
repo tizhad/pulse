@@ -628,7 +628,7 @@
   display: grid;
   gap: 2.5rem;
 
-  @media (min-width: 1024px) {
+  @media (min-width: 860px) {
     grid-template-columns: repeat(3, 1fr);
   }
 }
