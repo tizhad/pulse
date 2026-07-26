@@ -254,9 +254,8 @@
       <div class="bento-grid ln-features-grid">
         @for (f of features; track f.title) {
           <div
-            class="bento-card ln-feature-card"
-            [class.bento-card--dark]="f.dark"
-            [class.bento-card--cream]="!f.dark"
+            class="bento-card bento-card--cream ln-feature-card"
+            [class.ln-feature-card--forest]="f.forestOnHover"
           >
             <div class="ln-feature-card-top">
               <div class="ln-feature-icon">

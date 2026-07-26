@@ -525,7 +525,10 @@
   cursor: pointer;
   transition:
     transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-    box-shadow 0.3s ease;
+    box-shadow 0.3s ease,
+    background var(--transition),
+    color var(--transition),
+    border-color var(--transition);
 
   &:hover {
     transform: translateY(-8px) scale(1.02);
@@ -541,8 +544,14 @@
   }
 }
 
-.bento-card--dark.ln-feature-card:hover .ln-feature-title {
-  color: var(--gold);
+.ln-feature-card--forest:hover {
+  background: var(--forest);
+  border-color: transparent;
+  color: var(--forest-text);
+
+  .ln-feature-title {
+    color: var(--gold);
+  }
 }
 
 .ln-feature-card-top {
@@ -564,7 +573,7 @@
   transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.bento-card--dark .ln-feature-icon {
+.ln-feature-card--forest:hover .ln-feature-icon {
   background: rgba(245, 241, 232, 0.12);
   color: var(--gold);
 }
@@ -581,7 +590,7 @@
   color: var(--text-muted);
 }
 
-.bento-card--dark .ln-feature-badge {
+.ln-feature-card--forest:hover .ln-feature-badge {
   background: rgba(245, 241, 232, 0.12);
   color: var(--forest-text);
 }
