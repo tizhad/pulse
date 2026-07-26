@@ -52,7 +52,7 @@ export class LandingComponent implements OnInit {
       iconName: 'book-open',
       forestOnHover: false,
       title: 'Nest subjects forever',
-      body: 'Break topics into sub-subjects (and sub-sub-subjects). Tag priority, status, and interview potential.',
+      body: 'Break topics into sub-subjects (and sub-sub-subjects). Tag priority, status, and category as you go.',
       badge: 'Smart tree',
     },
     {
@@ -72,9 +72,9 @@ export class LandingComponent implements OnInit {
     {
       iconName: 'target',
       forestOnHover: false,
-      title: 'Priority that adapts',
-      body: 'Pulse re-ranks your focus list based on upcoming interviews and the gaps in your prep.',
-      badge: 'Adaptive',
+      title: 'Priority, your call',
+      body: 'Tag each subject critical, high, medium or low, then filter by priority, status or company to keep your board honest.',
+      badge: 'Manual tagging',
     },
     {
       iconName: 'zap',
@@ -114,7 +114,7 @@ export class LandingComponent implements OnInit {
     {
       num: '02',
       title: 'Prioritize',
-      body: 'Pulse scores interview potential. Sort, search and surface what actually matters this week.',
+      body: 'Tag priority by hand, then sort, search and filter to surface what actually matters this week.',
     },
     {
       num: '03',
