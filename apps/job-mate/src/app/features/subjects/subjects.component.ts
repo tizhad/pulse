@@ -30,7 +30,7 @@ type CategoryGroup = {
   readonly statusCounts: Partial<Record<SubjectStatus, number>>;
 };
 
-type SortKey = 'title' | 'qa' | 'status' | 'priority' | 'potential';
+type SortKey = 'title' | 'qa' | 'status' | 'priority';
 
 @Component({
   selector: 'app-subjects',
@@ -69,7 +69,7 @@ export class SubjectsComponent {
 
   readonly isGuest = computed(() => !this.auth.isAuthenticated());
 
-  readonly sortKey = signal<SortKey>('potential');
+  readonly sortKey = signal<SortKey>('priority');
   readonly showForm = signal(false);
   readonly grouping = signal(false);
 
@@ -78,7 +78,6 @@ export class SubjectsComponent {
   );
 
   private readonly sortLabels: Record<SortKey, string> = {
-    potential: 'Potential',
     priority: 'Priority',
     title: 'Title',
     qa: 'Q&A Count',
@@ -101,7 +100,6 @@ export class SubjectsComponent {
         case 'qa':       return b.qa.length - a.qa.length;
         case 'status':   return this.STATUS_ORDER[a.status] - this.STATUS_ORDER[b.status];
         case 'priority':  return this.PRIORITY_ORDER[a.priority] - this.PRIORITY_ORDER[b.priority];
-        case 'potential': return b.confidenceScore - a.confidenceScore;
       }
     });
   });
@@ -190,7 +188,7 @@ export class SubjectsComponent {
   }
 
   cycleSort(): void {
-    const keys: SortKey[] = ['potential', 'priority', 'title', 'qa', 'status'];
+    const keys: SortKey[] = ['priority', 'title', 'qa', 'status'];
     const idx = keys.indexOf(this.sortKey());
     this.sortKey.set(keys[(idx + 1) % keys.length]);
   }
