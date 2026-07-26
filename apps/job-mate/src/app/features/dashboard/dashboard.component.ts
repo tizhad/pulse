@@ -50,15 +50,8 @@ export class DashboardComponent {
 
   readonly ringCircumference = 2 * Math.PI * 42;
 
-  private readonly PRIORITY_ORDER: Record<string, number> = {
-    critical: 0, high: 1, medium: 2, low: 3,
-  };
-
   readonly todaysFocus = computed(() =>
-    this.studyStore.subjects()
-      .filter(s => s.status !== 'mastered')
-      .sort((a, b) => (this.PRIORITY_ORDER[a.priority] ?? 99) - (this.PRIORITY_ORDER[b.priority] ?? 99))
-      .slice(0, 5),
+    this.studyStore.subjects().filter(s => s.isPinned && s.status !== 'mastered'),
   );
 
   readonly recentApplications = computed(() =>

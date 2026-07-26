@@ -50,6 +50,96 @@
   gap: 6px;
 }
 
+.status-dropdown-wrap {
+  position: relative;
+}
+
+.badge-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: filter var(--transition);
+  padding: 10px;
+
+  &:hover {
+    filter: brightness(0.95);
+  }
+
+  svg {
+    opacity: 0.7;
+  }
+}
+
+.status-menu-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 19;
+  background: transparent;
+}
+
+.status-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 20;
+  min-width: 170px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-pop);
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.status-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  text-align: left;
+  white-space: nowrap;
+  transition: background var(--transition);
+
+  &:hover {
+    background: var(--surface-hover);
+  }
+
+  &.active {
+    font-weight: 700;
+  }
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+
+  &.status-not-started {
+    background: var(--status-not-started-text);
+  }
+  &.status-in-progress {
+    background: var(--status-in-progress-text);
+  }
+  &.status-needs-review {
+    background: var(--status-needs-review-text);
+  }
+  &.status-confident {
+    background: var(--status-confident-text);
+  }
+  &.status-mastered {
+    background: var(--status-mastered-text);
+  }
+}
+
 .company-chip {
   background: var(--surface-hover);
   border: 0.5px solid var(--border);
@@ -305,19 +395,43 @@
   line-height: 1.65;
   color: var(--text);
 
-  p { margin: 0 0 0.35rem; }
-  h2 { font-size: 1rem; font-weight: 700; color: var(--text); margin: 0.75rem 0 0.25rem; letter-spacing: -0.01em; }
-  strong { font-weight: 700; }
-  em { font-style: italic; }
-  ul { list-style: disc; padding-left: 1.25rem; margin: 0.25rem 0; }
-  ol { list-style: decimal; padding-left: 1.25rem; margin: 0.25rem 0; }
-  li { margin: 2px 0; }
+  p {
+    margin: 0 0 0.35rem;
+  }
+  h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0.75rem 0 0.25rem;
+    letter-spacing: -0.01em;
+  }
+  strong {
+    font-weight: 700;
+  }
+  em {
+    font-style: italic;
+  }
+  ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+    margin: 0.25rem 0;
+  }
+  ol {
+    list-style: decimal;
+    padding-left: 1.25rem;
+    margin: 0.25rem 0;
+  }
+  li {
+    margin: 2px 0;
+  }
 
   a {
     color: var(--accent);
     text-decoration: underline;
     text-underline-offset: 2px;
-    &:hover { opacity: 0.75; }
+    &:hover {
+      opacity: 0.75;
+    }
   }
 
   code {
@@ -395,21 +509,46 @@
   line-height: 1.65;
   color: var(--text);
   min-height: 80px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
 
-  p { margin: 0 0 0.25rem; }
-  h2 { font-size: 1rem; font-weight: 700; color: var(--text); margin: 0.625rem 0 0.25rem; letter-spacing: -0.01em; }
-  strong { font-weight: 700; }
-  em { font-style: italic; }
-  ul { list-style: disc; padding-left: 1.25rem; margin: 0.25rem 0; }
-  ol { list-style: decimal; padding-left: 1.25rem; margin: 0.25rem 0; }
-  li { margin: 2px 0; }
+  p {
+    margin: 0 0 0.25rem;
+  }
+  h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0.625rem 0 0.25rem;
+    letter-spacing: -0.01em;
+  }
+  strong {
+    font-weight: 700;
+  }
+  em {
+    font-style: italic;
+  }
+  ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+    margin: 0.25rem 0;
+  }
+  ol {
+    list-style: decimal;
+    padding-left: 1.25rem;
+    margin: 0.25rem 0;
+  }
+  li {
+    margin: 2px 0;
+  }
 
   a {
     color: var(--accent);
     text-decoration: underline;
     text-underline-offset: 2px;
-    &:hover { opacity: 0.75; }
+    &:hover {
+      opacity: 0.75;
+    }
   }
 
   // Inline code only — not inside pre

@@ -1,4 +1,7 @@
 .page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
   padding: 2.5rem 2rem;
   max-width: 1200px;
   margin: 0 auto;
@@ -25,23 +28,6 @@
   @media (max-width: 480px) {
     padding: 1.25rem;
     border-radius: 1.25rem;
-  }
-}
-
-/* ── Top row ─────────────────────────────────────────────────────────────── */
-
-.top-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 1.25rem;
-  margin-bottom: 1.25rem;
-
-  @media (max-width: 900px) {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  @media (max-width: 600px) {
-    grid-template-columns: 1fr;
   }
 }
 
@@ -260,16 +246,6 @@
 
 /* ── Bottom row ──────────────────────────────────────────────────────────── */
 
-.bottom-row {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 1.25rem;
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-  }
-}
-
 .section-header {
   display: flex;
   align-items: center;
@@ -326,12 +302,20 @@
 }
 
 .focus-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   font-size: 13px;
   font-weight: 600;
   color: var(--text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.focus-pin-icon {
+  flex-shrink: 0;
+  color: var(--gold);
 }
 
 .focus-meta {

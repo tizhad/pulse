@@ -31,6 +31,7 @@ function buildGuestSubject(data: Parameters<typeof toSubjectInsert>[0]): Subject
     lastReviewedAt: null,
     nextReviewAt: null,
     isArchived: false,
+    isPinned: false,
     createdAt: now,
     updatedAt: now,
     companyTags: [],
@@ -173,8 +174,13 @@ export class StudyStore {
 
   async updateSubject(id: string, patch: Partial<Pick<Subject,
     'title' | 'summary' | 'category' | 'priority' | 'status' |
-    'confidenceScore' | 'estimatedReadTime' | 'tags' | 'sourceUrl' | 'isArchived'
+    'confidenceScore' | 'estimatedReadTime' | 'tags' | 'sourceUrl' | 'isArchived' | 'isPinned'
   >>): Promise<void> {
+    if (!this.auth.user()) {
+      this.guestContent.updateSubject(id, patch);
+      return;
+    }
+
     const prev = this._subjects();
     this._subjects.update(list => list.map(s => s.id === id ? { ...s, ...patch } : s));
 
@@ -190,6 +196,7 @@ export class StudyStore {
     if (patch.tags !== undefined) dbPatch.tags = patch.tags;
     if (patch.sourceUrl !== undefined) dbPatch.source_url = patch.sourceUrl ?? null;
     if (patch.isArchived !== undefined) dbPatch.is_archived = patch.isArchived;
+    if (patch.isPinned !== undefined) dbPatch.is_pinned = patch.isPinned;
 
     const { error } = await this.supabase.client.from('study_subjects').update(dbPatch).eq('id', id);
     if (error) this._subjects.set(prev);
@@ -212,6 +219,12 @@ export class StudyStore {
     }).eq('id', id);
 
     if (error) this._subjects.set(prev);
+  }
+
+  async togglePinned(id: string): Promise<void> {
+    const sub = this.getById(id);
+    if (!sub) return;
+    await this.updateSubject(id, { isPinned: !sub.isPinned });
   }
 
   async deleteSubject(id: string): Promise<void> {

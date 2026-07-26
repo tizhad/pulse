@@ -258,6 +258,12 @@ export class SubjectsComponent {
     }
   }
 
+  toggleFocus(event: Event, subject: Subject): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.store.togglePinned(subject.id);
+  }
+
   statusClass(status: SubjectStatus): string {
     return `status-${status.replace('_', '-')}`;
   }

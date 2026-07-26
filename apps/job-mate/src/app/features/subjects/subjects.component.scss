@@ -296,6 +296,38 @@
   color: var(--text-secondary);
 }
 
+.focus-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  margin-top: 2px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  transition: background var(--transition), border-color var(--transition), color var(--transition);
+
+  &:hover {
+    background: var(--surface-hover);
+    color: var(--text);
+  }
+
+  &.active {
+    background: var(--gold-light);
+    border-color: color-mix(in srgb, var(--gold) 40%, transparent);
+    color: var(--gold-deep);
+
+    &:hover {
+      background: color-mix(in srgb, var(--gold) 22%, transparent);
+    }
+  }
+}
+
 .subjects-empty {
   grid-column: 1 / -1;
   font-size: 13px;

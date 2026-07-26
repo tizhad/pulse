@@ -4,25 +4,29 @@
   <!-- ── Hero ──────────────────────────────────────────────────────────────── -->
   <section class="ln-hero">
     <div class="ln-hero-text">
-      <span class="eyebrow ln-eyebrow">Interview prep · built daily</span>
+      <!-- <span class="eyebrow ln-eyebrow">Interview prep · built daily</span> -->
 
       <h1 class="ln-hero-h1">
-        Feel your <span class="accent-swash">momentum</span> build daily. Land the offer.
+        Your assistance in <span class="accent-swash">Interview</span> Prep.
+        Once and for all.
       </h1>
 
       <p class="ln-hero-desc">
-        <strong>Pulse</strong> is the playful workspace for serious candidates.
-        Track every subject, company and application — and watch your prep
-        heartbeat grow stronger every day.
+        <strong>Pulse</strong> is the workspace for serious candidates. Track
+        every subject, company and application, and watch your prep heartbeat
+        grow stronger every day.
       </p>
 
       <div class="ln-hero-actions">
-        <a [routerLink]="['/dashboard']" class="btn-primary btn-arrow ln-btn-lg">
-          Continue with Pulse
-        </a>
-        <span class="ln-btn-outline-lg ln-btn-disabled"
-          >Watch a 60s tour <span class="ln-soon-tag">Soon</span></span
+        <a
+          [routerLink]="['/dashboard']"
+          class="btn-primary btn-arrow ln-btn-lg"
         >
+          Lets start prepping
+        </a>
+        <!-- <span class="ln-btn-outline-lg ln-btn-disabled"
+          >Watch a 60s tour <span class="ln-soon-tag">Soon</span></span
+        > -->
       </div>
     </div>
 
@@ -173,19 +177,87 @@
     </div>
   </section>
 
+  <!-- ── Technical specs ──────────────────────────────────────────────────── -->
+  <section class="ln-stack" id="stack">
+    <div class="ln-section-inner">
+      <div class="ln-stack-header">
+        <h2 class="ln-stack-h2">Built with</h2>
+      </div>
+
+      <div class="marquee ln-stack-marquee">
+        <div class="marquee-track">
+          @for (t of techStack; track t + '-a') {
+            <span class="ln-stack-pill">{{ t }}</span>
+          }
+          @for (t of techStack; track t + '-b') {
+            <span class="ln-stack-pill" aria-hidden="true">{{ t }}</span>
+          }
+        </div>
+      </div>
+
+      <div class="ln-specs-layout">
+        <div class="ln-stack-table">
+          <div class="ln-stack-row">
+            <span class="ln-stack-label">Core ecosystem</span>
+            <span class="ln-stack-items"
+              >Angular 21 · Zoneless change detection · Standalone components ·
+              Strict TypeScript</span
+            >
+          </div>
+          <div class="ln-stack-row">
+            <span class="ln-stack-label">State &amp; forms</span>
+            <span class="ln-stack-items"
+              >Signals · Computed &amp; effects · NgRx SignalStore · Signal
+              Forms</span
+            >
+          </div>
+          <div class="ln-stack-row">
+            <span class="ln-stack-label">Architecture</span>
+            <span class="ln-stack-items"
+              >Nx Monorepo · Shared component lib · Functional guards &amp;
+              resolvers</span
+            >
+          </div>
+          <div class="ln-stack-row">
+            <span class="ln-stack-label">Quality</span>
+            <span class="ln-stack-items"
+              >Vitest unit tests · Playwright E2E · WCAG 2.1 AA
+              accessibility</span
+            >
+          </div>
+        </div>
+
+        <pre
+          class="code-block ln-code-panel"
+        ><code><span class="ln-code-comment">// stdout: pulse.status</span>
+<span class="ln-code-kw">const</span> pulse = &#123;
+  changeDetection: <span class="ln-code-str">"zoneless"</span>,
+  state: <span class="ln-code-str">"signals + SignalStore"</span>,
+  forms: <span class="ln-code-str">"Signal Forms"</span>,
+  monorepo: <span class="ln-code-str">"Nx"</span>,
+&#125;;</code></pre>
+      </div>
+    </div>
+  </section>
+
   <!-- ── Features ──────────────────────────────────────────────────────────── -->
   <section class="ln-features" id="features">
     <div class="ln-section-inner">
       <div class="ln-features-header">
         <span class="eyebrow">Everything in one heartbeat</span>
         <h2 class="ln-features-h2">
-          Built for the way candidates <span class="accent-swash">actually</span> prep.
+          Built for the way candidates
+          <span class="accent-swash">actually</span> prep.
         </h2>
       </div>
 
       <div class="bento-grid ln-features-grid">
         @for (f of features; track f.title) {
-          <div class="bento-card ln-feature-card" [class.bento-card--dark]="f.dark" [class.bento-card--cream]="!f.dark">
+          <div
+            class="bento-card ln-feature-card"
+            [class.bento-card--dark]="f.dark"
+            [class.bento-card--cream]="!f.dark"
+          >
             <div class="ln-feature-card-top">
               <div class="ln-feature-icon">
                 @switch (f.iconName) {

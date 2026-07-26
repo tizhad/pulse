@@ -92,6 +92,19 @@ export class LandingComponent implements OnInit {
     },
   ] as const;
 
+  readonly techStack = [
+    'Angular 21',
+    'Signals',
+    'Zoneless',
+    'NgRx SignalStore',
+    'Signal Forms',
+    'TypeScript',
+    'Nx Monorepo',
+    'RxJS',
+    'Vitest',
+    'Playwright',
+  ] as const;
+
   readonly steps = [
     {
       num: '01',

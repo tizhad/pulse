@@ -150,6 +150,28 @@ export class SubjectDetailComponent {
     { value: 'low', label: 'Low' },
   ];
 
+  /* ── Quick status dropdown ───────────────────────────────────────────────── */
+
+  readonly statusMenuOpen = signal(false);
+
+  toggleStatusMenu(): void {
+    this.statusMenuOpen.update(v => !v);
+  }
+
+  async selectStatus(status: SubjectStatus): Promise<void> {
+    this.statusMenuOpen.set(false);
+    const sub = this.subject();
+    if (!sub || sub.status === status) return;
+
+    await this.store.updateSubject(sub.id, { status });
+    this.posthog.capture('subject_status_updated', {
+      previous_status: sub.status,
+      new_status: status,
+      subject_title: sub.title,
+      priority: sub.priority,
+    });
+  }
+
   openEdit(): void {
     const sub = this.subject();
     if (!sub) return;
@@ -163,7 +185,6 @@ export class SubjectDetailComponent {
   }
 
   async saveEdit(): Promise<void> {
-    if (!this.requireAuth()) return;
     const sub = this.subject();
     const newStatus = this.editStatus();
     await this.store.updateSubject(this.id(), {

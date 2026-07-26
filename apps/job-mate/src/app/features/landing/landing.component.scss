@@ -43,9 +43,9 @@
 
 .ln-hero-h1 {
   font-family: var(--font-serif);
-  font-weight: 400;
-  font-size: var(--text-display-1);
-  line-height: 1.05;
+  font-weight: 500;
+  font-size: clamp(3rem, 2.2rem + 3.5vw, 5.5rem);
+  line-height: 1.1;
   color: var(--text);
   margin-bottom: 1.75rem;
 }
@@ -104,7 +104,9 @@
   white-space: nowrap;
   transition: background var(--transition);
 
-  &:hover { background: var(--surface-hover); }
+  &:hover {
+    background: var(--surface-hover);
+  }
 }
 
 .ln-btn-disabled {
@@ -178,7 +180,9 @@
   transform: rotate(5deg);
   color: var(--forest-text);
 
-  .ln-float-label { color: rgba(245, 241, 232, 0.75); }
+  .ln-float-label {
+    color: rgba(245, 241, 232, 0.75);
+  }
 }
 
 .ln-float-offer-title {
@@ -360,6 +364,127 @@
   color: var(--text);
 }
 
+/* ── Technical specs section ─────────────────────────────────────────────── */
+
+.ln-stack {
+  padding: 0 0 6rem;
+}
+
+.ln-stack-header {
+  max-width: 640px;
+  margin-bottom: 2.5rem;
+
+  .eyebrow {
+    margin-bottom: 0.75rem;
+  }
+}
+
+.ln-stack-h2 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: var(--text-display-1);
+  color: var(--text);
+  line-height: 1.15;
+}
+
+.ln-stack-marquee {
+  margin-bottom: 2.5rem;
+}
+
+.ln-stack-pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.ln-specs-layout {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.ln-stack-table {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.ln-stack-row {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 1.5rem;
+  padding: 0.9rem 1.1rem;
+  border-bottom: 1px solid var(--border);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:nth-child(odd) {
+    background: var(--surface-hover);
+  }
+}
+
+.ln-stack-label {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--gold-deep);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  align-self: center;
+}
+
+.ln-stack-items {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  align-self: center;
+}
+
+.ln-code-panel {
+  background: var(--forest);
+  border-color: transparent;
+  color: rgba(245, 241, 232, 0.85);
+}
+
+.ln-code-comment {
+  color: rgba(245, 241, 232, 0.45);
+}
+
+.ln-code-kw {
+  color: var(--gold);
+}
+
+.ln-code-str {
+  color: #9fd8b8;
+}
+
+@media (max-width: 860px) {
+  .ln-specs-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .ln-stack-row {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+}
+
 /* ── Features section ────────────────────────────────────────────────────── */
 
 .ln-features {
@@ -370,7 +495,9 @@
   max-width: 640px;
   margin-bottom: 3rem;
 
-  .eyebrow { margin-bottom: 0.75rem; }
+  .eyebrow {
+    margin-bottom: 0.75rem;
+  }
 }
 
 .ln-features-h2 {
@@ -394,15 +521,27 @@
 }
 
 .ln-feature-card {
-  transition: transform var(--transition), box-shadow var(--transition);
+  cursor: pointer;
+  transition:
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.3s ease;
 
   &:hover {
-    transform: translateY(-4px);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--shadow-pop);
 
     .ln-feature-icon {
-      transform: scale(1.08);
+      transform: scale(1.15) rotate(-6deg);
+    }
+
+    .ln-feature-title {
+      color: var(--gold-deep);
     }
   }
+}
+
+.bento-card--dark.ln-feature-card:hover .ln-feature-title {
+  color: var(--gold);
 }
 
 .ln-feature-card-top {
@@ -421,7 +560,7 @@
   background: var(--gold-light);
   color: var(--gold-deep);
   flex-shrink: 0;
-  transition: transform var(--transition);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .bento-card--dark .ln-feature-icon {
@@ -450,6 +589,7 @@
   font-size: 17px;
   font-weight: 700;
   letter-spacing: -0.01em;
+  transition: color var(--transition);
 }
 
 .ln-feature-body {

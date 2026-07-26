@@ -3,22 +3,22 @@
 
 :root {
   /* editorial palette additions */
-  --forest:           #1A2E1F;
-  --forest-text:      #F5F1E8;
-  --gold:             #A8875A;
-  --gold-deep:        #8A6D42;
-  --gold-light:       #F1E9D9;
-  --gold-text:        #1A2E1F;
+  --forest: #1a2e1f;
+  --forest-text: #f5f1e8;
+  --gold: #a8875a;
+  --gold-deep: #68502c;
+  --gold-light: #f1e9d9;
+  --gold-text: #1a2e1f;
 
   /* fonts */
-  --font-serif:       'Instrument Serif', ui-serif, Georgia, serif;
-  --font-sans:        'Work Sans', ui-sans-serif, system-ui, sans-serif;
-  --font-mono:        'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  --font-serif: 'Instrument Serif', ui-serif, Georgia, serif;
+  --font-sans: 'Work Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
 
   /* display type scale (headlines only — never body/data/form text) */
-  --text-display-1:   clamp(2.5rem, 2rem + 2.5vw, 4.5rem);
-  --text-display-2:   clamp(1.75rem, 1.5rem + 1.4vw, 2.75rem);
-  --text-display-3:   clamp(1.25rem, 1.1rem + 0.7vw, 1.75rem);
+  --text-display-1: clamp(2.5rem, 2rem + 2.5vw, 4.5rem);
+  --text-display-2: clamp(1.75rem, 1.5rem + 1.4vw, 2.75rem);
+  --text-display-3: clamp(1.25rem, 1.1rem + 0.7vw, 1.75rem);
 }
 
 /* ── Accent swash (italic serif emphasis word within a headline) ─────────── */
@@ -36,7 +36,7 @@
   align-items: center;
   gap: 0.5em;
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 18px;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -83,7 +83,13 @@
 
 .marquee {
   overflow: hidden;
-  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
 }
 
 .marquee-track {
@@ -98,6 +104,10 @@
 }
 
 @keyframes marquee-scroll {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }

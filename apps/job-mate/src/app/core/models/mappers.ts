@@ -40,6 +40,7 @@ export function fromSubjectRow(
     lastReviewedAt: row.last_reviewed_at ? new Date(row.last_reviewed_at) : null,
     nextReviewAt: row.next_review_at ? new Date(row.next_review_at) : null,
     isArchived: row.is_archived,
+    isPinned: row.is_pinned,
     createdAt: new Date(row.created_at),
     updatedAt: new Date(row.updated_at),
     companyTags: related.companyTags.map(fromCompanyTagRow),
@@ -52,7 +53,7 @@ export function fromSubjectRow(
 export function toSubjectInsert(
   data: Pick<Subject, 'title' | 'summary' | 'category' | 'priority' | 'status' | 'confidenceScore' | 'estimatedReadTime' | 'tags' | 'sourceUrl'>,
   userId: string,
-): Omit<SubjectRow, 'id' | 'created_at' | 'updated_at' | 'ai_summary' | 'interviewed_on' | 'last_reviewed_at' | 'next_review_at' | 'is_archived' | 'qa'> {
+): Omit<SubjectRow, 'id' | 'created_at' | 'updated_at' | 'ai_summary' | 'interviewed_on' | 'last_reviewed_at' | 'next_review_at' | 'is_archived' | 'is_pinned' | 'qa'> {
   return {
     user_id: userId,
     title: data.title,
