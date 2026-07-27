@@ -29,6 +29,8 @@ Organize everything you need to learn into subjects. Each subject has:
 - **Category** — Angular, React, JavaScript, TypeScript, System Design, and more
 - **Sortable table** — sort by priority, title, Q&A count, or status
 - **Inline status picker** — change status directly from the table without opening the subject
+- **Grouped view** — toggle from a flat table to cards grouped by category, with per-group status breakdown
+- **Archive & delete** — archive a subject to hide it reversibly, or delete it permanently; restore or purge archived subjects from the dashboard
 - **Rich notes** — full Tiptap rich text editor with 6 switchable code highlight themes
 - **Q&A pairs** — add questions and answers with difficulty levels (easy / medium / hard)
 - **Company tags** — link subjects to the companies that asked about them
@@ -90,6 +92,7 @@ AI-generated study outlines and Q&A sessions tailored to your weak spots.
 | Build system        | Nx monorepo                               |
 | E2E testing         | Playwright                                |
 | Unit testing        | Vitest                                    |
+| Analytics           | PostHog                                   |
 | Deployment          | Cloudflare Pages                          |
 
 ---
