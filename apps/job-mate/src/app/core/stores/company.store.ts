@@ -42,9 +42,15 @@ export class CompanyStore {
     const userId = this.auth.user()?.id;
     if (guests.length === 0 || !userId) return;
 
+    const { data: existing } = await this.supabase.client
+      .from('companies').select('name').eq('user_id', userId);
+    const existingNames = new Set((existing ?? []).map(row => row.name.toLowerCase()));
+
     for (const guest of guests) {
+      if (existingNames.has(guest.name.toLowerCase())) continue;
       await this.supabase.client.from('companies')
         .insert({ user_id: userId, name: guest.name, category: guest.category, status: guest.status });
+      existingNames.add(guest.name.toLowerCase());
     }
     this.guestContent.clearCompanies();
   }

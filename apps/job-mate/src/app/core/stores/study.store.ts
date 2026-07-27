@@ -104,7 +104,12 @@ export class StudyStore {
     const userId = this.auth.user()?.id;
     if (guests.length === 0 || !userId) return;
 
+    const { data: existing } = await this.supabase.client
+      .from('study_subjects').select('title').eq('user_id', userId);
+    const existingTitles = new Set((existing ?? []).map(row => row.title.toLowerCase()));
+
     for (const guest of guests) {
+      if (existingTitles.has(guest.title.toLowerCase())) continue;
       const payload = toSubjectInsert({
         title: guest.title,
         summary: guest.summary,
@@ -117,6 +122,7 @@ export class StudyStore {
         sourceUrl: guest.sourceUrl,
       }, userId);
       await this.supabase.client.from('study_subjects').insert(payload);
+      existingTitles.add(guest.title.toLowerCase());
     }
     this.guestContent.clearSubjects();
   }

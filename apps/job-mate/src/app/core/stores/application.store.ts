@@ -57,7 +57,13 @@ export class ApplicationStore {
     const userId = this.auth.user()?.id;
     if (guests.length === 0 || !userId) return;
 
+    const { data: existing } = await this.supabase.client
+      .from('applications').select('title, company').eq('user_id', userId);
+    const key = (title: string, company: string) => `${title.toLowerCase()}::${company.toLowerCase()}`;
+    const existingKeys = new Set((existing ?? []).map(row => key(row.title, row.company)));
+
     for (const guest of guests) {
+      if (existingKeys.has(key(guest.title, guest.company))) continue;
       await this.supabase.client.from('applications').insert({
         user_id: userId,
         title: guest.title,
@@ -69,6 +75,7 @@ export class ApplicationStore {
         url: guest.url,
         tags: guest.tags,
       });
+      existingKeys.add(key(guest.title, guest.company));
     }
     this.guestContent.clearApplications();
   }
