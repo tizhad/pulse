@@ -15,12 +15,21 @@ import { ApplicationStore } from '../../core/stores/application.store';
 import { Application, AppStatus } from '../../core/models/jobmate.models';
 import { AuthService } from '../../core/services/auth.service';
 import { AuthModalService } from '../../core/services/auth-modal.service';
-import { GuestContentService, GUEST_ITEM_LIMIT } from '../../core/services/guest-content.service';
+import {
+  GuestContentService,
+  GUEST_ITEM_LIMIT,
+} from '../../core/services/guest-content.service';
 import { PosthogService } from '../../core/services/posthog.service';
 import { ToastService } from '../../core/services/toast.service';
 import { CelebrationService } from '../../core/services/celebration.service';
 
-type SortKey = 'createdAt' | 'date' | 'updatedAt' | 'status' | 'title' | 'company';
+type SortKey =
+  | 'createdAt'
+  | 'date'
+  | 'updatedAt'
+  | 'status'
+  | 'title'
+  | 'company';
 type SortDir = 'asc' | 'desc';
 
 const STATUS_ORDER: Record<AppStatus, number> = {
@@ -103,9 +112,15 @@ export class ApplicationsComponent {
     return apps.sort((a, b) => {
       switch (key) {
         case 'createdAt':
-          return mul * (new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+          return (
+            mul *
+            (new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+          );
         case 'updatedAt':
-          return mul * (new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime());
+          return (
+            mul *
+            (new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime())
+          );
         case 'date':
           return mul * (a.date < b.date ? -1 : a.date > b.date ? 1 : 0);
         case 'status':
@@ -123,7 +138,11 @@ export class ApplicationsComponent {
       this.sortDir.update((d) => (d === 'asc' ? 'desc' : 'asc'));
     } else {
       this.sortKey.set(key);
-      this.sortDir.set(key === 'createdAt' || key === 'date' || key === 'updatedAt' ? 'desc' : 'asc');
+      this.sortDir.set(
+        key === 'createdAt' || key === 'date' || key === 'updatedAt'
+          ? 'desc'
+          : 'asc',
+      );
     }
   }
 
@@ -213,7 +232,9 @@ export class ApplicationsComponent {
     });
     this.saving.set(false);
     this.closeForm();
-    this.toast.success('Good job! Application logged — keep the momentum going. 🙌');
+    this.toast.success(
+      'Good job! Application logged — keep the momentum going. 🙌',
+    );
   }
 
   /* ── Edit modal ────────────────────────────────────────────────────────── */
@@ -298,9 +319,15 @@ export class ApplicationsComponent {
         company: company.trim(),
       });
       if (status === 'offer') {
-        this.celebration.celebrate('Well done!', 'You did it — congrats on the offer! 🎉');
+        this.celebration.celebrate(
+          'Well done!',
+          'You did it. Congrats on the offer! 🎉',
+        );
       } else if (status === 'rejected') {
-        this.toast.success("Sorry to hear that. But this isn't the end — on to the next opportunity! 💪");
+        this.celebration.encourage(
+          'Oh no!',
+          "Sorry to hear that. But this isn't the end, Go for the next opportunity! 💪",
+        );
       }
     }
     this.saving.set(false);

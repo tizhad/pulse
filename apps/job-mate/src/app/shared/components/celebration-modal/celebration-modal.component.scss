@@ -84,6 +84,16 @@
   &:active {
     transform: scale(0.97);
   }
+
+  &--encourage {
+    background: var(--sky);
+    color: #ffffff;
+
+    &:hover {
+      background: #1c8fd1;
+      color: #ffffff;
+    }
+  }
 }
 
 @keyframes confetti-fall {

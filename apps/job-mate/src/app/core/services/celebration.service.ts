@@ -1,6 +1,10 @@
 import { Injectable, signal } from '@angular/core';
 
+export type CelebrationKind = 'celebration' | 'encouragement';
+
 export type Celebration = {
+  readonly kind: CelebrationKind;
+  readonly icon: string | null;
   readonly title: string;
   readonly message: string;
 };
@@ -11,7 +15,11 @@ export class CelebrationService {
   readonly celebration = this._celebration.asReadonly();
 
   celebrate(title: string, message: string): void {
-    this._celebration.set({ title, message });
+    this._celebration.set({ kind: 'celebration', icon: '🎉', title, message });
+  }
+
+  encourage(title: string, message: string): void {
+    this._celebration.set({ kind: 'encouragement', icon: null, title, message });
   }
 
   dismiss(): void {

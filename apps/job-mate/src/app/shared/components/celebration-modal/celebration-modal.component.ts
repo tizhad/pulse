@@ -29,7 +29,7 @@ export class CelebrationModalComponent {
 
   constructor() {
     effect(() => {
-      if (this.celebration()) {
+      if (this.celebration()?.kind === 'celebration') {
         this.confetti.set(this.generateConfetti());
       }
     });
