@@ -5,7 +5,6 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import {
   FormControl,
   FormGroup,
@@ -13,10 +12,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ApplicationStore } from '../../core/stores/application.store';
-import { SettingsStore } from '../../core/stores/settings.store';
-import { StudyStore } from '../../core/stores/study.store';
-import { Application, AppStatus, SubjectCategory } from '../../core/models/jobmate.models';
-import { JobAnalysisService, JobAnalysis } from '../../core/services/job-analysis.service';
+import { Application, AppStatus } from '../../core/models/jobmate.models';
 import { AuthService } from '../../core/services/auth.service';
 import { AuthModalService } from '../../core/services/auth-modal.service';
 import { GuestContentService, GUEST_ITEM_LIMIT } from '../../core/services/guest-content.service';
@@ -45,31 +41,15 @@ const AVATAR_PALETTE: ReadonlyArray<{ bg: string; color: string }> = [
   { bg: '#A07C10', color: '#ffffff' },
 ];
 
-const SKILL_CATEGORY: Record<string, SubjectCategory> = {
-  'Angular': 'angular',   'RxJS': 'angular',
-  'React': 'react',       'Vue': 'react',
-  'JavaScript': 'javascript',
-  'TypeScript': 'typescript',
-  'CSS/SCSS': 'css',
-  'Testing': 'testing',
-  'Performance': 'performance',
-  'Accessibility': 'accessibility',
-  'System Design': 'system_design',
-  'Soft Skills': 'soft_skills', 'Agile/Scrum': 'soft_skills',
-};
-
 @Component({
   selector: 'app-applications',
   templateUrl: './applications.component.html',
   styleUrl: './applications.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule],
 })
 export class ApplicationsComponent {
   readonly store = inject(ApplicationStore);
-  readonly settingsStore = inject(SettingsStore);
-  private readonly studyStore = inject(StudyStore);
-  private readonly analysisService = inject(JobAnalysisService);
   private readonly auth = inject(AuthService);
   private readonly authModal = inject(AuthModalService);
   private readonly guestContent = inject(GuestContentService);
@@ -87,16 +67,6 @@ export class ApplicationsComponent {
     this.authModal.open(
       'signup',
       `You've added ${GUEST_ITEM_LIMIT} free applications — sign up to track more.`,
-    );
-    return false;
-  }
-
-  private canCreateSubject(): boolean {
-    if (this.auth.isAuthenticated()) return true;
-    if (this.guestContent.canAddSubject()) return true;
-    this.authModal.open(
-      'signup',
-      `You've added ${GUEST_ITEM_LIMIT} free subjects — sign up to keep building your study plan.`,
     );
     return false;
   }
@@ -171,20 +141,6 @@ export class ApplicationsComponent {
   readonly tags = signal<string[]>([]);
   readonly tagInput = new FormControl('', { nonNullable: true });
 
-  // Analysis state
-  readonly linkedinUrl = new FormControl('', { nonNullable: true });
-  readonly analyzing = signal(false);
-  readonly analyzeError = signal<string | null>(null);
-  readonly analysis = signal<JobAnalysis | null>(null);
-  readonly pasteMode = signal(false);
-  readonly pasteText = new FormControl('', { nonNullable: true });
-
-  // Study plan state
-  readonly addedSkills = signal<ReadonlySet<string>>(new Set());
-  readonly addingSkill = signal<string | null>(null);
-  readonly studyPlanMessage = signal<string | null>(null);
-  private studyPlanTimer: ReturnType<typeof setTimeout> | null = null;
-
   readonly form = new FormGroup({
     title: new FormControl('', {
       nonNullable: true,
@@ -204,123 +160,11 @@ export class ApplicationsComponent {
     this.form.reset({ date: this.todayIso(), status: 'saved' });
     this.tags.set([]);
     this.tagInput.reset();
-    this.linkedinUrl.reset();
-    this.analysis.set(null);
-    this.analyzeError.set(null);
-    this.analyzing.set(false);
-    this.pasteMode.set(false);
-    this.pasteText.reset();
-    this.addedSkills.set(new Set());
-    this.addingSkill.set(null);
-    this.studyPlanMessage.set(null);
     this.showForm.set(true);
   }
 
   closeForm(): void {
     this.showForm.set(false);
-  }
-
-  async analyze(): Promise<void> {
-    const url = this.linkedinUrl.value.trim();
-    if (!url) return;
-    this.analyzing.set(true);
-    this.analyzeError.set(null);
-    this.analysis.set(null);
-    try {
-      const result = await this.analysisService.fetchAndAnalyze(url);
-      this.analysis.set(result);
-      this.autofillForm(result);
-      this.posthog.capture('job_analyzed', {
-        source: 'url',
-        recommendation: result.recommendation,
-        match_score: result.matchScore,
-        required_skills_count: result.requiredSkills.length,
-        seniority_level: result.seniorityLevel,
-      });
-    } catch {
-      this.analyzeError.set('Could not fetch the job post. Try pasting the description below.');
-    } finally {
-      this.analyzing.set(false);
-    }
-  }
-
-  analyzeFromPaste(): void {
-    const text = this.pasteText.value.trim();
-    if (!text) return;
-    const result = this.analysisService.analyzeText(text);
-    this.analysis.set(result);
-    this.autofillForm(result);
-    this.analyzeError.set(null);
-    this.posthog.capture('job_analyzed', {
-      source: 'paste',
-      recommendation: result.recommendation,
-      match_score: result.matchScore,
-      required_skills_count: result.requiredSkills.length,
-      seniority_level: result.seniorityLevel,
-    });
-  }
-
-  private autofillForm(result: JobAnalysis): void {
-    if (result.jobTitle && !this.form.controls.title.value)
-      this.form.controls.title.setValue(result.jobTitle);
-    if (result.company && !this.form.controls.company.value)
-      this.form.controls.company.setValue(result.company);
-    if (result.location && !this.form.controls.location.value)
-      this.form.controls.location.setValue(result.isRemote ? 'Remote' : result.location);
-    if (result.salaryRange && !this.form.controls.salary.value)
-      this.form.controls.salary.setValue(result.salaryRange);
-  }
-
-  /* ── Skill checklist helpers ───────────────────────────────────────────── */
-
-  isSkillFound(skillName: string): boolean {
-    const analysis = this.analysis();
-    if (analysis?.matchedSkills.some(m => m.name === skillName)) return true;
-    const resume = this.settingsStore.settings()?.resume;
-    if (resume) return resume.skills.includes(skillName);
-    return this.studyStore.subjects().some(
-      s => s.title.toLowerCase() === skillName.toLowerCase(),
-    );
-  }
-
-  async addToStudyPlan(skillName: string): Promise<void> {
-    if (!this.canCreateSubject()) return;
-    if (this.addedSkills().has(skillName) || this.addingSkill()) return;
-    this.addingSkill.set(skillName);
-    const result = await this.studyStore.addSubject({
-      title: skillName,
-      summary: null,
-      category: SKILL_CATEGORY[skillName] ?? 'javascript',
-      priority: 'medium',
-      status: 'not_started',
-      confidenceScore: 0,
-      estimatedReadTime: null,
-      tags: [],
-      sourceUrl: null,
-    });
-    this.addingSkill.set(null);
-    if (result) {
-      this.addedSkills.update(s => new Set([...s, skillName]));
-      if (this.studyPlanTimer) clearTimeout(this.studyPlanTimer);
-      this.studyPlanMessage.set(skillName);
-      this.studyPlanTimer = setTimeout(() => this.studyPlanMessage.set(null), 5000);
-      this.posthog.capture('skill_added_to_study_plan', {
-        skill_name: skillName,
-        job_title: this.form.controls.title.value || null,
-        company: this.form.controls.company.value || null,
-      });
-    }
-  }
-
-  recommendationLabel(rec: JobAnalysis['recommendation']): string {
-    const map: Record<JobAnalysis['recommendation'], string> = {
-      'strong':        'Strong match — go for it',
-      'worth-trying':  'Worth applying',
-      'prepare-first': 'Prepare first',
-      'not-ready':     'Significant gap',
-      'no-data':       'Could not detect skills',
-    };
-    return map[rec];
   }
 
   addTag(): void {
@@ -354,17 +198,14 @@ export class ApplicationsComponent {
       status,
       date,
       salary: salary.trim() || null,
-      url: this.linkedinUrl.value.trim() || null,
+      url: null,
       tags: this.tags(),
     });
     this.posthog.capture('application_added', {
       status,
       company,
-      has_url: !!this.linkedinUrl.value.trim(),
       has_salary: !!salary.trim(),
       tags_count: this.tags().length,
-      via_job_analysis: !!this.analysis(),
-      match_score: this.analysis()?.matchScore ?? null,
     });
     this.saving.set(false);
     this.closeForm();
