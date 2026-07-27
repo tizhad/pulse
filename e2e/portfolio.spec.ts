@@ -5,13 +5,13 @@ import { test, expect } from './fixtures';
 test.describe('Portfolio page', () => {
   test('renders role and bio', async ({ page }) => {
     await page.goto('/portfolio');
-    await expect(page.getByText('Freelance frontend developer · Amsterdam')).toBeVisible();
+    await expect(page.getByText('Frontend Engineer · Amsterdam')).toBeVisible();
   });
 
   test('/about redirects to /portfolio', async ({ page }) => {
     await page.goto('/about');
     await expect(page).toHaveURL(/\/portfolio$/);
-    await expect(page.getByText('Freelance frontend developer · Amsterdam')).toBeVisible();
+    await expect(page.getByText('Frontend Engineer · Amsterdam')).toBeVisible();
   });
 
   test('lists all three featured projects', async ({ page }) => {
@@ -47,15 +47,16 @@ test.describe('Portfolio page', () => {
     await page.goto('/portfolio');
     const github = page.getByRole('link', { name: 'GitHub', exact: true });
     await expect(github).toHaveAttribute('href', 'https://github.com/tizhad');
-    const email = page.getByRole('link', { name: 'tiizhad@gmail.com' });
+    const email = page.getByRole('link', { name: 'Tell me about your project' });
     await expect(email).toHaveAttribute('href', 'mailto:tiizhad@gmail.com');
   });
 
   test('in-page nav anchors scroll to their sections', async ({ page }) => {
     await page.goto('/portfolio');
-    await page.getByRole('link', { name: 'Projects', exact: true }).click();
+    const topNav = page.getByLabel('Page navigation');
+    await topNav.getByRole('link', { name: 'Projects', exact: true }).click();
     await expect(page).toHaveURL(/#projects$/);
-    await page.getByRole('link', { name: 'Contact', exact: true }).click();
+    await topNav.getByRole('link', { name: 'Contact', exact: true }).click();
     await expect(page).toHaveURL(/#contact$/);
   });
 });
