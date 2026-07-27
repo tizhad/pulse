@@ -105,21 +105,4 @@ export class LandingComponent implements OnInit {
     'Playwright',
   ] as const;
 
-  readonly steps = [
-    {
-      num: '01',
-      title: 'Capture',
-      body: 'Drop in any subject, sub-subject or interview question in seconds. Tag the company that asked it.',
-    },
-    {
-      num: '02',
-      title: 'Prioritize',
-      body: 'Tag priority by hand, then sort, search and filter to surface what actually matters this week.',
-    },
-    {
-      num: '03',
-      title: 'Land',
-      body: 'Track applications, attach the right resume, and walk into interviews with quiet confidence.',
-    },
-  ] as const;
 }

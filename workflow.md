@@ -159,3 +159,17 @@
 - Visual upgrade: real screenshots (captured via Playwright) of Pulse, Starter Kit, and MoneyCho added to the project cards (`public/portfolio/*.png`, rendered with `NgOptimizedImage`, lazy, 16:9 top crop, hover zoom); new `RevealDirective` (IntersectionObserver fade-up on scroll, SSR-safe via `afterNextRender`) applied to bento cards, stats, timeline, project cards, specs; new `CountUpDirective` animates the stats (33→75, +30%, −25%) on first view; both directives and all CSS respect `prefers-reduced-motion`
 - Projects affected: `job-mate` (new `shared/directives/` folder in-app; `wealth-mate` untouched)
 - Playwright test added: yes — new "project cards show screenshots" test in `e2e/portfolio.spec.ts`; full suite green across all 4 device projects (184 tests)
+
+## Remove workflow steps section from landing — completed 2026-07-27
+- Removed the "Capture / Prioritize / Land" three-step section (`.ln-workflow`, `#workflow` anchor) that sat between the features grid and the footer on the marketing landing page, per direct request
+- Deleted the section markup, the `steps` data array, and all associated SCSS (`.ln-workflow*`, `.ln-steps-grid`, `.ln-step-*`); no other page linked to `#workflow`, so nothing else needed updating
+- Projects affected: `job-mate`
+- Playwright test added: no (pure removal, no new behavior to cover); full suite verified green (184 tests) after the change
+
+## Toast error feedback for failed saves — completed 2026-07-27
+- Root cause follow-up to the "Add to Today's Focus" incident: every store did optimistic updates with silent rollback on Supabase errors, so schema drift / network failures looked like dead buttons
+- New `ToastService` (signal-based queue, auto-dismiss 5s) + `ToastComponent` (fixed bottom-center stack, `role="alert"`, dismiss button, reduced-motion safe) mounted in the app root so it covers shell and marketing routes
+- Wired contextual error toasts into every silent failure path: `study.store` (create/update/confidence/archive/restore/delete/QA add+remove/note add+update+delete), `application.store` (create/update/delete), `company.store` (create/status/update/delete), `settings.store` (upsert) — all rollbacks now tell the user their change was undone
+- Also fixed `guest-content.service.spec.ts` fixture missing `isPinned` — unit tests had been broken since the pin feature landed on 2026-07-24
+- Projects affected: `job-mate`
+- Playwright test added: no (failure paths need a broken backend; covered by 5 new Vitest cases in `toast.service.spec.ts` — 30 unit tests green, full e2e suite still 184 green)

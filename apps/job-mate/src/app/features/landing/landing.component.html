@@ -369,23 +369,6 @@
     </div>
   </section>
 
-  <!-- ── Workflow ───────────────────────────────────────────────────────────── -->
-  <section class="ln-workflow" id="workflow">
-    <div class="ln-section-inner">
-      <div class="bento-card bento-card--dark ln-workflow-card">
-        <div class="ln-steps-grid">
-          @for (step of steps; track step.num) {
-            <div class="ln-step">
-              <div class="ln-step-num">{{ step.num }}</div>
-              <div class="ln-step-title">{{ step.title }}</div>
-              <p class="ln-step-body">{{ step.body }}</p>
-            </div>
-          }
-        </div>
-      </div>
-    </div>
-  </section>
-
   <app-marketing-footer
     eyebrow="Ready when you are"
     headlinePrefix="Build your"
