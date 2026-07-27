@@ -184,3 +184,13 @@
 - Guest (signed-out) users get an honest 0/empty state rather than faking local-only tracking, since `activity_days` only exists in Supabase
 - Projects affected: `job-mate` (`wealth-mate` untouched, build verified)
 - Playwright test added: no — deferred per standing guidance to skip e2e specs for a UI feature until its design is confirmed settled; manually verified guest-mode empty state renders correctly with no console errors via dev server + browser
+
+---
+
+## Celebrate offers, encourage rejections — completed 2026-07-27
+
+- Application status changes had no feedback beyond the toast added for silent-failure rollbacks: logging a new application, landing an offer, and getting rejected all looked the same
+- New `CelebrationService` + `CelebrationModalComponent` (confetti field, `role="dialog"`) mounted in the app root; `ApplicationsComponent.saveModal()` calls `celebration.celebrate(...)` when a status moves to `offer`
+- Iterated the design after first landing it: rejections initially reused a plain success toast, which read oddly next to the new confetti celebration — gave `CelebrationService` a `kind: 'celebration' | 'encouragement'` so rejections open the same modal without confetti, with a sky-blue "Thanks" action instead of "Nice!"; new applications still get the plain `ToastService` success toast
+- Projects affected: `job-mate`
+- Playwright test added: yes (`e2e/celebration-feedback.spec.ts` — guest application creation shows the success toast; moving an application to Offer shows the confetti celebration modal; moving to Rejected shows the no-confetti encouragement modal) — deferred until the toast-vs-modal design settled, per standing guidance; also fixed 3 stale assertions in `e2e/portfolio.spec.ts` broken by an unrelated footer/hero copy change landed in the same session. Full suite green across all 4 device projects (196 tests)
