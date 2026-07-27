@@ -1,0 +1,133 @@
+.celebration-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 600;
+  background: rgba(5, 5, 40, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  overflow: hidden;
+  animation: overlay-in 0.2s ease;
+}
+
+.confetti-field {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.confetti-piece {
+  position: absolute;
+  top: -10%;
+  border-radius: 2px;
+  opacity: 0;
+  animation-name: confetti-fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+
+  &--circle {
+    border-radius: 50%;
+  }
+}
+
+.celebration-card {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-pop);
+  padding: 2.5rem 2rem 2rem;
+  text-align: center;
+  animation: modal-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.celebration-icon {
+  font-size: 2.75rem;
+  line-height: 1;
+  margin-bottom: 0.75rem;
+}
+
+.celebration-title {
+  font-family: var(--font-serif, inherit);
+  font-size: 1.5rem;
+  color: var(--text);
+  margin: 0 0 0.5rem;
+}
+
+.celebration-message {
+  color: var(--text-secondary);
+  font-size: 14.5px;
+  line-height: 1.5;
+  margin: 0 0 1.5rem;
+}
+
+.celebration-close {
+  border: none;
+  border-radius: var(--radius);
+  background: var(--gold);
+  color: var(--gold-text);
+  font-weight: 600;
+  padding: 0.65rem 1.75rem;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition), transform var(--transition);
+
+  &:hover {
+    background: var(--gold-deep);
+    color: #fff;
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(115vh) rotate(720deg);
+    opacity: 0.85;
+  }
+}
+
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .confetti-piece {
+    animation: none;
+    display: none;
+  }
+
+  .celebration-overlay,
+  .celebration-card {
+    animation: none;
+  }
+}

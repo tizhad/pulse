@@ -17,6 +17,8 @@ import { AuthService } from '../../core/services/auth.service';
 import { AuthModalService } from '../../core/services/auth-modal.service';
 import { GuestContentService, GUEST_ITEM_LIMIT } from '../../core/services/guest-content.service';
 import { PosthogService } from '../../core/services/posthog.service';
+import { ToastService } from '../../core/services/toast.service';
+import { CelebrationService } from '../../core/services/celebration.service';
 
 type SortKey = 'createdAt' | 'date' | 'updatedAt' | 'status' | 'title' | 'company';
 type SortDir = 'asc' | 'desc';
@@ -54,6 +56,8 @@ export class ApplicationsComponent {
   private readonly authModal = inject(AuthModalService);
   private readonly guestContent = inject(GuestContentService);
   private readonly posthog = inject(PosthogService);
+  private readonly toast = inject(ToastService);
+  private readonly celebration = inject(CelebrationService);
 
   private requireAuth(): boolean {
     if (this.auth.isAuthenticated()) return true;
@@ -209,6 +213,7 @@ export class ApplicationsComponent {
     });
     this.saving.set(false);
     this.closeForm();
+    this.toast.success('Good job! Application logged — keep the momentum going. 🙌');
   }
 
   /* ── Edit modal ────────────────────────────────────────────────────────── */
@@ -292,6 +297,11 @@ export class ApplicationsComponent {
         new_status: status,
         company: company.trim(),
       });
+      if (status === 'offer') {
+        this.celebration.celebrate('Well done!', 'You did it — congrats on the offer! 🎉');
+      } else if (status === 'rejected') {
+        this.toast.success("Sorry to hear that. But this isn't the end — on to the next opportunity! 💪");
+      }
     }
     this.saving.set(false);
     this.closeModal();

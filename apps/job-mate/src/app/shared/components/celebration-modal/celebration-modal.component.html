@@ -1,0 +1,38 @@
+@if (celebration(); as c) {
+<div
+  class="celebration-overlay"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-label]="c.title"
+  tabindex="-1"
+  (click)="dismiss()"
+  (keydown.escape)="dismiss()"
+>
+  <div class="confetti-field" aria-hidden="true">
+    @for (piece of confetti(); track piece.id) {
+      <span
+        class="confetti-piece"
+        [class.confetti-piece--circle]="piece.circle"
+        [style.left.%]="piece.left"
+        [style.width.px]="piece.width"
+        [style.height.px]="piece.height"
+        [style.background]="piece.color"
+        [style.animationDelay.s]="piece.delay"
+        [style.animationDuration.s]="piece.duration"
+      ></span>
+    }
+  </div>
+
+  <div
+    class="celebration-card"
+    tabindex="0"
+    (click)="$event.stopPropagation()"
+    (keydown)="$event.stopPropagation()"
+  >
+    <div class="celebration-icon">🎉</div>
+    <h2 class="celebration-title">{{ c.title }}</h2>
+    <p class="celebration-message">{{ c.message }}</p>
+    <button type="button" class="celebration-close" (click)="dismiss()">Nice!</button>
+  </div>
+</div>
+}
