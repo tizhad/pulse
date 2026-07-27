@@ -117,4 +117,18 @@ describe('GuestContentService', () => {
     const { svc } = setup(storage);
     expect(svc.subjects()[0].createdAt).toBeInstanceOf(Date);
   });
+
+  it('marks subjects as migrated on clear, so a later fresh instance on the same device does not reseed samples', () => {
+    const storage = new StorageStub();
+    const first = setup(storage);
+    first.svc.clearSubjects();
+    expect(storage.load<boolean>('guest_subjects_migrated')).toBe(true);
+
+    // Simulates a full page reload for an already-signed-in user: a brand
+    // new GuestContentService instance is constructed against the same
+    // (now-cleared) storage. It must NOT reseed RxJS/Signals again.
+    TestBed.resetTestingModule();
+    const second = setup(storage);
+    expect(second.svc.subjects()).toEqual([]);
+  });
 });

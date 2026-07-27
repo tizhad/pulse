@@ -361,6 +361,13 @@ export class GuestContentService {
     const stored = this.storage.load<Subject[]>('guest_subjects');
     if (stored) return stored.map(reviveSubject);
 
+    // Once this device's guest subjects have migrated into a real account,
+    // never reseed the samples again -- otherwise every reload of an
+    // already-signed-in session looks like a fresh guest (see incident:
+    // repeated reseed+migrate cycles created duplicate "RxJS"/"Signals"
+    // subjects in production).
+    if (this.storage.load<boolean>('guest_subjects_migrated')) return [];
+
     const seed = buildSampleSubjects();
     this.storage.save('guest_subjects', seed);
     return seed;
@@ -410,6 +417,7 @@ export class GuestContentService {
     this._subjectsAddedCount.set(0);
     this.storage.clear('guest_subjects');
     this.storage.clear('guest_subjects_added_count');
+    this.storage.save('guest_subjects_migrated', true);
   }
 
   clearCompanies(): void {
