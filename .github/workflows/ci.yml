@@ -24,9 +24,13 @@ jobs:
       # Learn more at https://nx.dev/ci/reference/nx-cloud-cli#npx-nxcloud-startcirun
       - run: npx nx start-ci-run --distribute-on="3 linux-medium-js" --stop-agents-after="e2e"
 
+      # Node 20 lacks native WebSocket support, which the Supabase client
+      # needs during SSR prerendering of / and /portfolio -- this failed
+      # the build the moment CI got past the lockfile/e2e issues above.
+      # Match local dev (Node 22) instead.
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       # No package-lock.json is committed (see 5fda918: a macOS-generated
       # lockfile was missing Linux-native optional deps and broke npm ci
