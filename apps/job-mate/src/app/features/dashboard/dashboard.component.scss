@@ -327,6 +327,48 @@
   margin-top: 1px;
 }
 
+/* Archived subjects */
+.archived-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 1rem;
+  background: var(--surface-hover);
+  margin-bottom: 6px;
+
+  &:last-child { margin-bottom: 0; }
+}
+
+.subject-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.icon-btn {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  transition: background var(--transition), color var(--transition);
+
+  &:hover {
+    background: var(--surface);
+    color: var(--text);
+  }
+
+  &.icon-btn-danger:hover {
+    background: color-mix(in srgb, var(--coral) 12%, transparent);
+    color: var(--coral);
+  }
+}
+
 /* Recent apps */
 .app-row {
   display: flex;

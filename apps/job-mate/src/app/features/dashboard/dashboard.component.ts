@@ -106,4 +106,13 @@ export class DashboardComponent {
   companyInitial(company: string): string {
     return company.charAt(0).toUpperCase();
   }
+
+  restoreSubject(id: string): void {
+    this.studyStore.restoreSubject(id);
+  }
+
+  deleteArchivedSubject(title: string, id: string): void {
+    if (!confirm(`Delete "${title}" permanently? This can't be undone.`)) return;
+    this.studyStore.deleteSubject(id);
+  }
 }

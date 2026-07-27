@@ -262,6 +262,19 @@ export class SubjectsComponent {
     this.store.togglePinned(subject.id);
   }
 
+  archiveSubject(event: Event, subject: Subject): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.store.archiveSubject(subject.id);
+  }
+
+  deleteSubject(event: Event, subject: Subject): void {
+    event.preventDefault();
+    event.stopPropagation();
+    if (!confirm(`Delete "${subject.title}" permanently? This can't be undone.`)) return;
+    this.store.deleteSubject(subject.id);
+  }
+
   statusClass(status: SubjectStatus): string {
     return `status-${status.replace('_', '-')}`;
   }

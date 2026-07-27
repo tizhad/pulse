@@ -51,8 +51,12 @@ export class StudyStore {
   private readonly _loading = signal(false);
   private readonly _loaded = signal(false);
 
+  private readonly _archivedSubjects = signal<Subject[]>([]);
+  private readonly _archivedLoaded = signal(false);
+
   readonly subjects = this._subjects.asReadonly();
   readonly loading = this._loading.asReadonly();
+  readonly archivedSubjects = this._archivedSubjects.asReadonly();
 
   readonly filters = signal<StudyFilters>({
     category: null, status: null, priority: null, company: null, search: '',
@@ -97,6 +101,7 @@ export class StudyStore {
   private async onSignedIn(): Promise<void> {
     await this.migrateGuestSubjects();
     await this.load();
+    await this.loadArchived();
   }
 
   private async migrateGuestSubjects(): Promise<void> {
@@ -233,11 +238,61 @@ export class StudyStore {
     await this.updateSubject(id, { isPinned: !sub.isPinned });
   }
 
-  async deleteSubject(id: string): Promise<void> {
-    const prev = this._subjects();
+  async loadArchived(): Promise<void> {
+    if (this._archivedLoaded()) return;
+    const userId = this.auth.user()?.id;
+    if (!userId) return;
+
+    const { data, error } = await this.supabase.client
+      .from('study_subjects').select('*').eq('user_id', userId).eq('is_archived', true);
+    if (!error && data) {
+      this._archivedSubjects.set(data.map(row => fromSubjectRow(row)));
+      this._archivedLoaded.set(true);
+    }
+  }
+
+  async archiveSubject(id: string): Promise<void> {
+    const subject = this._subjects().find(s => s.id === id);
+    if (!subject) return;
+
+    const prevSubjects = this._subjects();
+    const prevArchived = this._archivedSubjects();
     this._subjects.update(list => list.filter(s => s.id !== id));
+    this._archivedSubjects.update(list => [{ ...subject, isArchived: true }, ...list]);
+
+    const { error } = await this.supabase.client.from('study_subjects').update({ is_archived: true }).eq('id', id);
+    if (error) {
+      this._subjects.set(prevSubjects);
+      this._archivedSubjects.set(prevArchived);
+    }
+  }
+
+  async restoreSubject(id: string): Promise<void> {
+    const subject = this._archivedSubjects().find(s => s.id === id);
+    if (!subject) return;
+
+    const prevSubjects = this._subjects();
+    const prevArchived = this._archivedSubjects();
+    this._archivedSubjects.update(list => list.filter(s => s.id !== id));
+    this._subjects.update(list => [{ ...subject, isArchived: false }, ...list]);
+
+    const { error } = await this.supabase.client.from('study_subjects').update({ is_archived: false }).eq('id', id);
+    if (error) {
+      this._subjects.set(prevSubjects);
+      this._archivedSubjects.set(prevArchived);
+    }
+  }
+
+  async deleteSubject(id: string): Promise<void> {
+    const prevSubjects = this._subjects();
+    const prevArchived = this._archivedSubjects();
+    this._subjects.update(list => list.filter(s => s.id !== id));
+    this._archivedSubjects.update(list => list.filter(s => s.id !== id));
     const { error } = await this.supabase.client.from('study_subjects').delete().eq('id', id);
-    if (error) this._subjects.set(prev);
+    if (error) {
+      this._subjects.set(prevSubjects);
+      this._archivedSubjects.set(prevArchived);
+    }
   }
 
   async addQA(id: string, qa: import('../models/jobmate.models').QA): Promise<void> {
