@@ -67,3 +67,4 @@ vitest.config.*.timestamp*
 __screenshots__/
 package-lock.json
 .env
+supabase/.temp/
