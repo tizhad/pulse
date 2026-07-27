@@ -123,6 +123,7 @@ export class ApplicationStore {
     }
     const app = fromApplicationRow(data);
     this._applications.update(list => [app, ...list]);
+    void this.supabase.client.rpc('bump_activity', { p_kind: 'application' });
     return app;
   }
 
@@ -140,7 +141,10 @@ export class ApplicationStore {
   }
 
   async updateStatus(id: string, status: AppStatus): Promise<void> {
-    return this.updateApplication(id, { status });
+    await this.updateApplication(id, { status });
+    if (this.auth.user()) {
+      void this.supabase.client.rpc('bump_activity', { p_kind: 'application' });
+    }
   }
 
   async deleteApplication(id: string): Promise<void> {

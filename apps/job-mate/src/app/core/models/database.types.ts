@@ -215,9 +215,30 @@ export type Database = {
         Update: Partial<Database['public']['Tables']['user_settings']['Insert']>;
         Relationships: [];
       };
+      activity_days: {
+        Row: {
+          user_id: string;
+          activity_date: string;
+          study_count: number;
+          application_count: number;
+        };
+        Insert: {
+          user_id: string;
+          activity_date: string;
+          study_count?: number;
+          application_count?: number;
+        };
+        Update: Partial<Database['public']['Tables']['activity_days']['Insert']>;
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Functions: {
+      bump_activity: {
+        Args: { p_kind: 'study' | 'application' };
+        Returns: void;
+      };
+    };
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;
   };
@@ -232,3 +253,4 @@ export type ResourceRow = Database['public']['Tables']['subject_resources']['Row
 export type CompanyRow = Database['public']['Tables']['companies']['Row'];
 export type ApplicationRow = Database['public']['Tables']['applications']['Row'];
 export type UserSettingsRow = Database['public']['Tables']['user_settings']['Row'];
+export type ActivityDayRow = Database['public']['Tables']['activity_days']['Row'];

@@ -240,7 +240,10 @@ export class StudyStore {
     if (error) {
       this._subjects.set(prev);
       this.toast.error("Couldn't save your confidence score — it's been undone.");
+      return;
     }
+
+    void this.supabase.client.rpc('bump_activity', { p_kind: 'study' });
   }
 
   async togglePinned(id: string): Promise<void> {
