@@ -4,7 +4,7 @@
   padding: 5rem 1.5rem;
 
   @media (min-width: 768px) {
-    padding: 6rem 2.5rem;
+    padding: 2rem 0.5rem;
   }
 }
 
@@ -43,7 +43,9 @@
   background: var(--gold);
   color: var(--gold-text);
 
-  &:hover { background: var(--gold-deep); }
+  &:hover {
+    background: var(--gold-deep);
+  }
 }
 
 .mkt-footer-links {
@@ -61,7 +63,9 @@
     text-decoration: none;
     transition: opacity var(--transition);
 
-    &:hover { opacity: 1; }
+    &:hover {
+      opacity: 1;
+    }
   }
 }
 
