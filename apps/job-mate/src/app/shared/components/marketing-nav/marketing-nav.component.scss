@@ -23,7 +23,7 @@
   width: 40px;
   height: 40px;
   border-radius: 1rem;
-  background: var(--forest);
+  background: var(--spark);
   color: var(--forest-text);
   display: grid;
   place-items: center;
@@ -41,7 +41,8 @@
 }
 
 @keyframes mkt-ping {
-  75%, 100% {
+  75%,
+  100% {
     transform: scale(1.4);
     opacity: 0;
   }
@@ -84,7 +85,9 @@
     transition: color var(--transition);
     text-decoration: none;
 
-    &:hover { color: var(--text); }
+    &:hover {
+      color: var(--text);
+    }
   }
 }
 
@@ -144,7 +147,9 @@
     font-weight: 500;
     color: var(--text-secondary);
     text-decoration: none;
-    transition: color var(--transition), background var(--transition);
+    transition:
+      color var(--transition),
+      background var(--transition);
 
     &:hover {
       background: var(--surface-hover);
@@ -172,5 +177,7 @@
   text-decoration: none;
   transition: opacity var(--transition);
 
-  &:hover { opacity: 0.88; }
+  &:hover {
+    opacity: 0.88;
+  }
 }
