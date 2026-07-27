@@ -90,6 +90,7 @@
   @if (showLinkInput()) {
     <div class="re-link-row">
       <input
+        #linkInput
         class="re-link-input"
         type="url"
         placeholder="https://…"
@@ -98,7 +99,6 @@
         (input)="linkUrl.set($any($event.target).value)"
         (keydown.enter)="insertLink()"
         (keydown.escape)="closeLinkInput()"
-        autofocus
       />
       <button class="re-link-apply" (mousedown)="$event.preventDefault()" (click)="insertLink()">
         Apply

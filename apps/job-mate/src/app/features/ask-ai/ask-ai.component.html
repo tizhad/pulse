@@ -292,8 +292,9 @@
         <div class="ai-form-card">
 
           <div class="ai-form-field">
-            <label class="ai-form-label">Category</label>
+            <label class="ai-form-label" for="ai-category-select">Category</label>
             <select
+              id="ai-category-select"
               class="ai-select"
               (change)="setCategory($event)"
             >
@@ -305,16 +306,16 @@
 
           <div class="ai-form-row">
             <div class="ai-form-field">
-              <label class="ai-form-label">Priority</label>
-              <select class="ai-select" (change)="setPriority($event)">
+              <label class="ai-form-label" for="ai-priority-select">Priority</label>
+              <select id="ai-priority-select" class="ai-select" (change)="setPriority($event)">
                 @for (p of priorityOptions; track p.value) {
                   <option [value]="p.value" [selected]="p.value === priority()">{{ p.label }}</option>
                 }
               </select>
             </div>
             <div class="ai-form-field">
-              <label class="ai-form-label">Status</label>
-              <select class="ai-select" (change)="setStatus($event)">
+              <label class="ai-form-label" for="ai-status-select">Status</label>
+              <select id="ai-status-select" class="ai-select" (change)="setStatus($event)">
                 @for (s of statusOptions; track s.value) {
                   <option [value]="s.value" [selected]="s.value === status()">{{ s.label }}</option>
                 }

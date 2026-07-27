@@ -28,6 +28,7 @@ export class RichEditorComponent implements OnDestroy {
   readonly value = model<string>('');
 
   private readonly hostRef = viewChild<ElementRef<HTMLDivElement>>('editorHost');
+  private readonly linkInputRef = viewChild<ElementRef<HTMLInputElement>>('linkInput');
 
   private editor: Editor | null = null;
 
@@ -55,6 +56,15 @@ export class RichEditorComponent implements OnDestroy {
       const current = this.editor.isEmpty ? '' : this.editor.getHTML();
       if (current !== val) {
         this.editor.commands.setContent(val || '');
+      }
+    });
+
+    // Move focus into the link input the moment it appears, replacing the
+    // native `autofocus` attribute (flagged by @angular-eslint as harmful
+    // on page load, but this input only renders after a user action).
+    effect(() => {
+      if (this.showLinkInput()) {
+        this.linkInputRef()?.nativeElement.focus();
       }
     });
   }
