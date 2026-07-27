@@ -10,6 +10,7 @@ import {
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { AuthComponent } from './features/auth/auth.component';
+import { ToastComponent } from './shared/components/toast/toast.component';
 import { filter, map } from 'rxjs';
 import { AuthService } from './core/services/auth.service';
 import { AuthModalService } from './core/services/auth-modal.service';
@@ -21,7 +22,7 @@ import { environment } from '../environments/environment';
   templateUrl: './app.html',
   styleUrl: './app.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterModule, AuthComponent],
+  imports: [RouterModule, AuthComponent, ToastComponent],
 })
 export class App implements OnInit {
   private readonly router = inject(Router);

@@ -90,7 +90,7 @@
           </svg>
         </div>
         <div class="ai-idle-title">Study outline</div>
-        <p class="ai-idle-desc">Sub-topics ready to nest under any subject.</p>
+        <p class="ai-idle-desc">Sub-topics you can save as a study note.</p>
       </div>
       <div class="ai-idle-card">
         <div class="ai-idle-icon">
@@ -127,6 +127,30 @@
     </div>
   }
 
+  <!-- ── Error state ────────────────────────────────────────────────────────── -->
+  @if (pageState() === 'error') {
+    <div class="ai-loading-card">
+      <div class="ai-loading-header">
+        <div class="ai-loading-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        </div>
+        <div>
+          <div class="ai-loading-title">Couldn't generate that brief</div>
+          <div class="ai-loading-sub">{{ errorMessage() }}</div>
+        </div>
+      </div>
+      <button class="ai-regenerate-btn" type="button" (click)="ask(query())">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+          <path d="M3 3v5h5"/>
+        </svg>
+        Try again
+      </button>
+    </div>
+  }
+
   <!-- ── Ready state ────────────────────────────────────────────────────────── -->
   @if (pageState() === 'ready' && result(); as r) {
     <div class="ai-result-grid">
@@ -144,18 +168,12 @@
                 </svg>
                 AI brief
               </div>
-              <h2 class="ai-result-query">{{ r.query }}</h2>
+              <h2 class="ai-result-query">{{ r.title }}</h2>
               <div class="ai-result-tags">
                 @for (tag of r.tags; track tag) {
                   <span class="ai-tag">{{ tag }}</span>
                 }
                 <span class="ai-tag ai-tag--difficulty">{{ r.difficulty }}</span>
-                <span class="ai-tag ai-tag--potential">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-                  </svg>
-                  Potential {{ r.potential }}/10
-                </span>
               </div>
             </div>
             <button class="ai-regenerate-btn" type="button" (click)="onRegenerate()">
@@ -181,13 +199,14 @@
         </div>
 
         <!-- Outline card -->
+        @if (r.outline.length > 0) {
         <div class="ai-card">
           <div class="ai-card-section-header">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M21 3 9 15"/><path d="M12 3H3v18h18v-9"/>
             </svg>
             <h3 class="ai-card-section-title">Suggested study outline</h3>
-            <span class="ai-card-section-hint">Becomes nested sub-subjects on add</span>
+            <span class="ai-card-section-hint">Saved as a study note on add</span>
           </div>
           <div class="ai-outline-list">
             @for (section of r.outline; track section.title; let i = $index) {
@@ -210,6 +229,7 @@
             }
           </div>
         </div>
+        }
 
         <!-- Q&A card -->
         <div class="ai-card">
@@ -236,16 +256,18 @@
         </div>
 
         <!-- Code snippet card -->
+        @if (r.snippet; as snippet) {
         <div class="ai-card ai-card--code">
           <div class="ai-code-header">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
             </svg>
             <span class="ai-code-label">Example</span>
-            <span class="ai-code-lang">{{ r.snippet.lang }}</span>
+            <span class="ai-code-lang">{{ snippet.lang }}</span>
           </div>
-          <pre class="ai-code-block"><code>{{ r.snippet.code }}</code></pre>
+          <pre class="ai-code-block"><code>{{ snippet.code }}</code></pre>
         </div>
+        }
 
       </div>
 
@@ -260,9 +282,9 @@
             </svg>
             Save to study tree
           </div>
-          <div class="ai-save-header-title">Add "{{ r.query }}" as a subject</div>
+          <div class="ai-save-header-title">Add "{{ r.title }}" as a subject</div>
           <p class="ai-save-header-desc">
-            We'll create the subject with its outline as sub-subjects, attach the Q&amp;A, and tag the asking companies.
+            We'll create the subject, attach the Q&amp;A, tag the asking companies, and — if you're signed in — save the outline and code example as notes.
           </p>
         </div>
 
@@ -270,13 +292,13 @@
         <div class="ai-form-card">
 
           <div class="ai-form-field">
-            <label class="ai-form-label">Nest under</label>
+            <label class="ai-form-label">Category</label>
             <select
               class="ai-select"
-              (change)="selectedParent.set(getSelectValue($event))"
+              (change)="setCategory($event)"
             >
-              @for (p of parents; track p.id) {
-                <option [value]="p.id" [selected]="p.id === selectedParent()">{{ p.label }}</option>
+              @for (c of categoryOptions; track c.value) {
+                <option [value]="c.value" [selected]="c.value === selectedCategory()">{{ c.label }}</option>
               }
             </select>
           </div>
@@ -284,30 +306,34 @@
           <div class="ai-form-row">
             <div class="ai-form-field">
               <label class="ai-form-label">Priority</label>
-              <select class="ai-select" (change)="priority.set(getSelectValue($event))">
-                <option value="low" [selected]="priority() === 'low'">Low</option>
-                <option value="medium" [selected]="priority() === 'medium'">Medium</option>
-                <option value="high" [selected]="priority() === 'high'">High</option>
-                <option value="critical" [selected]="priority() === 'critical'">Critical</option>
+              <select class="ai-select" (change)="setPriority($event)">
+                @for (p of priorityOptions; track p.value) {
+                  <option [value]="p.value" [selected]="p.value === priority()">{{ p.label }}</option>
+                }
               </select>
             </div>
             <div class="ai-form-field">
               <label class="ai-form-label">Status</label>
-              <select class="ai-select" (change)="status.set(getSelectValue($event))">
-                <option value="todo" [selected]="status() === 'todo'">To-do</option>
-                <option value="in-progress" [selected]="status() === 'in-progress'">In progress</option>
-                <option value="done" [selected]="status() === 'done'">Done</option>
+              <select class="ai-select" (change)="setStatus($event)">
+                @for (s of statusOptions; track s.value) {
+                  <option [value]="s.value" [selected]="s.value === status()">{{ s.label }}</option>
+                }
               </select>
             </div>
           </div>
 
           <div class="ai-toggles">
-            <button class="ai-toggle" type="button" (click)="includeSubjects.set(!includeSubjects())">
-              <span class="ai-toggle-label">Include {{ r.outline.length }} sub-subjects</span>
-              <span class="ai-toggle-track" [class.is-on]="includeSubjects()">
-                <span class="ai-toggle-thumb"></span>
-              </span>
-            </button>
+            @if (r.outline.length > 0) {
+              <button class="ai-toggle" type="button" (click)="!isGuest() && includeOutline.set(!includeOutline())">
+                <span class="ai-toggle-label">
+                  Save outline as a study note
+                  @if (isGuest()) { <span class="ai-toggle-hint">(sign up required)</span> }
+                </span>
+                <span class="ai-toggle-track" [class.is-on]="includeOutline() && !isGuest()">
+                  <span class="ai-toggle-thumb"></span>
+                </span>
+              </button>
+            }
             <button class="ai-toggle" type="button" (click)="includeQA.set(!includeQA())">
               <span class="ai-toggle-label">Attach {{ r.questions.length }} Q&amp;A items</span>
               <span class="ai-toggle-track" [class.is-on]="includeQA()">
@@ -315,24 +341,29 @@
               </span>
             </button>
             <button class="ai-toggle" type="button" (click)="includeCompanies.set(!includeCompanies())">
-              <span class="ai-toggle-label">Link {{ r.askedBy.length }} asking companies</span>
+              <span class="ai-toggle-label">Tag {{ r.askedBy.length }} asking companies</span>
               <span class="ai-toggle-track" [class.is-on]="includeCompanies()">
                 <span class="ai-toggle-thumb"></span>
               </span>
             </button>
-            <button class="ai-toggle" type="button" (click)="includeCode.set(!includeCode())">
-              <span class="ai-toggle-label">Save code example as note</span>
-              <span class="ai-toggle-track" [class.is-on]="includeCode()">
-                <span class="ai-toggle-thumb"></span>
-              </span>
-            </button>
+            @if (r.snippet) {
+              <button class="ai-toggle" type="button" (click)="!isGuest() && includeCode.set(!includeCode())">
+                <span class="ai-toggle-label">
+                  Save code example as a note
+                  @if (isGuest()) { <span class="ai-toggle-hint">(sign up required)</span> }
+                </span>
+                <span class="ai-toggle-track" [class.is-on]="includeCode() && !isGuest()">
+                  <span class="ai-toggle-thumb"></span>
+                </span>
+              </button>
+            }
           </div>
 
           <button
             class="ai-add-btn"
             type="button"
             [class.is-added]="added()"
-            [disabled]="added()"
+            [disabled]="added() || saving()"
             (click)="onAdd()"
           >
             @if (added()) {
@@ -344,13 +375,13 @@
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
               </svg>
-              Add to my subjects
+              {{ saving() ? 'Adding…' : 'Add to my subjects' }}
             }
           </button>
 
-          @if (added()) {
+          @if (added() && addedSubjectId(); as id) {
             <p class="ai-added-hint">
-              View it in <strong>Subjects → {{ addedParentLabel() }}</strong>
+              <a [routerLink]="['/subjects', id]">View subject</a>
             </p>
           }
         </div>

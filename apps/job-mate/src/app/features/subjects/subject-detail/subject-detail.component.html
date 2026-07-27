@@ -20,9 +20,46 @@
       <div class="header-left">
         <h1 class="subject-title">{{ sub.title }}</h1>
         <div class="header-badges">
-          <span class="badge" [class]="statusClass(sub.status)">{{
-            statusLabel(sub.status)
-          }}</span>
+          <div class="status-dropdown-wrap">
+            <button
+              type="button"
+              class="badge badge-btn"
+              [class]="statusClass(sub.status)"
+              [attr.aria-expanded]="statusMenuOpen()"
+              (click)="toggleStatusMenu()"
+            >
+              {{ statusLabel(sub.status) }}
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </button>
+
+            @if (statusMenuOpen()) {
+              <div
+                class="status-menu-backdrop"
+                role="presentation"
+                tabindex="0"
+                (click)="statusMenuOpen.set(false)"
+                (keydown.enter)="statusMenuOpen.set(false)"
+                (keydown.space)="statusMenuOpen.set(false)"
+              ></div>
+              <div class="status-menu" role="menu">
+                @for (opt of statusOptions; track opt.value) {
+                  <button
+                    type="button"
+                    role="menuitemradio"
+                    [attr.aria-checked]="sub.status === opt.value"
+                    class="status-menu-item"
+                    [class.active]="sub.status === opt.value"
+                    (click)="selectStatus(opt.value)"
+                  >
+                    <span class="status-dot" [class]="statusClass(opt.value)"></span>
+                    {{ opt.label }}
+                  </button>
+                }
+              </div>
+            }
+          </div>
           <span class="badge" [class]="priorityClass(sub.priority)">{{
             sub.priority.toUpperCase()
           }}</span>

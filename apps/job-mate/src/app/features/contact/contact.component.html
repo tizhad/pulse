@@ -1,94 +1,80 @@
 <div class="ct-root">
   <header class="ct-header">
-    <h1 class="ct-title">Contact the Tizhad Crew</h1>
+    <span class="eyebrow">Get in touch</span>
+    <h1 class="ct-title">Let's talk about your project.</h1>
   </header>
 
   <main class="ct-main">
     <!-- Left: form -->
     <section class="ct-col ct-col--form">
-      <h2 class="ct-section-title">Drop us a Message</h2>
+      <h2 class="ct-section-title">Send a message</h2>
 
       <form class="ct-form" (submit)="$event.preventDefault(); send()">
         <div class="ct-field">
+          <label class="ct-label" for="ct-name">Name</label>
           <input
             id="ct-name"
             class="ct-input"
             type="text"
-            placeholder=" "
             [value]="name()"
             (input)="name.set($any($event.target).value)"
             autocomplete="name"
           />
-          <label class="ct-label" for="ct-name">
-            <strong>PIRATE NAME</strong>&nbsp;<span>(Name)</span>
-          </label>
         </div>
 
         <div class="ct-field">
+          <label class="ct-label" for="ct-email">Email</label>
           <input
             id="ct-email"
             class="ct-input"
             type="email"
-            placeholder=" "
             [value]="email()"
             (input)="email.set($any($event.target).value)"
             autocomplete="email"
           />
-          <label class="ct-label" for="ct-email">
-            <strong>DEN DEN MUSHI ID</strong>&nbsp;<span>(Email)</span>
-          </label>
         </div>
 
         <div class="ct-field">
+          <label class="ct-label" for="ct-subject">Subject</label>
           <input
             id="ct-subject"
             class="ct-input"
             type="text"
-            placeholder=" "
+            placeholder="What's this about?"
             [value]="subject()"
             (input)="subject.set($any($event.target).value)"
           />
-          <label class="ct-label" for="ct-subject">
-            <strong>SUBJECT</strong>&nbsp;<span>(e.g., Grand Line Query)</span>
-          </label>
         </div>
 
-        <div class="ct-field ct-field--textarea">
+        <div class="ct-field">
+          <label class="ct-label" for="ct-message">Message</label>
           <textarea
             id="ct-message"
             class="ct-input ct-textarea"
-            rows="4"
-            placeholder=" "
+            rows="5"
             [value]="message()"
             (input)="message.set($any($event.target).value)"
           ></textarea>
-          <label class="ct-label" for="ct-message">
-            <strong>MESSAGE</strong>&nbsp;<span>(Write your log here...)</span>
-          </label>
         </div>
 
         @if (sent()) {
-          <p class="ct-success">
-            ⚓ Message received! We'll reply by the next tide.
-          </p>
+          <p class="ct-success">Message opened in your email client.</p>
         }
 
-        <div class="ct-btn-wrap">
-          <button class="ct-btn-send" type="submit" [disabled]="!isValid()">
-            Send Message
-          </button>
-        </div>
+        <button class="btn-primary btn-arrow ct-btn-send" type="submit" [disabled]="!isValid()">
+          Send message
+        </button>
       </form>
     </section>
 
     <!-- Right: contact info -->
     <section class="ct-col ct-col--info">
-      <h2 class="ct-section-title">Choose your Transmission</h2>
+      <h2 class="ct-section-title">Direct</h2>
 
       <div class="ct-contact-list">
         <a class="ct-contact-item" href="mailto:captain@app.tizhad.com">
           <div class="ct-contact-text">
-            <span class="ct-contact-name">Den Den Mushi</span>
+            <span class="ct-contact-name">Email</span>
             <span class="ct-contact-val">captain&#64;app.tizhad.com</span>
           </div>
         </a>
@@ -97,8 +83,6 @@
   </main>
 
   <footer class="ct-footer">
-    <p class="ct-footer-copy">
-      © 2024 APP.TIZHAD.COM — ALL RIGHTS RESERVED ON THE GRAND LINE
-    </p>
+    <p class="ct-footer-copy">Pulse · © 2026</p>
   </footer>
 </div>

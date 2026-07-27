@@ -1,35 +1,29 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-  inject,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { PosthogService } from '../../core/services/posthog.service';
 import { SeoService } from '../../core/services/seo.service';
 import { environment } from '../../../environments/environment';
+import {
+  MarketingNavComponent,
+  type MarketingNavLink,
+} from '../../shared/components/marketing-nav/marketing-nav.component';
+import { MarketingFooterComponent } from '../../shared/components/marketing-footer/marketing-footer.component';
 
 @Component({
   selector: 'app-landing',
   templateUrl: './landing.component.html',
   styleUrl: './landing.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink],
+  imports: [RouterLink, MarketingNavComponent, MarketingFooterComponent],
 })
 export class LandingComponent implements OnInit {
   private readonly posthog = inject(PosthogService);
   private readonly seo = inject(SeoService);
 
-  readonly mobileMenuOpen = signal(false);
-
-  toggleMobileMenu(): void {
-    this.mobileMenuOpen.update((open) => !open);
-  }
-
-  closeMobileMenu(): void {
-    this.mobileMenuOpen.set(false);
-  }
+  readonly navLinks: readonly MarketingNavLink[] = [
+    { label: 'Features', routerLink: ['/'], fragment: 'features' },
+    { label: 'About creator', routerLink: ['/portfolio'] },
+  ];
 
   ngOnInit(): void {
     this.seo.set({
@@ -53,72 +47,62 @@ export class LandingComponent implements OnInit {
     this.posthog.capture('landing_page_viewed');
   }
 
-  readonly stars = [0, 1, 2, 3, 4];
-  readonly year = new Date().getFullYear();
-
   readonly features = [
     {
       iconName: 'book-open',
-      gradient: 'var(--gradient-cool)',
-      title: 'Nest subjects forever',
-      body: 'Break topics into sub-subjects (and sub-sub-subjects). Tag priority, status, and interview potential.',
-      badge: 'Smart tree',
+      forestOnHover: false,
+      title: 'Every subject, fully loaded',
+      body: 'Group by category, tag priority and status, and stack every question you’ve been asked underneath.',
+      badge: 'By category',
     },
     {
       iconName: 'building2',
-      gradient: 'var(--gradient-warm)',
+      forestOnHover: true,
       title: 'Companies ↔ questions',
       body: 'See exactly which companies asked which question — and build a focused study plan from real signals.',
       badge: 'Linked',
     },
     {
       iconName: 'briefcase',
-      gradient: 'var(--gradient-primary)',
+      forestOnHover: false,
       title: 'Application pipeline',
       body: 'Drag-and-drop kanban with status history, salary, notes, and a resume version saved per role.',
       badge: 'Kanban',
     },
     {
       iconName: 'target',
-      gradient: 'var(--gradient-warm)',
-      title: 'Priority that adapts',
-      body: 'Pulse re-ranks your focus list based on upcoming interviews and the gaps in your prep.',
-      badge: 'Adaptive',
+      forestOnHover: false,
+      title: 'Priority, your call',
+      body: 'Tag each subject critical, high, medium or low, then filter by priority, status or company to keep your board honest.',
+      badge: 'Manual tagging',
     },
     {
       iconName: 'zap',
-      gradient: 'var(--gradient-primary)',
+      forestOnHover: true,
       title: 'Resume per company',
       body: 'Upload a tailored PDF for every application. Diff versions and never lose your best line again.',
       badge: 'PDF vault',
     },
     {
       iconName: 'trending-up',
-      gradient: 'var(--gradient-cool)',
+      forestOnHover: false,
       title: 'Daily heartbeat',
       body: "Streaks, heatmaps, and gentle nudges. See progress so clearly you can't help but keep going.",
       badge: 'Habits',
     },
   ] as const;
 
-  readonly steps = [
-    {
-      num: '01',
-      tone: 'var(--coral)',
-      title: 'Capture',
-      body: 'Drop in any subject, sub-subject or interview question in seconds. Tag the company that asked it.',
-    },
-    {
-      num: '02',
-      tone: 'var(--amber)',
-      title: 'Prioritize',
-      body: 'Pulse scores interview potential. Sort, search and surface what actually matters this week.',
-    },
-    {
-      num: '03',
-      tone: 'var(--mint)',
-      title: 'Land',
-      body: 'Track applications, attach the right resume, and walk into interviews with quiet confidence.',
-    },
+  readonly techStack = [
+    'Angular 21',
+    'Signals',
+    'Zoneless',
+    'NgRx SignalStore',
+    'Signal Forms',
+    'TypeScript',
+    'Nx Monorepo',
+    'RxJS',
+    'Vitest',
+    'Playwright',
   ] as const;
+
 }

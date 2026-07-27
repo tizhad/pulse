@@ -5,13 +5,13 @@ import { test, expect } from './fixtures';
 test.describe('Portfolio page', () => {
   test('renders role and bio', async ({ page }) => {
     await page.goto('/portfolio');
-    await expect(page.getByText('FRONTEND ENGINEER · ANGULAR MIGRATION SPECIALIST')).toBeVisible();
+    await expect(page.getByText('Freelance frontend developer · Amsterdam')).toBeVisible();
   });
 
   test('/about redirects to /portfolio', async ({ page }) => {
     await page.goto('/about');
     await expect(page).toHaveURL(/\/portfolio$/);
-    await expect(page.getByText('FRONTEND ENGINEER · ANGULAR MIGRATION SPECIALIST')).toBeVisible();
+    await expect(page.getByText('Freelance frontend developer · Amsterdam')).toBeVisible();
   });
 
   test('lists all three featured projects', async ({ page }) => {
@@ -21,9 +21,25 @@ test.describe('Portfolio page', () => {
     await expect(page.getByRole('heading', { name: 'MoneyCho', exact: true })).toBeVisible();
   });
 
+  test('project cards show screenshots', async ({ page }) => {
+    await page.goto('/portfolio');
+    for (const name of [
+      'Screenshot of the Pulse landing page',
+      'Screenshot of the Angular 21 SaaS Starter Kit page',
+      'Screenshot of the MoneyCho.com homepage',
+    ]) {
+      const img = page.getByAltText(name);
+      await img.scrollIntoViewIfNeeded();
+      await expect(img).toBeVisible();
+    }
+  });
+
   test('starter kit project links to /starter-kit', async ({ page }) => {
     await page.goto('/portfolio');
-    await page.getByRole('link', { name: 'See the Kit ↗' }).click();
+    await page
+      .locator('.pf-project-card', { hasText: 'Angular 21 SaaS Starter Kit' })
+      .getByRole('link', { name: 'See the starter kit' })
+      .click();
     await expect(page).toHaveURL(/\/starter-kit/);
   });
 
@@ -37,9 +53,9 @@ test.describe('Portfolio page', () => {
 
   test('in-page nav anchors scroll to their sections', async ({ page }) => {
     await page.goto('/portfolio');
-    await page.getByRole('link', { name: '~/projects' }).click();
+    await page.getByRole('link', { name: 'Projects', exact: true }).click();
     await expect(page).toHaveURL(/#projects$/);
-    await page.getByRole('link', { name: '~/contact' }).click();
+    await page.getByRole('link', { name: 'Contact', exact: true }).click();
     await expect(page).toHaveURL(/#contact$/);
   });
 });

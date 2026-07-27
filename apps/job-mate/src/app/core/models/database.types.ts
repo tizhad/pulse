@@ -26,6 +26,7 @@ export type Database = {
           last_reviewed_at: string | null;
           next_review_at: string | null;
           is_archived: boolean;
+          is_pinned: boolean;
           created_at: string;
           updated_at: string;
         };
@@ -47,6 +48,7 @@ export type Database = {
           last_reviewed_at?: string | null;
           next_review_at?: string | null;
           is_archived?: boolean;
+          is_pinned?: boolean;
           created_at?: string;
           updated_at?: string;
         };

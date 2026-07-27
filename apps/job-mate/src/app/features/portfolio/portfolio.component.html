@@ -6,7 +6,7 @@
         height="16"
         viewBox="0 0 24 24"
         fill="none"
-        stroke="white"
+        stroke="currentColor"
         stroke-width="2"
         stroke-linecap="round"
         stroke-linejoin="round"
@@ -14,13 +14,19 @@
         <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
       </svg>
     </div>
-    <span>PULSE</span>
+    <span>Tina.R</span>
   </a>
   <nav class="pf-nav-links" aria-label="Page navigation">
-    <a href="/portfolio#work" (click)="scrollToSection($event, 'work')">~/work</a>
-    <a href="/portfolio#projects" (click)="scrollToSection($event, 'projects')">~/projects</a>
-    <a href="/portfolio#stack" (click)="scrollToSection($event, 'stack')">~/stack</a>
-    <a href="/portfolio#contact" (click)="scrollToSection($event, 'contact')">~/contact</a>
+    <a href="/portfolio#work" (click)="scrollToSection($event, 'work')">Work</a>
+    <a href="/portfolio#projects" (click)="scrollToSection($event, 'projects')"
+      >Projects</a
+    >
+    <a href="/portfolio#stack" (click)="scrollToSection($event, 'stack')"
+      >Stack</a
+    >
+    <a href="/portfolio#contact" (click)="scrollToSection($event, 'contact')"
+      >Contact</a
+    >
     <a
       href="https://www.moneycho.com"
       target="_blank"
@@ -39,304 +45,349 @@
 <article class="portfolio">
   <!-- ── Hero ─────────────────────────────────────────────────────────────── -->
   <section class="pf-hero">
-    <!-- <h1 class="pf-name">TIZHAD</h1> -->
-    <p class="pf-role">FRONTEND ENGINEER · ANGULAR MIGRATION SPECIALIST</p>
+    <span class="eyebrow">Freelance frontend developer · Amsterdam</span>
+
+    <h1 class="pf-hero-h1">
+      I'm Tina. I take aging frontend apps and make them
+      <span class="accent-swash">fast, modern</span> and easy to work on.
+    </h1>
 
     <p class="pf-bio">
-      My sweet spot is taking complex, ambiguous problems, whether it's raw
-      performance bottlenecks or greenfield feature engines, shaping the
-      technical solution, and owning the execution end-to-end.
-    </p>
-    <p class="pf-bio">
-      Freelance, available for contract engagements, up to 32 hrs/week, hybrid
-      (1-2 day onsite, Randstad) or remote.
+      Over the past five years I've rebuilt legacy platforms, shipped an
+      enterprise workflow engine, and led a fintech team at a super-app with 50
+      million users. Teams usually bring me in when something is slow, stuck, or
+      too big to fit in a sprint. I take contracts up to 32 hours a week, remote
+      or hybrid (1–2 days on-site in the Randstad).
     </p>
 
-    <p class="pf-terminal-line">
-      $ cat about.md | grep mission <span class="pf-cursor">_</span>
-    </p>
+    <div class="pf-hero-actions">
+      <a href="mailto:tiizhad@gmail.com" class="btn-primary btn-arrow pf-btn-lg"
+        >Tell me about your project</a
+      >
+      <a
+        href="/portfolio#work"
+        (click)="scrollToSection($event, 'work')"
+        class="pf-btn-text"
+        >See the work</a
+      >
+    </div>
   </section>
 
-  <!-- ── Core Competencies ────────────────────────────────────────────────── -->
+  <!-- ── What I Bring ─────────────────────────────────────────────────────── -->
   <section class="pf-section" id="work">
-    <p class="pf-section-label">WHAT_I_BRING</p>
+    <span class="eyebrow">What I do</span>
 
-    <div class="pf-capabilities-grid">
-      <div class="pf-card">
-        <h3>Angular Migration &amp; Performance Engineering</h3>
+    <div class="bento-grid pf-bento">
+      <div appReveal class="bento-card bento-card--cream pf-bento-card">
+        <h3>Frontend modernization &amp; performance</h3>
         <p>
-          Deep specialization in modern Angular architectures (v14–v21). I stay
-          ahead of the framework's trajectory—leveraging Zoneless change
-          detection, Signals, defer blocks, and robust Server-Side Rendering
-          (SSR). I don't guess at performance; I profile runtimes via Chrome
-          DevTools Protocol to eliminate long tasks and drop Core Web Vitals
-          metrics.
+          My deepest expertise is Angular 14 to 21: zoneless change detection,
+          signals, defer blocks, solid SSR. I also ship React and Next.js. When
+          an app feels slow I don't guess. I profile it with Chrome DevTools,
+          check what Datadog says about real users in production, and fix the
+          actual bottleneck instead of the loudest symptom.
+        </p>
+        <div class="pf-tags">
+          <span class="pf-tag">Angular</span>
+          <span class="pf-tag">React &amp; Next.js</span>
+          <span class="pf-tag">SSR &amp; Zoneless</span>
+        </div>
+      </div>
+
+      <div appReveal class="bento-card bento-card--dark pf-bento-card">
+        <h3>An engineer who thinks like a PM</h3>
+        <p>
+          Before going all-in on engineering I ran a fintech squad at scale.
+          That left habits your team will notice: I ask what a feature is worth
+          before building it, I check the edge cases nobody wrote down, and I
+          won't gold-plate things users don't need.
         </p>
       </div>
 
-      <div class="pf-card">
-        <h3>The Product Manager's Mindset</h3>
+      <div
+        appReveal
+        class="bento-card bento-card--dark bento-card--span-2 pf-bento-card"
+      >
+        <span class="pf-bento-index">Systems</span>
+        <h3>Big codebases don't scare me</h3>
         <p>
-          Having run a fintech squad at scale, I understand feature ROI, A/B
-          testing methodologies, and user migration risks. When I build a
-          feature, I naturally validate edge cases, prioritize user adoption
-          patterns, and ensure the engineering effort aligns strictly with
-          product goals.
-        </p>
-      </div>
-
-      <div class="pf-card">
-        <h3>System Architecture &amp; Scale</h3>
-        <p>
-          Comfortable inside large-scale codebases, Nx Monorepos, and Module
-          Federation environments. I build testable code backed by Playwright
-          and Jest, ensuring that high-velocity shipping doesn't come at the
-          cost of production stability or accessibility (WCAG 2.1 AA).
+          Nx monorepos, module federation, micro-frontends, CI/CD pipelines. I
+          write code your team can test and maintain (Playwright, Jest) and keep
+          it accessible to WCAG 2.1 AA — which since June 2025 is a legal
+          requirement for most EU businesses under the European Accessibility
+          Act, not a nice-to-have.
         </p>
       </div>
     </div>
   </section>
 
-  <!-- ── Track Record & Achievements ──────────────────────────────────────── -->
+  <!-- ── Proven Results ────────────────────────────────────────────────────── -->
+  <section class="pf-section pf-results">
+    <span class="eyebrow">Track record</span>
+    <h2 class="pf-section-h2">Results I can point to</h2>
+
+    <div class="pf-stats-row">
+      <div appReveal class="pf-stat">
+        <span class="pf-stat-label">Lighthouse score</span>
+        <div class="pf-stat-value">
+          33 <span class="pf-stat-arrow">→</span>
+          <span [appCountUp]="75">75</span>
+        </div>
+        <span class="pf-stat-caption"
+          >Legacy platform, full runtime + asset overhaul</span
+        >
+      </div>
+      <div appReveal class="pf-stat">
+        <span class="pf-stat-label">Mobile adoption</span>
+        <div class="pf-stat-value">
+          <span [appCountUp]="30" countUpPrefix="+" countUpSuffix="%"
+            >+30%</span
+          >
+        </div>
+        <span class="pf-stat-caption"
+          >After ANPR workflow shipped end-to-end</span
+        >
+      </div>
+      <div appReveal class="pf-stat">
+        <span class="pf-stat-label">Operational overhead</span>
+        <div class="pf-stat-value">
+          <span [appCountUp]="25" countUpPrefix="−" countUpSuffix="%"
+            >−25%</span
+          >
+        </div>
+        <span class="pf-stat-caption"
+          >Workflow Actions engine, Angular + RxJS + NgRx</span
+        >
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Track record ──────────────────────────────────────────────────────── -->
   <section class="pf-section" id="track-record">
-    <p class="pf-section-label">TRACK_RECORD</p>
     <div class="pf-timeline">
-      <div class="pf-timeline-block">
+      <div appReveal class="pf-timeline-block">
         <div class="pf-timeline-header">
-          <h3>Optimizing Technical Foundations</h3>
+          <h3>Bringing a legacy platform back to life</h3>
           <span class="pf-location">Amsterdam</span>
         </div>
         <p>
-          I have a proven track record of taking complete frontend ownership to
-          salvage and optimize legacy web applications. In my previous work, I
-          drove deep runtime profiling and modernized asset pipelines to
-          successfully push a critical platform's
-          <strong>Lighthouse score from 33 to 75</strong>. By collaborating
-          directly with infrastructure teams to design and roll out custom
-          CloudFront CDN architectures, I specialized in drastically reducing
-          Largest Contentful Paint (LCP) and cutting global latency.
+          I took full frontend ownership of a legacy web platform that badly
+          needed rescuing. Runtime profiling and a modernized asset pipeline
+          took its Lighthouse score from 33 to 75, and I worked directly with
+          the infrastructure team on a custom CloudFront CDN setup to cut load
+          times for users worldwide.
         </p>
         <p>
-          Beyond runtime optimizations, I own features from physical realities
-          to digital execution. I have designed and shipped complex,
-          hardware-integrated workflows—such as automated number plate
-          recognition (ANPR) systems—from zero to production, including on-site
-          validation. By owning the accompanying product strategy and user
-          migration paths, I directly contributed to a
-          <strong>30% uplift in mobile application adoption</strong>.
+          On the same team I built a hardware-integrated number plate
+          recognition (ANPR) workflow from zero to production. Mobile app
+          adoption rose 30% after it shipped.
         </p>
       </div>
 
-      <div class="pf-timeline-block">
+      <div appReveal class="pf-timeline-block">
         <div class="pf-timeline-header">
-          <h3>Architecting Complex Enterprise Engines</h3>
+          <h3>An enterprise workflow engine</h3>
           <span class="pf-location">Delft</span>
         </div>
         <p>
-          I engineer highly configurable, multi-application frontend
-          architectures capable of orchestrating complex business logic. I
-          previously built a custom Workflow Actions engine using Angular, RxJS,
-          and NgRx inside an Nx Monorepo environment. This framework empowered
-          non-technical operators to orchestrate mission-critical asset
-          scheduling and shift tasks across separate micro-frontends, resulting
-          in a measurable
-          <strong>25% reduction in manual operational overhead</strong>.
-        </p>
-        <p class="pf-timeline-extra">
-          <strong>What I can do for your codebase:</strong> I am equipped to
-          audit and eliminate complex memory leaks, restructure monolithic
-          applications into maintainable monorepos or micro-frontends, implement
-          predictable state management models, and design reactive, future-proof
-          interfaces that non-technical users can easily configure.
+          I designed and built a configurable Workflow Actions engine with
+          Angular, RxJS and NgRx inside an Nx monorepo. It let non-technical
+          operators schedule mission-critical tasks across separate
+          micro-frontends themselves, which cut manual operational work by 25%.
         </p>
       </div>
 
-      <div class="pf-timeline-block">
+      <div appReveal class="pf-timeline-block">
         <div class="pf-timeline-header">
-          <h3>Product Leadership at Scale</h3>
+          <h3>Product leadership at Snapp!</h3>
           <span class="pf-location">Tehran</span>
         </div>
         <p>
-          Before committing fully back to engineering, I led the fintech squad
-          at Snapp!, a ride-hailing super-app managing 50 million users and 6
-          million daily transactions. I steered the end-to-end regulatory
-          alignment and launch of Direct Debit—a consumer industry first in the
-          country. I also spearheaded a comprehensive VAT compliance project
-          that insulated the business with a
-          <strong>20% savings in tax overhead</strong>, earning me the Best PM
-          award.
+          I led the fintech squad at Snapp!, a ride-hailing super-app with 50
+          million users and 6 million daily transactions. I steered Direct Debit
+          through regulatory alignment to launch, a consumer-industry first in
+          the country, and ran a VAT compliance project that saved 20% in tax
+          overhead. The latter earned me the company's Best PM award.
         </p>
       </div>
     </div>
   </section>
 
-  <!-- ── Featured Projects ─────────────────────────────────────────────────── -->
+  <!-- ── Selected work ─────────────────────────────────────────────────────── -->
   <section class="pf-section" id="projects">
-    <p class="pf-section-label">
-      FEATURED_ARTIFACTS <span class="pf-count">[03 ITEMS]</span>
-    </p>
+    <span class="eyebrow">Selected work</span>
+    <h2 class="pf-section-h2">Things I've built recently</h2>
 
     <div class="pf-projects-grid">
-      <div class="pf-project-card">
-        <p class="pf-project-index">[01]</p>
+      <div appReveal class="pf-project-card">
+        <div class="pf-project-media">
+          <img
+            ngSrc="/portfolio/pulse.png"
+            width="1280"
+            height="800"
+            alt="Screenshot of the Pulse landing page"
+          />
+        </div>
         <h3 class="pf-project-title">Pulse</h3>
         <p class="pf-project-sub">
-          Personal Finance &amp; Career Management Architecture
+          The job-hunt workspace serving this very page
         </p>
         <p class="pf-project-desc">
-          I maintain an active production-grade sandbox to experiment with
-          paradigm shifts in the frontend ecosystem before they hit the
-          mainstream enterprise market. Pulse is built to push the limits of
-          modern Angular, featuring an entirely
-          <strong>Zoneless application architecture</strong>, reactive state
-          primitives via <strong>Signals</strong>, localized deferred rendering,
-          a <strong>Supabase</strong> backend, and live
-          <strong>Anthropic API integrations</strong>.
+          An interview-prep and application tracker I built to see how far
+          modern Angular can go: fully zoneless, signal-based state, deferred
+          rendering, a Supabase backend, and live Anthropic API integration.
         </p>
-        <div class="pf-tech-tags">
-          <span class="pf-tech">Angular 21</span>
-          <span class="pf-tech">Signals</span>
-          <span class="pf-tech">Zoneless</span>
-          <span class="pf-tech">LLM Integration</span>
-          <span class="pf-tech">Nx Monorepo</span>
+        <div class="pf-tags">
+          <span class="pf-tag">Angular 21</span>
+          <span class="pf-tag">Signals</span>
+          <span class="pf-tag">Zoneless</span>
         </div>
         <a
           href="https://github.com/tizhad/pulse"
           target="_blank"
           rel="noopener noreferrer"
           class="pf-project-link"
-          >Explore Codebase ↗</a
         >
+          View the code on GitHub
+        </a>
       </div>
 
-      <div class="pf-project-card">
-        <p class="pf-project-index">[02]</p>
+      <div appReveal class="pf-project-card">
+        <div class="pf-project-media">
+          <img
+            ngSrc="/portfolio/starter-kit.png"
+            width="1280"
+            height="800"
+            alt="Screenshot of the Angular 21 SaaS Starter Kit page"
+          />
+        </div>
         <h3 class="pf-project-title">Angular 21 SaaS Starter Kit</h3>
         <p class="pf-project-sub">Skip the boilerplate. Ship your product.</p>
         <p class="pf-project-desc">
-          A production-ready Angular 21 foundation sold as a one-time purchase.
-          Full auth flow, light/dark/system theme, SSR, NgRx SignalStore with
-          Supabase CRUD, PostHog analytics, SEO service, AI chat UI, and a
-          responsive sidebar — all wired together and ready to fork.
+          A production-ready Angular 21 foundation sold as a one-time purchase:
+          complete auth flow, SSR, NgRx SignalStore with Supabase CRUD, PostHog
+          analytics, an SEO service, and an AI chat UI.
         </p>
-        <div class="pf-tech-tags">
-          <span class="pf-tech">Angular 21</span>
-          <span class="pf-tech">Supabase</span>
-          <span class="pf-tech">SSR</span>
-          <span class="pf-tech">NgRx Signals</span>
-          <span class="pf-tech">€69 one-time</span>
+        <div class="pf-tags">
+          <span class="pf-tag">Angular 21</span>
+          <span class="pf-tag">Supabase</span>
+          <span class="pf-tag">€69 one-time</span>
         </div>
         <a [routerLink]="['/starter-kit']" class="pf-project-link"
-          >See the Kit ↗</a
+          >See the starter kit</a
         >
       </div>
 
-      <div class="pf-project-card">
-        <p class="pf-project-index">[03]</p>
+      <div appReveal class="pf-project-card">
+        <div class="pf-project-media">
+          <img
+            ngSrc="/portfolio/moneycho.png"
+            width="1280"
+            height="800"
+            alt="Screenshot of the MoneyCho.com homepage"
+          />
+        </div>
         <h3 class="pf-project-title">MoneyCho</h3>
         <p class="pf-project-sub">
-          Free Financial Tools — No Registration Required
+          Free financial tools, no registration required
         </p>
         <p class="pf-project-desc">
-          A personal finance toolkit built for Dutch speakers. Six
-          production-ready calculators — budgeting, compound interest, debt
-          payoff, mortgage, savings goals, and credit card payments — all backed
-          by visible formulas and monthly-updated rates. No registration
-          required, and every calculation is transparent regardless of how the
-          site is monetized.
+          A personal finance toolkit for Dutch speakers, built with Next.js: six
+          calculators with the formula shown next to every result and rates
+          updated monthly. No sign-up, no tricks.
         </p>
-        <div class="pf-tech-tags">
-          <span class="pf-tech">Financial Tools</span>
-          <span class="pf-tech">Dutch</span>
-          <span class="pf-tech">No Registration</span>
-          <span class="pf-tech">Open Formulas</span>
+        <div class="pf-tags">
+          <span class="pf-tag">Next.js</span>
+          <span class="pf-tag">React</span>
+          <span class="pf-tag">Dutch</span>
         </div>
         <a
           href="https://www.moneycho.com"
           target="_blank"
           rel="noopener noreferrer"
           class="pf-project-link"
-          >Visit MoneyCho ↗</a
         >
+          Visit moneycho.com
+        </a>
       </div>
     </div>
   </section>
 
-  <!-- ── Technical Specs ──────────────────────────────────────────────────── -->
+  <!-- ── Technical specs ───────────────────────────────────────────────────── -->
   <section class="pf-section" id="stack">
-    <p class="pf-section-label">TECHNICAL_SPECS</p>
+    <span class="eyebrow">Technical specs</span>
+    <h2 class="pf-section-h2">Built with</h2>
 
-    <div class="pf-specs-layout">
+    <div class="marquee pf-stack-marquee">
+      <div class="marquee-track">
+        @for (t of techStack; track t + '-a') {
+          <span class="pf-stack-pill">{{ t }}</span>
+        }
+        @for (t of techStack; track t + '-b') {
+          <span class="pf-stack-pill" aria-hidden="true">{{ t }}</span>
+        }
+      </div>
+    </div>
+
+    <div appReveal class="pf-specs-layout">
       <div class="pf-stack-table">
         <div class="pf-stack-row">
-          <span class="pf-stack-label">Core Ecosystem</span>
+          <span class="pf-stack-label">Core ecosystem</span>
           <span class="pf-stack-items"
-            >Angular (14–21) · React · TypeScript · JavaScript (ES6+) · SSR ·
-            REST &amp; GraphQL</span
+            >Angular (14–21) · React · Next.js · TypeScript · SSR · REST &amp;
+            GraphQL</span
           >
         </div>
         <div class="pf-stack-row">
-          <span class="pf-stack-label">State &amp; Async</span>
+          <span class="pf-stack-label">State &amp; async</span>
           <span class="pf-stack-items"
             >Signals (Zoneless) · RxJS · NgRx · Redux Toolkit · WebSockets</span
           >
         </div>
         <div class="pf-stack-row">
-          <span class="pf-stack-label">Architecture &amp; Ops</span>
+          <span class="pf-stack-label">Architecture &amp; ops</span>
           <span class="pf-stack-items"
             >Nx Monorepos · Module Federation · CI/CD Pipelines · Strapi
             CMS</span
           >
         </div>
         <div class="pf-stack-row">
-          <span class="pf-stack-label">Performance &amp; Quality</span>
+          <span class="pf-stack-label">Performance &amp; monitoring</span>
           <span class="pf-stack-items"
-            >Chrome DevTools Protocol · Flamegraph Profiling · Lighthouse ·
-            Playwright · Jest · WCAG 2.1 AA</span
+            >Datadog · Chrome DevTools Protocol · Lighthouse · Playwright · Jest
+            · WCAG 2.1 AA</span
+          >
+        </div>
+        <div class="pf-stack-row">
+          <span class="pf-stack-label">SEO &amp; discoverability</span>
+          <span class="pf-stack-items"
+            >Technical SEO · JSON-LD structured data · Core Web Vitals · AI
+            search visibility (GEO)</span
           >
         </div>
       </div>
 
       <pre
-        class="pf-code-panel"
-      ><code><span class="pf-code-comment">// stdout: engineer.status</span>
-<span class="pf-code-kw">const</span> engineer = &#123;
-  focus: <span class="pf-code-str">"Angular migration"</span>,
+        class="code-block pf-code-panel"
+      ><code><span class="pf-code-comment">// stdout: tina.status</span>
+<span class="pf-code-kw">const</span> tina = &#123;
+  focus: <span class="pf-code-str">"Frontend performance"</span>,
   approach: <span class="pf-code-str">"Own it end-to-end"</span>,
-  availability: <span class="pf-code-str">"Sep 2026"</span>,
+  nextSlot: <span class="pf-code-str">"Sep 2026"</span>,
   location: <span class="pf-code-str">"Amsterdam / remote"</span>,
 &#125;;</code></pre>
     </div>
   </section>
 
-  <!-- ── Contact / Endpoints ──────────────────────────────────────────────── -->
-  <section class="pf-contact" id="contact">
-    <h2 class="pf-contact-title">Let's build something worth shipping.</h2>
-    <p class="pf-contact-sub">
-      I'm based in Amsterdam (no sponsorship required), taking freelance
-      contracts, up to 32 hrs/week, hybrid (1 day onsite,
-      Randstad) or remote. If your team is running Angular a few versions behind
-      where the framework already is, that's exactly the problem I solve.
-    </p>
-
-    <p class="pf-section-label pf-endpoints-label">ENDPOINTS</p>
-    <div class="pf-endpoints">
-      <a
-        href="https://github.com/tizhad"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="pf-endpoint"
-        >GitHub</a
-      >
-      <!-- Placeholder — no Twitter profile yet, fill in when created -->
-      <a href="#" class="pf-endpoint pf-endpoint-placeholder">Twitter</a>
-      <!-- Placeholder — no LinkedIn profile linked yet, fill in when available -->
-      <a href="#" class="pf-endpoint pf-endpoint-placeholder">LinkedIn</a>
-      <a href="mailto:tiizhad@gmail.com" class="pf-endpoint pf-endpoint-email"
-        >tiizhad&#64;gmail.com</a
-      >
-    </div>
-
-    <a href="mailto:tiizhad@gmail.com" class="pf-btn-hire">Get in touch →</a>
-  </section>
+  <div id="contact"></div>
+  <app-marketing-footer
+    eyebrow="Open for freelance work"
+    headlinePrefix="Let's build something"
+    headlineAccent="worth shipping."
+    [cta]="{ label: 'Get in touch', href: 'mailto:tiizhad@gmail.com' }"
+    [links]="[
+      { label: 'GitHub', href: 'https://github.com/tizhad', external: true },
+      { label: 'tiizhad@gmail.com', href: 'mailto:tiizhad@gmail.com' },
+    ]"
+  />
 </article>

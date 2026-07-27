@@ -1,0 +1,18 @@
+<div class="toast-stack" aria-live="assertive">
+  @for (toast of toasts(); track toast.id) {
+    <div class="toast" [class.toast--error]="toast.kind === 'error'" role="alert">
+      <span class="toast-message">{{ toast.message }}</span>
+      <button
+        type="button"
+        class="toast-dismiss"
+        aria-label="Dismiss notification"
+        (click)="dismiss(toast.id)"
+      >
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+  }
+</div>

@@ -1,82 +1,14 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { AskAiService, type AiBrief, type AiOutlineSection, type AiSnippet } from '../../core/services/ask-ai.service';
+import { StudyStore } from '../../core/stores/study.store';
+import { AuthService } from '../../core/services/auth.service';
+import { AuthModalService } from '../../core/services/auth-modal.service';
+import { GuestContentService, GUEST_ITEM_LIMIT } from '../../core/services/guest-content.service';
+import { PosthogService } from '../../core/services/posthog.service';
+import type { SubjectCategory, SubjectPriority, SubjectStatus } from '../../core/models/jobmate.models';
 
-type Difficulty = 'Easy' | 'Medium' | 'Hard';
-type PageState = 'idle' | 'loading' | 'ready';
-
-type AiResult = {
-  query: string;
-  summary: string;
-  potential: number;
-  difficulty: Difficulty;
-  tags: string[];
-  askedBy: string[];
-  outline: { title: string; bullets: string[] }[];
-  questions: { q: string; a: string }[];
-  snippet: { lang: string; code: string };
-};
-
-const MOCK_RESULT: AiResult = {
-  query: 'Angular Router',
-  summary:
-    'The Angular Router enables navigation between views in a single-page app by mapping URL segments to components. It supports lazy loading, route guards, nested/child routes, route parameters, and resolvers for pre-fetching data.',
-  potential: 8,
-  difficulty: 'Medium',
-  tags: ['Angular', 'Frontend', 'Routing', 'SPA'],
-  askedBy: ['Google', 'Microsoft', 'Stripe'],
-  outline: [
-    {
-      title: 'Core concepts',
-      bullets: [
-        'RouterModule.forRoot() vs forChild()',
-        '<router-outlet> and routerLink directives',
-        'Route configuration shape (path, component, children)',
-      ],
-    },
-    {
-      title: 'Advanced features',
-      bullets: [
-        'Lazy loading with loadChildren',
-        'Route guards: CanActivate, CanDeactivate, Resolve',
-        'Route parameters & ActivatedRoute observables',
-      ],
-    },
-    {
-      title: 'Common pitfalls',
-      bullets: [
-        'Subscribing to params vs snapshot',
-        'Memory leaks from unsubscribed observables',
-        'Misusing wildcard ** routes',
-      ],
-    },
-  ],
-  questions: [
-    {
-      q: 'What is the difference between RouterModule.forRoot() and forChild()?',
-      a: 'forRoot() registers the router service and routes for the root module — call it once. forChild() only registers routes for feature modules without re-creating the router service.',
-    },
-    {
-      q: 'How do route guards work in Angular?',
-      a: 'Guards are services implementing interfaces like CanActivate or CanDeactivate. The router calls them before activating a route; returning false (or a UrlTree) cancels or redirects navigation.',
-    },
-    {
-      q: 'How do you implement lazy loading?',
-      a: "Use loadChildren with a dynamic import: { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule) }.",
-    },
-  ],
-  snippet: {
-    lang: 'ts',
-    code: `const routes: Routes = [
-  { path: '', component: HomeComponent },
-  {
-    path: 'admin',
-    canActivate: [AuthGuard],
-    loadChildren: () =>
-      import('./admin/admin.module').then(m => m.AdminModule),
-  },
-  { path: '**', component: NotFoundComponent },
-];`,
-  },
-};
+type PageState = 'idle' | 'loading' | 'ready' | 'error';
 
 const SUGGESTIONS = [
   'React reconciliation',
@@ -87,70 +19,187 @@ const SUGGESTIONS = [
   'Big-O of quicksort',
 ];
 
-const PARENTS = [
-  { id: 'none', label: 'Top level' },
-  { id: 'ds', label: 'Data Structures' },
-  { id: 'sd', label: 'System Design' },
-  { id: 'fe', label: 'Frontend' },
-] as const;
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
 
-const PARENT_LABELS: Record<string, string> = {
-  none: 'Top level',
-  ds: 'Data Structures',
-  sd: 'System Design',
-  fe: 'Frontend',
-};
+function renderOutlineNote(outline: AiOutlineSection[]): string {
+  return outline
+    .map(
+      (section) =>
+        `<h3>${escapeHtml(section.title)}</h3><ul>${section.bullets
+          .map((b) => `<li>${escapeHtml(b)}</li>`)
+          .join('')}</ul>`,
+    )
+    .join('');
+}
+
+function renderCodeNote(snippet: AiSnippet): string {
+  return `<pre><code>${escapeHtml(snippet.code)}</code></pre>`;
+}
 
 @Component({
   selector: 'app-ask-ai',
   templateUrl: './ask-ai.component.html',
   styleUrl: './ask-ai.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterLink],
 })
 export class AskAiComponent {
+  private readonly askAi = inject(AskAiService);
+  private readonly studyStore = inject(StudyStore);
+  private readonly auth = inject(AuthService);
+  private readonly authModal = inject(AuthModalService);
+  private readonly guestContent = inject(GuestContentService);
+  private readonly posthog = inject(PosthogService);
+
   readonly suggestions = SUGGESTIONS;
-  readonly parents = PARENTS;
+
+  readonly categoryOptions: { value: SubjectCategory; label: string }[] = [
+    { value: 'angular', label: 'Angular' },
+    { value: 'react', label: 'React' },
+    { value: 'javascript', label: 'JavaScript' },
+    { value: 'typescript', label: 'TypeScript' },
+    { value: 'performance', label: 'Performance' },
+    { value: 'testing', label: 'Testing' },
+    { value: 'accessibility', label: 'Accessibility' },
+    { value: 'system_design', label: 'System Design' },
+    { value: 'css', label: 'CSS' },
+    { value: 'soft_skills', label: 'Soft Skills' },
+  ];
+
+  readonly priorityOptions: { value: SubjectPriority; label: string }[] = [
+    { value: 'low', label: 'Low' },
+    { value: 'medium', label: 'Medium' },
+    { value: 'high', label: 'High' },
+    { value: 'critical', label: 'Critical' },
+  ];
+
+  readonly statusOptions: { value: SubjectStatus; label: string }[] = [
+    { value: 'not_started', label: 'Not started' },
+    { value: 'in_progress', label: 'In progress' },
+    { value: 'needs_review', label: 'Needs review' },
+    { value: 'confident', label: 'Confident' },
+    { value: 'mastered', label: 'Mastered' },
+  ];
 
   readonly query = signal('');
   readonly pageState = signal<PageState>('idle');
-  readonly result = signal<AiResult | null>(null);
+  readonly errorMessage = signal<string | null>(null);
+  readonly result = signal<AiBrief | null>(null);
   readonly added = signal(false);
+  readonly addedSubjectId = signal<string | null>(null);
+  readonly saving = signal(false);
 
-  readonly selectedParent = signal('none');
-  readonly priority = signal('high');
-  readonly status = signal('todo');
-  readonly includeSubjects = signal(true);
+  readonly selectedCategory = signal<SubjectCategory>('javascript');
+  readonly priority = signal<SubjectPriority>('high');
+  readonly status = signal<SubjectStatus>('not_started');
+  readonly includeOutline = signal(true);
   readonly includeQA = signal(true);
   readonly includeCompanies = signal(true);
   readonly includeCode = signal(true);
 
-  readonly addedParentLabel = computed(() => PARENT_LABELS[this.selectedParent()] ?? 'Top level');
+  readonly isGuest = () => !this.auth.isAuthenticated();
 
-  ask(q: string): void {
-    if (!q.trim()) return;
-    this.query.set(q);
+  private canCreateSubject(): boolean {
+    if (this.auth.isAuthenticated()) return true;
+    if (this.guestContent.canAddSubject()) return true;
+    this.authModal.open(
+      'signup',
+      `You've added ${GUEST_ITEM_LIMIT} free subjects — sign up to keep building your study plan.`,
+    );
+    return false;
+  }
+
+  async ask(q: string): Promise<void> {
+    const trimmed = q.trim();
+    if (!trimmed) return;
+
+    this.query.set(trimmed);
     this.pageState.set('loading');
     this.added.set(false);
-    setTimeout(() => {
-      this.result.set({ ...MOCK_RESULT, query: q });
+    this.errorMessage.set(null);
+
+    try {
+      const brief = await this.askAi.generateBrief(trimmed);
+      this.result.set(brief);
+      this.selectedCategory.set(brief.category);
       this.pageState.set('ready');
-    }, 1200);
+      this.posthog.capture('ask_ai_query', { query: trimmed });
+    } catch (err) {
+      console.error('Ask AI request failed:', err);
+      this.pageState.set('error');
+      this.errorMessage.set('Something went wrong generating this brief. Please try again.');
+    }
   }
 
   onSubmit(): void {
     this.ask(this.query());
   }
 
-  onAdd(): void {
-    this.added.set(true);
-  }
-
   onRegenerate(): void {
     const r = this.result();
-    if (r) this.ask(r.query);
+    if (r) this.ask(this.query());
   }
 
-  getSelectValue(event: Event): string {
+  private getSelectValue(event: Event): string {
     return (event.target as HTMLSelectElement).value;
+  }
+
+  setCategory(event: Event): void {
+    this.selectedCategory.set(this.getSelectValue(event) as SubjectCategory);
+  }
+
+  setPriority(event: Event): void {
+    this.priority.set(this.getSelectValue(event) as SubjectPriority);
+  }
+
+  setStatus(event: Event): void {
+    this.status.set(this.getSelectValue(event) as SubjectStatus);
+  }
+
+  async onAdd(): Promise<void> {
+    const r = this.result();
+    if (!r || !this.canCreateSubject()) return;
+
+    this.saving.set(true);
+    const subject = await this.studyStore.addSubject({
+      title: r.title,
+      summary: r.summary,
+      category: this.selectedCategory(),
+      priority: this.priority(),
+      status: this.status(),
+      confidenceScore: 1,
+      estimatedReadTime: null,
+      tags: this.includeCompanies() ? r.askedBy : [],
+      sourceUrl: null,
+    });
+    this.saving.set(false);
+    if (!subject) return;
+
+    if (this.includeQA()) {
+      for (const q of r.questions) {
+        await this.studyStore.addQA(subject.id, { question: q.q, answer: q.a });
+      }
+    }
+
+    if (this.auth.isAuthenticated()) {
+      if (this.includeOutline() && r.outline.length > 0) {
+        await this.studyStore.addNote(subject.id, renderOutlineNote(r.outline));
+      }
+      if (this.includeCode() && r.snippet) {
+        await this.studyStore.addNote(subject.id, renderCodeNote(r.snippet));
+      }
+    }
+
+    this.addedSubjectId.set(subject.id);
+    this.added.set(true);
+    this.posthog.capture('ask_ai_subject_added', {
+      category: this.selectedCategory(),
+      qa_count: r.questions.length,
+    });
   }
 }

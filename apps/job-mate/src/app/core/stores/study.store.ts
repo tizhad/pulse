@@ -2,6 +2,7 @@ import { Injectable, inject, signal, computed, effect } from '@angular/core';
 import { SupabaseService } from '../services/supabase.service';
 import { AuthService } from '../services/auth.service';
 import { GuestContentService } from '../services/guest-content.service';
+import { ToastService } from '../services/toast.service';
 import {
   fromSubjectRow, toSubjectInsert,
   fromCompanyTagRow, fromStudyNoteRow, fromCodeSampleRow, fromResourceRow,
@@ -31,6 +32,7 @@ function buildGuestSubject(data: Parameters<typeof toSubjectInsert>[0]): Subject
     lastReviewedAt: null,
     nextReviewAt: null,
     isArchived: false,
+    isPinned: false,
     createdAt: now,
     updatedAt: now,
     companyTags: [],
@@ -45,13 +47,18 @@ export class StudyStore {
   private readonly supabase = inject(SupabaseService);
   private readonly auth = inject(AuthService);
   private readonly guestContent = inject(GuestContentService);
+  private readonly toast = inject(ToastService);
 
   private readonly _subjects = signal<Subject[]>([]);
   private readonly _loading = signal(false);
   private readonly _loaded = signal(false);
 
+  private readonly _archivedSubjects = signal<Subject[]>([]);
+  private readonly _archivedLoaded = signal(false);
+
   readonly subjects = this._subjects.asReadonly();
   readonly loading = this._loading.asReadonly();
+  readonly archivedSubjects = this._archivedSubjects.asReadonly();
 
   readonly filters = signal<StudyFilters>({
     category: null, status: null, priority: null, company: null, search: '',
@@ -96,6 +103,7 @@ export class StudyStore {
   private async onSignedIn(): Promise<void> {
     await this.migrateGuestSubjects();
     await this.load();
+    await this.loadArchived();
   }
 
   private async migrateGuestSubjects(): Promise<void> {
@@ -103,7 +111,12 @@ export class StudyStore {
     const userId = this.auth.user()?.id;
     if (guests.length === 0 || !userId) return;
 
+    const { data: existing } = await this.supabase.client
+      .from('study_subjects').select('title').eq('user_id', userId);
+    const existingTitles = new Set((existing ?? []).map(row => row.title.toLowerCase()));
+
     for (const guest of guests) {
+      if (existingTitles.has(guest.title.toLowerCase())) continue;
       const payload = toSubjectInsert({
         title: guest.title,
         summary: guest.summary,
@@ -116,6 +129,7 @@ export class StudyStore {
         sourceUrl: guest.sourceUrl,
       }, userId);
       await this.supabase.client.from('study_subjects').insert(payload);
+      existingTitles.add(guest.title.toLowerCase());
     }
     this.guestContent.clearSubjects();
   }
@@ -164,7 +178,10 @@ export class StudyStore {
 
     const payload = toSubjectInsert(data, userId);
     const { data: row, error } = await this.supabase.client.from('study_subjects').insert(payload).select().single();
-    if (error || !row) return null;
+    if (error || !row) {
+      this.toast.error("Couldn't create the subject. Please try again.");
+      return null;
+    }
 
     const subject = fromSubjectRow(row);
     this._subjects.update(list => [subject, ...list]);
@@ -173,8 +190,13 @@ export class StudyStore {
 
   async updateSubject(id: string, patch: Partial<Pick<Subject,
     'title' | 'summary' | 'category' | 'priority' | 'status' |
-    'confidenceScore' | 'estimatedReadTime' | 'tags' | 'sourceUrl' | 'isArchived'
+    'confidenceScore' | 'estimatedReadTime' | 'tags' | 'sourceUrl' | 'isArchived' | 'isPinned'
   >>): Promise<void> {
+    if (!this.auth.user()) {
+      this.guestContent.updateSubject(id, patch);
+      return;
+    }
+
     const prev = this._subjects();
     this._subjects.update(list => list.map(s => s.id === id ? { ...s, ...patch } : s));
 
@@ -190,9 +212,13 @@ export class StudyStore {
     if (patch.tags !== undefined) dbPatch.tags = patch.tags;
     if (patch.sourceUrl !== undefined) dbPatch.source_url = patch.sourceUrl ?? null;
     if (patch.isArchived !== undefined) dbPatch.is_archived = patch.isArchived;
+    if (patch.isPinned !== undefined) dbPatch.is_pinned = patch.isPinned;
 
     const { error } = await this.supabase.client.from('study_subjects').update(dbPatch).eq('id', id);
-    if (error) this._subjects.set(prev);
+    if (error) {
+      this._subjects.set(prev);
+      this.toast.error("Couldn't save subject changes — they've been undone.");
+    }
   }
 
   async updateConfidence(id: string, score: 1 | 2 | 3 | 4 | 5): Promise<void> {
@@ -211,14 +237,76 @@ export class StudyStore {
       last_reviewed_at: new Date().toISOString(),
     }).eq('id', id);
 
-    if (error) this._subjects.set(prev);
+    if (error) {
+      this._subjects.set(prev);
+      this.toast.error("Couldn't save your confidence score — it's been undone.");
+    }
+  }
+
+  async togglePinned(id: string): Promise<void> {
+    const sub = this.getById(id);
+    if (!sub) return;
+    await this.updateSubject(id, { isPinned: !sub.isPinned });
+  }
+
+  async loadArchived(): Promise<void> {
+    if (this._archivedLoaded()) return;
+    const userId = this.auth.user()?.id;
+    if (!userId) return;
+
+    const { data, error } = await this.supabase.client
+      .from('study_subjects').select('*').eq('user_id', userId).eq('is_archived', true);
+    if (!error && data) {
+      this._archivedSubjects.set(data.map(row => fromSubjectRow(row)));
+      this._archivedLoaded.set(true);
+    }
+  }
+
+  async archiveSubject(id: string): Promise<void> {
+    const subject = this._subjects().find(s => s.id === id);
+    if (!subject) return;
+
+    const prevSubjects = this._subjects();
+    const prevArchived = this._archivedSubjects();
+    this._subjects.update(list => list.filter(s => s.id !== id));
+    this._archivedSubjects.update(list => [{ ...subject, isArchived: true }, ...list]);
+
+    const { error } = await this.supabase.client.from('study_subjects').update({ is_archived: true }).eq('id', id);
+    if (error) {
+      this._subjects.set(prevSubjects);
+      this._archivedSubjects.set(prevArchived);
+      this.toast.error("Couldn't archive the subject. Please try again.");
+    }
+  }
+
+  async restoreSubject(id: string): Promise<void> {
+    const subject = this._archivedSubjects().find(s => s.id === id);
+    if (!subject) return;
+
+    const prevSubjects = this._subjects();
+    const prevArchived = this._archivedSubjects();
+    this._archivedSubjects.update(list => list.filter(s => s.id !== id));
+    this._subjects.update(list => [{ ...subject, isArchived: false }, ...list]);
+
+    const { error } = await this.supabase.client.from('study_subjects').update({ is_archived: false }).eq('id', id);
+    if (error) {
+      this._subjects.set(prevSubjects);
+      this._archivedSubjects.set(prevArchived);
+      this.toast.error("Couldn't restore the subject. Please try again.");
+    }
   }
 
   async deleteSubject(id: string): Promise<void> {
-    const prev = this._subjects();
+    const prevSubjects = this._subjects();
+    const prevArchived = this._archivedSubjects();
     this._subjects.update(list => list.filter(s => s.id !== id));
+    this._archivedSubjects.update(list => list.filter(s => s.id !== id));
     const { error } = await this.supabase.client.from('study_subjects').delete().eq('id', id);
-    if (error) this._subjects.set(prev);
+    if (error) {
+      this._subjects.set(prevSubjects);
+      this._archivedSubjects.set(prevArchived);
+      this.toast.error("Couldn't delete the subject. Please try again.");
+    }
   }
 
   async addQA(id: string, qa: import('../models/jobmate.models').QA): Promise<void> {
@@ -228,7 +316,10 @@ export class StudyStore {
     const prev = this._subjects();
     this._subjects.update(list => list.map(s => s.id === id ? { ...s, qa: updatedQA } : s));
     const { error } = await this.supabase.client.from('study_subjects').update({ qa: updatedQA as never }).eq('id', id);
-    if (error) this._subjects.set(prev);
+    if (error) {
+      this._subjects.set(prev);
+      this.toast.error("Couldn't save the Q&A — it's been undone.");
+    }
   }
 
   async addNote(subjectId: string, content: string): Promise<void> {
@@ -246,6 +337,8 @@ export class StudyStore {
       this._subjects.update(list =>
         list.map(s => s.id === subjectId ? { ...s, notes: [...s.notes, note] } : s),
       );
+    } else {
+      this.toast.error("Couldn't add the note. Please try again.");
     }
   }
 
@@ -262,6 +355,8 @@ export class StudyStore {
           notes: s.notes.map(n => n.id === noteId ? { ...n, content, updatedAt: new Date() } : n),
         } : s),
       );
+    } else {
+      this.toast.error("Couldn't save the note. Please try again.");
     }
   }
 
@@ -271,7 +366,10 @@ export class StudyStore {
       list.map(s => s.id === subjectId ? { ...s, notes: s.notes.filter(n => n.id !== noteId) } : s),
     );
     const { error } = await this.supabase.client.from('subject_notes').delete().eq('id', noteId);
-    if (error) this._subjects.set(prev);
+    if (error) {
+      this._subjects.set(prev);
+      this.toast.error("Couldn't delete the note — it's been restored.");
+    }
   }
 
   async removeQA(id: string, index: number): Promise<void> {
@@ -281,7 +379,10 @@ export class StudyStore {
     const prev = this._subjects();
     this._subjects.update(list => list.map(s => s.id === id ? { ...s, qa: updatedQA } : s));
     const { error } = await this.supabase.client.from('study_subjects').update({ qa: updatedQA as never }).eq('id', id);
-    if (error) this._subjects.set(prev);
+    if (error) {
+      this._subjects.set(prev);
+      this.toast.error("Couldn't remove the Q&A — it's been restored.");
+    }
   }
 
   getById(id: string): Subject | undefined {

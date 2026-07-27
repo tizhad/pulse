@@ -21,6 +21,7 @@ export class AuthComponent {
   readonly password = signal('');
   readonly errorMessage = signal<string | null>(null);
   readonly loading = signal(false);
+  readonly googleLoading = signal(false);
 
   close(): void {
     this.authModal.close();
@@ -62,5 +63,19 @@ export class AuthComponent {
     );
 
     this.authModal.close();
+  }
+
+  async signInWithGoogle(): Promise<void> {
+    this.errorMessage.set(null);
+    this.googleLoading.set(true);
+
+    this.posthog.capture('google_signin_clicked');
+    const error = await this.auth.signInWithGoogle();
+
+    if (error) {
+      this.googleLoading.set(false);
+      this.errorMessage.set(error.message);
+    }
+    // On success the browser redirects to Google, so no further state change here.
   }
 }

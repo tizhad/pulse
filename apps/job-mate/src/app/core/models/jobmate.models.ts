@@ -78,6 +78,7 @@ export interface Subject {
   lastReviewedAt: Date | null;
   nextReviewAt: Date | null;
   isArchived: boolean;
+  isPinned: boolean;
   createdAt: Date;
   updatedAt: Date;
   // joined relations

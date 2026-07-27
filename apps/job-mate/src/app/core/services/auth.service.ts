@@ -42,6 +42,15 @@ export class AuthService {
     return error;
   }
 
+  async signInWithGoogle(): Promise<AuthError | null> {
+    if (!this.supabase.isConfigured) return null;
+    const { error } = await this.supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.origin + window.location.pathname },
+    });
+    return error;
+  }
+
   async signOut(): Promise<void> {
     if (!this.supabase.isConfigured) return;
     await this.supabase.auth.signOut();

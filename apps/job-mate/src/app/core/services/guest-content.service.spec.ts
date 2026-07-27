@@ -34,7 +34,7 @@ function makeSubject(id: string): Subject {
     id, userId: 'guest', title: `Subject ${id}`, summary: null, category: 'angular',
     priority: 'medium', status: 'not_started', confidenceScore: 1, estimatedReadTime: null,
     tags: [], qa: [], sourceUrl: null, aiSummary: null, interviewedOn: [],
-    lastReviewedAt: null, nextReviewAt: null, isArchived: false,
+    lastReviewedAt: null, nextReviewAt: null, isArchived: false, isPinned: false,
     createdAt: new Date(), updatedAt: new Date(),
     companyTags: [], notes: [], codeSamples: [], resources: [],
   };

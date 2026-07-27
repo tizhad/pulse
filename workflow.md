@@ -126,3 +126,50 @@
 - Bug found and fixed along the way: `/starter-kit` was missing from `App.noShellRoutes` (`app.ts`), so visiting it rendered the dashboard app-shell (sidebar + its own mobile hamburger) wrapped around the page's own marketing header — a stray fixed-position shell header was actually intercepting clicks meant for the new starter-kit mobile menu. Added `/starter-kit` to `noShellRoutes`.
 - Projects affected: `job-mate`
 - Playwright test added: yes (`e2e/marketing-mobile-nav.spec.ts` — desktop/mobile visibility for both pages, toggle open/close, backdrop close, link navigation closes menu)
+
+---
+
+## Editorial Design System Rollout — completed 2026-07-23
+
+- Full-app visual redesign replacing three inconsistent design languages (cream/indigo CRUD UI, dark-terminal `/portfolio`, glassmorphism Landing/Starter-Kit) with one unified editorial system, commissioned from a Lovable-generated `/portfolio` reference and extended app-wide at the user's request. See `decision.md` for the full architectural rationale.
+- Self-hosted Instrument Serif + Work Sans (`apps/job-mate/public/fonts/`, `styles/_fonts.scss`), removed unused Google Fonts CDN links
+- New palette (cream `#FAF8F2` / forest `#1A2E1F` / gold `#A8875A`) and new global utilities (`.eyebrow`, `.bento-grid`/`.bento-card`, `.marquee`, pill `.btn-primary`) in `styles/_tokens.scss`
+- Rewrote Landing, Starter-Kit, and Portfolio to the new bento/editorial layout; extracted `MarketingNavComponent`/`MarketingFooterComponent` to remove `ln-*`/`sk-*` duplicated nav/footer markup
+- Re-skinned the root shell (`app.html`/`app.scss`) and auth modal — sidebar nav deliberately kept compact/sans-serif rather than editorial, per a density rule that reserves serif treatment for headlines/eyebrows/empty-states and keeps tables/badges/forms/nav dense
+- Applied the same density rule across Dashboard, Subjects (+ detail), Companies, Applications; promoted duplicated `.page-title`/`.page-header`/`.page-subtitle`/`.empty-state` rules (found identical across 7-9 components) to global utilities instead of editing each file
+- Retinted remaining surfaces (Settings, Resume, Ask AI, Thank-you, Download) via the token cascade plus targeted fixes (old indigo gradient tokens retargeted, no longer referencing `#6C5CE7`)
+- Rewrote `/contact` from its pre-existing One Piece-themed easter egg to the editorial system (user's explicit choice after I flagged it as a fourth, previously-unknown design language)
+- Dropped the `prefers-color-scheme: dark` auto dark-mode override tied to the retired indigo palette
+- Deleted the empty, unreferenced `shared/components/status-badge/` directory
+- Projects affected: `job-mate` (`wealth-mate` untouched, build verified unaffected)
+- Playwright test added: yes — rewrote `e2e/marketing-mobile-nav.spec.ts` and `e2e/portfolio.spec.ts` for the new markup/copy; full suite (`e2e/guest-limits.spec.ts`, `e2e/shell-navigation.spec.ts`, both rewritten specs) green across all 4 device projects (180 tests)
+
+## Portfolio content & SEO rewrite — completed 2026-07-27
+- Rewrote all `/portfolio` copy for a human, first-person voice aimed at landing freelance/contract/interim work: name (Tina Rezanezhad) now appears in the hero H1, abstract slogans ("high-performance digital craft", "Strategic engineering") replaced with concrete plain-language claims, timeline entries rewritten in first person
+- Fixed factual mismatches: Pulse project card no longer described as "personal finance" (it is the interview-prep/job-tracker app serving the page); "View case study" links renamed to honest labels ("View the code on GitHub", "See the starter kit", "Visit moneycho.com"); availability code panel renamed `availability` → `nextSlot: "Sep 2026"` so it no longer contradicts the "Open for freelance contracts" status pill
+- Removed dead Twitter/LinkedIn `#` links from the portfolio footer (GitHub + email kept)
+- SEO: page title now "Tina Rezanezhad — Freelance Angular Developer in Amsterdam" (added `absoluteTitle` option to `SeoService` to skip the "| Pulse" suffix on personal pages); meta description rewritten around freelance/contract search terms; JSON-LD Person now uses the real name with `alternateName: "Tizhad"` and expanded `knowsAbout`
+- Projects affected: `job-mate` (`wealth-mate` untouched, build verified)
+- Playwright test added: updated `e2e/portfolio.spec.ts` assertions to the new copy; portfolio + marketing-nav suites green across all 4 device projects (72 tests)
+
+## Portfolio repositioning + visual upgrade — completed 2026-07-27
+- Repositioned `/portfolio` from an Angular-only niche to a problem niche ("frontend modernization & performance"): hero now says "aging frontend apps", deepest-expertise-is-Angular framing kept in the bento card body, React/Next.js added everywhere it's true (stack table, marquee, MoneyCho card now credits Next.js), SEO title/description/JSON-LD broadened to "Freelance Frontend Developer" with Angular/React/Next.js keywords
+- Added Datadog (real experience, previously unlisted) to the performance card, stack table ("Performance & monitoring" row), marquee, and JSON-LD; added a new "SEO & discoverability" stack row (Technical SEO, JSON-LD, Core Web Vitals, AI search visibility/GEO)
+- Sharpened the WCAG 2.1 AA line into a compliance pitch: since June 2025 it's a legal requirement for most EU businesses under the European Accessibility Act
+- Visual upgrade: real screenshots (captured via Playwright) of Pulse, Starter Kit, and MoneyCho added to the project cards (`public/portfolio/*.png`, rendered with `NgOptimizedImage`, lazy, 16:9 top crop, hover zoom); new `RevealDirective` (IntersectionObserver fade-up on scroll, SSR-safe via `afterNextRender`) applied to bento cards, stats, timeline, project cards, specs; new `CountUpDirective` animates the stats (33→75, +30%, −25%) on first view; both directives and all CSS respect `prefers-reduced-motion`
+- Projects affected: `job-mate` (new `shared/directives/` folder in-app; `wealth-mate` untouched)
+- Playwright test added: yes — new "project cards show screenshots" test in `e2e/portfolio.spec.ts`; full suite green across all 4 device projects (184 tests)
+
+## Remove workflow steps section from landing — completed 2026-07-27
+- Removed the "Capture / Prioritize / Land" three-step section (`.ln-workflow`, `#workflow` anchor) that sat between the features grid and the footer on the marketing landing page, per direct request
+- Deleted the section markup, the `steps` data array, and all associated SCSS (`.ln-workflow*`, `.ln-steps-grid`, `.ln-step-*`); no other page linked to `#workflow`, so nothing else needed updating
+- Projects affected: `job-mate`
+- Playwright test added: no (pure removal, no new behavior to cover); full suite verified green (184 tests) after the change
+
+## Toast error feedback for failed saves — completed 2026-07-27
+- Root cause follow-up to the "Add to Today's Focus" incident: every store did optimistic updates with silent rollback on Supabase errors, so schema drift / network failures looked like dead buttons
+- New `ToastService` (signal-based queue, auto-dismiss 5s) + `ToastComponent` (fixed bottom-center stack, `role="alert"`, dismiss button, reduced-motion safe) mounted in the app root so it covers shell and marketing routes
+- Wired contextual error toasts into every silent failure path: `study.store` (create/update/confidence/archive/restore/delete/QA add+remove/note add+update+delete), `application.store` (create/update/delete), `company.store` (create/status/update/delete), `settings.store` (upsert) — all rollbacks now tell the user their change was undone
+- Also fixed `guest-content.service.spec.ts` fixture missing `isPinned` — unit tests had been broken since the pin feature landed on 2026-07-24
+- Projects affected: `job-mate`
+- Playwright test added: no (failure paths need a broken backend; covered by 5 new Vitest cases in `toast.service.spec.ts` — 30 unit tests green, full e2e suite still 184 green)
