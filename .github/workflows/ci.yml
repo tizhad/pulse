@@ -37,7 +37,14 @@ jobs:
 
       # Prepend any command with "nx record --" to record its logs to Nx Cloud
       - run: npx nx record -- echo Hello World
-      - run: npx nx run-many -t lint test build typecheck e2e
+      # e2e is run directly via Playwright, not as an Nx target: the
+      # @nx/playwright plugin's inferred e2e target needs a committed
+      # lockfile to resolve @playwright/test as an external dependency
+      # for its project graph node, which this repo intentionally lacks
+      # (see the npm install step above). This matches the project's
+      # documented local workflow (CLAUDE.md: `npx playwright test`).
+      - run: npx nx run-many -t lint test build typecheck
+      - run: npx playwright test
       # Nx Cloud recommends fixes for failures to help you get CI green faster. Learn more: https://nx.dev/ci/features/self-healing-ci
       - run: npx nx fix-ci
         if: always()
