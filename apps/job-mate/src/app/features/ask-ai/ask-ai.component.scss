@@ -406,14 +406,6 @@
   color: var(--priority-high-text);
 }
 
-.ai-tag--potential {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  background: color-mix(in srgb, var(--mint) 40%, transparent);
-  color: var(--mint-foreground);
-}
-
 .ai-regenerate-btn {
   display: inline-flex;
   align-items: center;
@@ -784,6 +776,12 @@ details[open] .ai-qa-chevron {
   color: var(--text);
 }
 
+.ai-toggle-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-left: 4px;
+}
+
 .ai-toggle-track {
   position: relative;
   display: inline-block;
@@ -846,7 +844,11 @@ details[open] .ai-qa-chevron {
   text-align: center;
   color: var(--text-muted);
 
-  strong { color: var(--text); font-weight: 600; }
+  a {
+    color: var(--gold-deep, var(--text));
+    font-weight: 600;
+    text-decoration: underline;
+  }
 }
 
 /* ── Disclaimer ──────────────────────────────────────────────────────────── */

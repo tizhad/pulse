@@ -51,9 +51,9 @@ export class LandingComponent implements OnInit {
     {
       iconName: 'book-open',
       forestOnHover: false,
-      title: 'Nest subjects forever',
-      body: 'Break topics into sub-subjects (and sub-sub-subjects). Tag priority, status, and category as you go.',
-      badge: 'Smart tree',
+      title: 'Every subject, fully loaded',
+      body: 'Group by category, tag priority and status, and stack every question you’ve been asked underneath.',
+      badge: 'By category',
     },
     {
       iconName: 'building2',
