@@ -370,15 +370,13 @@
   </section>
 
   <app-marketing-footer
-    eyebrow="Ready when you are"
-    headlinePrefix="Build your"
-    headlineAccent="momentum"
-    headlineSuffix=" today."
-    [cta]="{ label: 'Continue with Pulse', routerLink: ['/dashboard'] }"
     [links]="[
-      { label: 'Privacy', href: '#' },
-      { label: 'Terms', href: '#' },
+      { label: 'About Me', routerLink: ['/portfolio'] },
       { label: 'Contact', routerLink: ['/contact'] },
+      { label: 'GitHub', href: 'https://github.com/tizhad', external: true },
+      { label: 'LinkedIn', href: 'https://www.linkedin.com/in/trezanezhad/', external: true },
+      { label: 'MoneyCho', href: 'https://www.moneycho.com', external: true },
+      { label: 'Starter Kit', routerLink: ['/starter-kit'] },
     ]"
   />
 </div>

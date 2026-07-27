@@ -27,14 +27,6 @@
     <a href="/portfolio#contact" (click)="scrollToSection($event, 'contact')"
       >Contact</a
     >
-    <a
-      href="https://www.moneycho.com"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="pf-nav-external"
-    >
-      MoneyCho ↗
-    </a>
   </nav>
   <span class="pf-status">
     <span class="pf-status-dot"></span>
@@ -45,8 +37,6 @@
 <article class="portfolio">
   <!-- ── Hero ─────────────────────────────────────────────────────────────── -->
   <section class="pf-hero">
-    <span class="eyebrow">Freelance frontend developer · Amsterdam</span>
-
     <h1 class="pf-hero-h1">
       I'm Tina. I take aging frontend apps and make them
       <span class="accent-swash">fast, modern</span> and easy to work on.
@@ -59,16 +49,11 @@
       too big to fit in a sprint. I take contracts up to 32 hours a week, remote
       or hybrid (1–2 days on-site in the Randstad).
     </p>
+    <span class="eyebrow">Frontend Engineer · Amsterdam</span>
 
     <div class="pf-hero-actions">
       <a href="mailto:tiizhad@gmail.com" class="btn-primary btn-arrow pf-btn-lg"
         >Tell me about your project</a
-      >
-      <a
-        href="/portfolio#work"
-        (click)="scrollToSection($event, 'work')"
-        class="pf-btn-text"
-        >See the work</a
       >
     </div>
   </section>
@@ -373,7 +358,6 @@
 <span class="pf-code-kw">const</span> tina = &#123;
   focus: <span class="pf-code-str">"Frontend performance"</span>,
   approach: <span class="pf-code-str">"Own it end-to-end"</span>,
-  nextSlot: <span class="pf-code-str">"Sep 2026"</span>,
   location: <span class="pf-code-str">"Amsterdam / remote"</span>,
 &#125;;</code></pre>
     </div>
@@ -381,13 +365,17 @@
 
   <div id="contact"></div>
   <app-marketing-footer
-    eyebrow="Open for freelance work"
-    headlinePrefix="Let's build something"
-    headlineAccent="worth shipping."
-    [cta]="{ label: 'Get in touch', href: 'mailto:tiizhad@gmail.com' }"
     [links]="[
+      { label: 'About Me', routerLink: ['/portfolio'] },
+      { label: 'Contact', routerLink: ['/contact'] },
       { label: 'GitHub', href: 'https://github.com/tizhad', external: true },
-      { label: 'tiizhad@gmail.com', href: 'mailto:tiizhad@gmail.com' },
+      {
+        label: 'LinkedIn',
+        href: 'https://www.linkedin.com/in/trezanezhad/',
+        external: true,
+      },
+      { label: 'MoneyCho', href: 'https://www.moneycho.com', external: true },
+      { label: 'Starter Kit', routerLink: ['/starter-kit'] },
     ]"
   />
 </article>
