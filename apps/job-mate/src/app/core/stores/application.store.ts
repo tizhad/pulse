@@ -2,6 +2,7 @@ import { Injectable, inject, signal, effect } from '@angular/core';
 import { SupabaseService } from '../services/supabase.service';
 import { AuthService } from '../services/auth.service';
 import { GuestContentService } from '../services/guest-content.service';
+import { ToastService } from '../services/toast.service';
 import { fromApplicationRow } from '../models/mappers';
 import type { Application, AppStatus } from '../models/jobmate.models';
 
@@ -30,6 +31,7 @@ export class ApplicationStore {
   private readonly supabase = inject(SupabaseService);
   private readonly auth = inject(AuthService);
   private readonly guestContent = inject(GuestContentService);
+  private readonly toast = inject(ToastService);
 
   private readonly _applications = signal<Application[]>([]);
   private readonly _loaded = signal(false);
@@ -115,7 +117,10 @@ export class ApplicationStore {
       tags: payload.tags,
     }).select().single();
 
-    if (error || !data) return null;
+    if (error || !data) {
+      this.toast.error("Couldn't create the application. Please try again.");
+      return null;
+    }
     const app = fromApplicationRow(data);
     this._applications.update(list => [app, ...list]);
     return app;
@@ -128,7 +133,10 @@ export class ApplicationStore {
     const prev = this._applications();
     this._applications.update(list => list.map(a => a.id === id ? { ...a, ...patch } : a));
     const { error } = await this.supabase.client.from('applications').update(patch).eq('id', id);
-    if (error) this._applications.set(prev);
+    if (error) {
+      this._applications.set(prev);
+      this.toast.error("Couldn't save application changes — they've been undone.");
+    }
   }
 
   async updateStatus(id: string, status: AppStatus): Promise<void> {
@@ -139,7 +147,10 @@ export class ApplicationStore {
     const prev = this._applications();
     this._applications.update(list => list.filter(a => a.id !== id));
     const { error } = await this.supabase.client.from('applications').delete().eq('id', id);
-    if (error) this._applications.set(prev);
+    if (error) {
+      this._applications.set(prev);
+      this.toast.error("Couldn't delete the application — it's been restored.");
+    }
   }
 
   invalidate(): void {

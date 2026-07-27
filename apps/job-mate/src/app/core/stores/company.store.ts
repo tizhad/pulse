@@ -2,6 +2,7 @@ import { Injectable, inject, signal, effect } from '@angular/core';
 import { SupabaseService } from '../services/supabase.service';
 import { AuthService } from '../services/auth.service';
 import { GuestContentService } from '../services/guest-content.service';
+import { ToastService } from '../services/toast.service';
 import { fromCompanyRow } from '../models/mappers';
 import type { Company, CompanyStatus } from '../models/jobmate.models';
 
@@ -15,6 +16,7 @@ export class CompanyStore {
   private readonly supabase = inject(SupabaseService);
   private readonly auth = inject(AuthService);
   private readonly guestContent = inject(GuestContentService);
+  private readonly toast = inject(ToastService);
 
   private readonly _companies = signal<Company[]>([]);
   private readonly _loaded = signal(false);
@@ -80,7 +82,10 @@ export class CompanyStore {
       .insert({ user_id: userId, name, category, status })
       .select().single();
 
-    if (error || !data) return null;
+    if (error || !data) {
+      this.toast.error("Couldn't create the company. Please try again.");
+      return null;
+    }
     const company = fromCompanyRow(data);
     this._companies.update(list => [company, ...list]);
     return company;
@@ -90,21 +95,30 @@ export class CompanyStore {
     const prev = this._companies();
     this._companies.update(list => list.map(c => c.id === id ? { ...c, status } : c));
     const { error } = await this.supabase.client.from('companies').update({ status }).eq('id', id);
-    if (error) this._companies.set(prev);
+    if (error) {
+      this._companies.set(prev);
+      this.toast.error("Couldn't save the company status — it's been undone.");
+    }
   }
 
   async updateCompany(id: string, patch: Partial<Pick<Company, 'name' | 'category' | 'status'>>): Promise<void> {
     const prev = this._companies();
     this._companies.update(list => list.map(c => c.id === id ? { ...c, ...patch } : c));
     const { error } = await this.supabase.client.from('companies').update(patch).eq('id', id);
-    if (error) this._companies.set(prev);
+    if (error) {
+      this._companies.set(prev);
+      this.toast.error("Couldn't save company changes — they've been undone.");
+    }
   }
 
   async deleteCompany(id: string): Promise<void> {
     const prev = this._companies();
     this._companies.update(list => list.filter(c => c.id !== id));
     const { error } = await this.supabase.client.from('companies').delete().eq('id', id);
-    if (error) this._companies.set(prev);
+    if (error) {
+      this._companies.set(prev);
+      this.toast.error("Couldn't delete the company — it's been restored.");
+    }
   }
 
   invalidate(): void {

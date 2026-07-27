@@ -1,6 +1,7 @@
 import { Injectable, inject, signal, effect } from '@angular/core';
 import { SupabaseService } from '../services/supabase.service';
 import { AuthService } from '../services/auth.service';
+import { ToastService } from '../services/toast.service';
 import { fromSettingsRow } from '../models/mappers';
 import type { UserSettings, ResumeData } from '../models/jobmate.models';
 import type { Json } from '../models/database.types';
@@ -9,6 +10,7 @@ import type { Json } from '../models/database.types';
 export class SettingsStore {
   private readonly supabase = inject(SupabaseService);
   private readonly auth = inject(AuthService);
+  private readonly toast = inject(ToastService);
 
   private readonly _settings = signal<UserSettings | null>(null);
   private readonly _loaded = signal(false);
@@ -58,6 +60,7 @@ export class SettingsStore {
 
     if (error) {
       this._settings.set(prev);
+      this.toast.error("Couldn't save your settings — they've been undone.");
     } else if (data) {
       const fromDb = fromSettingsRow(data);
       // PostgREST may return resume:null if its schema cache predates the

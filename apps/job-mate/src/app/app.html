@@ -239,6 +239,8 @@
 <router-outlet />
 }
 
+<app-toast />
+
 @if (authModal.isOpen()) {
 <div class="auth-overlay" role="dialog" aria-modal="true" aria-label="Sign in" tabindex="-1" (click)="authModal.close()" (keydown.escape)="authModal.close()">
   <div class="auth-modal-wrap" tabindex="0" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
