@@ -143,3 +143,11 @@
 - Deleted the empty, unreferenced `shared/components/status-badge/` directory
 - Projects affected: `job-mate` (`wealth-mate` untouched, build verified unaffected)
 - Playwright test added: yes — rewrote `e2e/marketing-mobile-nav.spec.ts` and `e2e/portfolio.spec.ts` for the new markup/copy; full suite (`e2e/guest-limits.spec.ts`, `e2e/shell-navigation.spec.ts`, both rewritten specs) green across all 4 device projects (180 tests)
+
+## Portfolio content & SEO rewrite — completed 2026-07-27
+- Rewrote all `/portfolio` copy for a human, first-person voice aimed at landing freelance/contract/interim work: name (Tina Rezanezhad) now appears in the hero H1, abstract slogans ("high-performance digital craft", "Strategic engineering") replaced with concrete plain-language claims, timeline entries rewritten in first person
+- Fixed factual mismatches: Pulse project card no longer described as "personal finance" (it is the interview-prep/job-tracker app serving the page); "View case study" links renamed to honest labels ("View the code on GitHub", "See the starter kit", "Visit moneycho.com"); availability code panel renamed `availability` → `nextSlot: "Sep 2026"` so it no longer contradicts the "Open for freelance contracts" status pill
+- Removed dead Twitter/LinkedIn `#` links from the portfolio footer (GitHub + email kept)
+- SEO: page title now "Tina Rezanezhad — Freelance Angular Developer in Amsterdam" (added `absoluteTitle` option to `SeoService` to skip the "| Pulse" suffix on personal pages); meta description rewritten around freelance/contract search terms; JSON-LD Person now uses the real name with `alternateName: "Tizhad"` and expanded `knowsAbout`
+- Projects affected: `job-mate` (`wealth-mate` untouched, build verified)
+- Playwright test added: updated `e2e/portfolio.spec.ts` assertions to the new copy; portfolio + marketing-nav suites green across all 4 device projects (72 tests)

@@ -8,6 +8,8 @@ export type SeoConfig = {
   readonly url?: string;
   readonly image?: string;
   readonly type?: 'website' | 'profile';
+  /** Use the title as-is, without the "| Pulse" site suffix (for personal pages). */
+  readonly absoluteTitle?: boolean;
 };
 
 @Injectable({ providedIn: 'root' })
@@ -17,7 +19,7 @@ export class SeoService {
   private readonly doc = inject(DOCUMENT);
 
   set(config: SeoConfig): void {
-    const fullTitle = `${config.title} | Pulse`;
+    const fullTitle = config.absoluteTitle ? config.title : `${config.title} | Pulse`;
 
     this.title.setTitle(fullTitle);
 

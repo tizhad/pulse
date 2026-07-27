@@ -51,19 +51,21 @@ export class PortfolioComponent implements OnInit {
   ngOnInit(): void {
     const url = `${environment.siteUrl}/portfolio`;
     this.seo.set({
-      title: 'Frontend Engineer & Product Thinker',
+      title: 'Tina Rezanezhad — Freelance Angular Developer in Amsterdam',
       description:
-        'Frontend engineer with 5+ years shipping product-grade interfaces. Deep Angular expertise, PM background at a 50M-user super-app. Amsterdam-based.',
+        'Freelance Angular developer in Amsterdam. I modernize legacy frontends, fix performance, and ship features end-to-end. Available for contract and interim work.',
       url,
       type: 'profile',
+      absoluteTitle: true,
     });
     this.seo.addJsonLd('about-person', {
       '@context': 'https://schema.org',
       '@type': 'Person',
-      name: 'Tizhad',
-      jobTitle: 'Frontend Engineer',
+      name: 'Tina Rezanezhad',
+      alternateName: 'Tizhad',
+      jobTitle: 'Freelance Frontend Developer',
       description:
-        'Frontend engineer with 5+ years of delivery experience and a background as a Technical Product Manager.',
+        'Freelance Angular developer with 5+ years of delivery experience and a background as a technical product manager at a 50M-user super-app.',
       url,
       email: 'tiizhad@gmail.com',
       sameAs: ['https://github.com/tizhad'],
@@ -78,6 +80,8 @@ export class PortfolioComponent implements OnInit {
         'TypeScript',
         'RxJS',
         'Nx',
+        'Web Performance',
+        'Server-Side Rendering',
         'Frontend Engineering',
         'Product Management',
       ],

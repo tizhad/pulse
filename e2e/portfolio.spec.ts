@@ -5,13 +5,13 @@ import { test, expect } from './fixtures';
 test.describe('Portfolio page', () => {
   test('renders role and bio', async ({ page }) => {
     await page.goto('/portfolio');
-    await expect(page.getByText('Frontend engineer · Amsterdam')).toBeVisible();
+    await expect(page.getByText('Freelance frontend developer · Amsterdam')).toBeVisible();
   });
 
   test('/about redirects to /portfolio', async ({ page }) => {
     await page.goto('/about');
     await expect(page).toHaveURL(/\/portfolio$/);
-    await expect(page.getByText('Frontend engineer · Amsterdam')).toBeVisible();
+    await expect(page.getByText('Freelance frontend developer · Amsterdam')).toBeVisible();
   });
 
   test('lists all three featured projects', async ({ page }) => {
@@ -25,7 +25,7 @@ test.describe('Portfolio page', () => {
     await page.goto('/portfolio');
     await page
       .locator('.pf-project-card', { hasText: 'Angular 21 SaaS Starter Kit' })
-      .getByRole('link', { name: 'View case study' })
+      .getByRole('link', { name: 'See the starter kit' })
       .click();
     await expect(page).toHaveURL(/\/starter-kit/);
   });
