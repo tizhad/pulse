@@ -173,3 +173,14 @@
 - Also fixed `guest-content.service.spec.ts` fixture missing `isPinned` — unit tests had been broken since the pin feature landed on 2026-07-24
 - Projects affected: `job-mate`
 - Playwright test added: no (failure paths need a broken backend; covered by 5 new Vitest cases in `toast.service.spec.ts` — 30 unit tests green, full e2e suite still 184 green)
+
+## Real dashboard streak, heatmap, and weekly activity — completed 2026-07-27
+
+- Dashboard streak card was 100% fake: `streakIntensities` was a hardcoded static array, "7 day streak" and "Studied 4h 20m this week" were literal strings with no logic behind them at all — confirmed by reading `dashboard.component.ts`/`.html` before touching anything
+- New Supabase migration (`20260727150000_create_activity_days.sql`): `activity_days` table (`user_id`, `activity_date`, `study_count`, `application_count`) with owner-only RLS, plus a `bump_activity(p_kind text)` SECURITY DEFINER function that atomically upserts today's row — avoids read-then-write races from the client
+- Instrumented real user actions to call `supabase.rpc('bump_activity', ...)`: `study.store.updateConfidence()` → `'study'`, `application.store.addApplication()` and `updateStatus()` → `'application'`
+- New `ActivityStore` (`core/stores/activity.store.ts`) fetches the last 90 days of `activity_days` (wider than the 14-day heatmap display so a long streak isn't undercounted) and exposes `currentStreak()`, `heatmapCells()` (14-day, intensity normalized against the week's max), `weeklyActivityCount()`
+- Dashboard now reads real values: `{{ activityStore.currentStreak() }} day streak`, real heatmap cells, `{{ activityStore.weeklyActivityCount() }} activities this week` — replaced the fake "4h 20m" duration claim since there's no time-tracking anywhere in the app (real study-timer instrumentation was scoped out as a separate future feature, see decision log)
+- Guest (signed-out) users get an honest 0/empty state rather than faking local-only tracking, since `activity_days` only exists in Supabase
+- Projects affected: `job-mate` (`wealth-mate` untouched, build verified)
+- Playwright test added: no — deferred per standing guidance to skip e2e specs for a UI feature until its design is confirmed settled; manually verified guest-mode empty state renders correctly with no console errors via dev server + browser

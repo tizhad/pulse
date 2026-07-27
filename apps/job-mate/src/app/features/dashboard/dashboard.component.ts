@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { RouterLink } from '@angular/router';
 import { StudyStore } from '../../core/stores/study.store';
 import { ApplicationStore } from '../../core/stores/application.store';
+import { ActivityStore } from '../../core/stores/activity.store';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,6 +14,7 @@ import { ApplicationStore } from '../../core/stores/application.store';
 export class DashboardComponent {
   readonly studyStore = inject(StudyStore);
   readonly appStore = inject(ApplicationStore);
+  readonly activityStore = inject(ActivityStore);
 
   readonly pipelineRows = [
     { label: 'Applied',      key: 'applied',       color: 'var(--pipe-applied)' },
@@ -22,8 +24,6 @@ export class DashboardComponent {
     { label: 'Rejected',     key: 'rejected',      color: 'var(--pipe-rejected)' },
     { label: 'No reply',     key: 'saved',         color: 'var(--pipe-noreply)' },
   ] as const;
-
-  readonly streakIntensities = [0.2, 0.5, 0.8, 0.6, 0, 0.4, 0.9, 1, 0.7, 0.5, 0.8, 0.6, 0.9, 1];
 
   readonly masteredCount = computed(() =>
     this.studyStore.subjects().filter(s => s.status === 'mastered').length,
