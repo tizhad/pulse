@@ -151,3 +151,11 @@
 - SEO: page title now "Tina Rezanezhad — Freelance Angular Developer in Amsterdam" (added `absoluteTitle` option to `SeoService` to skip the "| Pulse" suffix on personal pages); meta description rewritten around freelance/contract search terms; JSON-LD Person now uses the real name with `alternateName: "Tizhad"` and expanded `knowsAbout`
 - Projects affected: `job-mate` (`wealth-mate` untouched, build verified)
 - Playwright test added: updated `e2e/portfolio.spec.ts` assertions to the new copy; portfolio + marketing-nav suites green across all 4 device projects (72 tests)
+
+## Portfolio repositioning + visual upgrade — completed 2026-07-27
+- Repositioned `/portfolio` from an Angular-only niche to a problem niche ("frontend modernization & performance"): hero now says "aging frontend apps", deepest-expertise-is-Angular framing kept in the bento card body, React/Next.js added everywhere it's true (stack table, marquee, MoneyCho card now credits Next.js), SEO title/description/JSON-LD broadened to "Freelance Frontend Developer" with Angular/React/Next.js keywords
+- Added Datadog (real experience, previously unlisted) to the performance card, stack table ("Performance & monitoring" row), marquee, and JSON-LD; added a new "SEO & discoverability" stack row (Technical SEO, JSON-LD, Core Web Vitals, AI search visibility/GEO)
+- Sharpened the WCAG 2.1 AA line into a compliance pitch: since June 2025 it's a legal requirement for most EU businesses under the European Accessibility Act
+- Visual upgrade: real screenshots (captured via Playwright) of Pulse, Starter Kit, and MoneyCho added to the project cards (`public/portfolio/*.png`, rendered with `NgOptimizedImage`, lazy, 16:9 top crop, hover zoom); new `RevealDirective` (IntersectionObserver fade-up on scroll, SSR-safe via `afterNextRender`) applied to bento cards, stats, timeline, project cards, specs; new `CountUpDirective` animates the stats (33→75, +30%, −25%) on first view; both directives and all CSS respect `prefers-reduced-motion`
+- Projects affected: `job-mate` (new `shared/directives/` folder in-app; `wealth-mate` untouched)
+- Playwright test added: yes — new "project cards show screenshots" test in `e2e/portfolio.spec.ts`; full suite green across all 4 device projects (184 tests)

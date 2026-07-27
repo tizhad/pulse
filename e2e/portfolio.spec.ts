@@ -21,6 +21,19 @@ test.describe('Portfolio page', () => {
     await expect(page.getByRole('heading', { name: 'MoneyCho', exact: true })).toBeVisible();
   });
 
+  test('project cards show screenshots', async ({ page }) => {
+    await page.goto('/portfolio');
+    for (const name of [
+      'Screenshot of the Pulse landing page',
+      'Screenshot of the Angular 21 SaaS Starter Kit page',
+      'Screenshot of the MoneyCho.com homepage',
+    ]) {
+      const img = page.getByAltText(name);
+      await img.scrollIntoViewIfNeeded();
+      await expect(img).toBeVisible();
+    }
+  });
+
   test('starter kit project links to /starter-kit', async ({ page }) => {
     await page.goto('/portfolio');
     await page

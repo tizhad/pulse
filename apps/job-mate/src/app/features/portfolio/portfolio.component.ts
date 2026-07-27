@@ -4,11 +4,13 @@ import {
   OnInit,
   inject,
 } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import { DOCUMENT, NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { SeoService } from '../../core/services/seo.service';
 import { environment } from '../../../environments/environment';
 import { MarketingFooterComponent } from '../../shared/components/marketing-footer/marketing-footer.component';
+import { RevealDirective } from '../../shared/directives/reveal.directive';
+import { CountUpDirective } from '../../shared/directives/count-up.directive';
 
 const NAV_SCROLL_OFFSET = 84;
 
@@ -17,7 +19,13 @@ const NAV_SCROLL_OFFSET = 84;
   templateUrl: './portfolio.component.html',
   styleUrl: './portfolio.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, MarketingFooterComponent],
+  imports: [
+    RouterLink,
+    NgOptimizedImage,
+    MarketingFooterComponent,
+    RevealDirective,
+    CountUpDirective,
+  ],
 })
 export class PortfolioComponent implements OnInit {
   private readonly seo = inject(SeoService);
@@ -25,12 +33,15 @@ export class PortfolioComponent implements OnInit {
 
   readonly techStack = [
     'Angular',
+    'React',
+    'Next.js',
     'TypeScript',
     'RxJS',
     'Signals',
     'NgRx',
     'Nx Monorepo',
     'GraphQL',
+    'Datadog',
     'Playwright',
     'Jest',
     'SCSS',
@@ -51,9 +62,9 @@ export class PortfolioComponent implements OnInit {
   ngOnInit(): void {
     const url = `${environment.siteUrl}/portfolio`;
     this.seo.set({
-      title: 'Tina Rezanezhad — Freelance Angular Developer in Amsterdam',
+      title: 'Tina Rezanezhad — Freelance Frontend Developer in Amsterdam',
       description:
-        'Freelance Angular developer in Amsterdam. I modernize legacy frontends, fix performance, and ship features end-to-end. Available for contract and interim work.',
+        'Freelance frontend developer in Amsterdam, working in Angular, React and Next.js. I modernize legacy frontends, fix performance, and ship features end-to-end. Available for contract and interim work.',
       url,
       type: 'profile',
       absoluteTitle: true,
@@ -65,7 +76,7 @@ export class PortfolioComponent implements OnInit {
       alternateName: 'Tizhad',
       jobTitle: 'Freelance Frontend Developer',
       description:
-        'Freelance Angular developer with 5+ years of delivery experience and a background as a technical product manager at a 50M-user super-app.',
+        'Freelance frontend developer working in Angular, React and Next.js, with 5+ years of delivery experience and a background as a technical product manager at a 50M-user super-app.',
       url,
       email: 'tiizhad@gmail.com',
       sameAs: ['https://github.com/tizhad'],
@@ -77,10 +88,14 @@ export class PortfolioComponent implements OnInit {
       knowsAbout: [
         'Angular',
         'React',
+        'Next.js',
         'TypeScript',
         'RxJS',
         'Nx',
         'Web Performance',
+        'Datadog',
+        'Technical SEO',
+        'Structured Data',
         'Server-Side Rendering',
         'Frontend Engineering',
         'Product Management',

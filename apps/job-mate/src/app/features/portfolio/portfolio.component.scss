@@ -324,11 +324,46 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--surface);
-  transition: box-shadow var(--transition), transform var(--transition);
+  overflow: hidden;
+  transition:
+    box-shadow var(--transition),
+    transform var(--transition),
+    opacity 0.6s ease;
+
+  /* Cards keep their hover lift, so the reveal is fade-only here. */
+  &.reveal {
+    transform: none;
+  }
 
   &:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-card);
+  }
+}
+
+.pf-project-media {
+  margin: -1.75rem -1.75rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--surface-hover);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    transition: transform 0.5s ease;
+  }
+}
+
+.pf-project-card:hover .pf-project-media img {
+  transform: scale(1.03);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-project-card:hover .pf-project-media img {
+    transform: none;
   }
 }
 
@@ -499,4 +534,16 @@
     flex-direction: column;
     gap: 0.25rem;
   }
+}
+
+/* ── Reveal stagger (grids without hover transitions) ────────────────────── */
+
+.pf-bento .reveal:nth-child(2),
+.pf-stats-row .reveal:nth-child(2) {
+  transition-delay: 90ms;
+}
+
+.pf-bento .reveal:nth-child(3),
+.pf-stats-row .reveal:nth-child(3) {
+  transition-delay: 180ms;
 }
