@@ -14,7 +14,13 @@
 
   <div class="companies-grid">
     @for (company of store.companies(); track company.id) {
-      <div class="card company-card" (click)="openModal(company)">
+      <div
+        class="card company-card"
+        role="button"
+        tabindex="0"
+        (click)="openModal(company)"
+        (keydown.enter)="openModal(company)"
+      >
         <div class="company-top">
           <div class="company-avatar"
                [style.background]="avatarBg(company.name)"
