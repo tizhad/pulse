@@ -1,0 +1,154 @@
+.ls-root {
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.ls-hero {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 2.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @media (min-width: 768px) {
+    padding: 5rem 2.5rem 3rem;
+  }
+}
+
+.ls-hero-h1 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: var(--text-display-2);
+  line-height: 1.15;
+  color: var(--text);
+  margin: 1.25rem 0 1rem;
+}
+
+.ls-hero-desc {
+  font-family: var(--font-sans);
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  max-width: 560px;
+}
+
+.ls-grid-section {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem 2rem;
+
+  @media (min-width: 768px) {
+    padding: 0 2.5rem 2rem;
+  }
+}
+
+.ls-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.ls-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-lg);
+  border: 0.5px solid var(--border);
+  background: var(--surface);
+  overflow: hidden;
+  transition: transform var(--transition), box-shadow var(--transition);
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card);
+  }
+}
+
+.ls-card-preview {
+  height: 140px;
+  display: flex;
+  align-items: flex-end;
+  padding: 1rem 1.25rem;
+  background: var(--card-accent-bg);
+}
+
+.ls-card-niche {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--card-accent-text);
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  padding: 5px 12px;
+}
+
+.ls-card-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ls-card-title {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  color: var(--text);
+}
+
+.ls-card-tagline {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.ls-card-demonstrates {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.55;
+  margin-bottom: 0.5rem;
+}
+
+.ls-card-link {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--card-accent-solid);
+}
+
+.ls-accent-saas {
+  --card-accent-bg: linear-gradient(135deg, #6c5ce7 0%, #22d3ee 100%);
+  --card-accent-text: #ffffff;
+  --card-accent-solid: #6c5ce7;
+}
+
+.ls-accent-fintech {
+  --card-accent-bg: linear-gradient(135deg, #0f9d58 0%, #10b981 100%);
+  --card-accent-text: #ffffff;
+  --card-accent-solid: #0b7a43;
+}
+
+.ls-accent-devtool {
+  --card-accent-bg: linear-gradient(135deg, #0d1117 0%, #b45309 130%);
+  --card-accent-text: #f5f1e8;
+  --card-accent-solid: #b45309;
+}
+
+.ls-demo-note {
+  max-width: 640px;
+  margin: 0 auto 3rem;
+  padding: 0 1.5rem;
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}

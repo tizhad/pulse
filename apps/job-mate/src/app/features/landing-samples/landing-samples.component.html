@@ -1,0 +1,55 @@
+<div class="ls-root">
+  <app-marketing-nav logoSubtitle="LANDING PAGE SAMPLES" [links]="navLinks" />
+
+  <section class="ls-hero">
+    <span class="eyebrow">Landing page samples</span>
+    <h1 class="ls-hero-h1">
+      A few landing pages I built to show what's <span class="accent-swash">possible.</span>
+    </h1>
+    <p class="ls-hero-desc">
+      Three fictional products, three different niches, three different designs — all built
+      end-to-end in Angular 21. Have a real product that needs one of these? Let's talk.
+    </p>
+  </section>
+
+  <section class="ls-grid-section">
+    <div class="ls-grid">
+      @for (sample of samples; track sample.slug) {
+        <a
+          appReveal
+          class="ls-card"
+          [class]="sample.accentClass"
+          [routerLink]="['/landing-samples', sample.slug]"
+        >
+          <div class="ls-card-preview">
+            <span class="ls-card-niche">{{ sample.niche }}</span>
+          </div>
+          <div class="ls-card-body">
+            <h2 class="ls-card-title">{{ sample.brand }}</h2>
+            <p class="ls-card-tagline">{{ sample.tagline }}</p>
+            <p class="ls-card-demonstrates">{{ sample.demonstrates }}</p>
+            <span class="ls-card-link">View the landing page →</span>
+          </div>
+        </a>
+      }
+    </div>
+  </section>
+
+  <p class="ls-demo-note">
+    Flowdesk, Vaultly, and Forge Kit are fictional products built purely to demonstrate landing
+    page design and Angular development — not real companies or apps.
+  </p>
+
+  <app-marketing-footer
+    [links]="[
+      { label: 'Portfolio', routerLink: ['/portfolio'] },
+      { label: 'Hire me for your landing page', routerLink: ['/contact'] },
+      { label: 'GitHub', href: 'https://github.com/tizhad', external: true },
+      {
+        label: 'LinkedIn',
+        href: 'https://www.linkedin.com/in/trezanezhad/',
+        external: true,
+      },
+    ]"
+  />
+</div>
