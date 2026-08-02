@@ -1,0 +1,179 @@
+<div class="fd-root">
+  <app-marketing-nav brandName="FLOWDESK" logoSubtitle="TEAM WORKFLOW SOFTWARE" [links]="navLinks" />
+
+  <!-- ── Hero ──────────────────────────────────────────────────────────────── -->
+  <section class="fd-hero">
+    <div class="fd-hero-text">
+      <span class="eyebrow">Team workflow software</span>
+      <h1 class="fd-hero-h1">
+        Work flows better when it's <span class="accent-swash">actually visible.</span>
+      </h1>
+      <p class="fd-hero-desc">
+        Flowdesk replaces the status-update meeting with a board everyone already trusts —
+        boards, automations, and reporting in one place.
+      </p>
+      <div class="fd-hero-actions">
+        <a class="btn-primary btn-arrow fd-btn-lg" [routerLink]="[]" fragment="waitlist">
+          Get started free
+        </a>
+        <a class="fd-btn-outline" [routerLink]="[]" fragment="features">See features</a>
+      </div>
+    </div>
+
+    <div class="fd-hero-visual">
+      <div class="bento-card bento-card--cream fd-board-card">
+        <div class="fd-board-dots">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="fd-board-columns">
+          <div class="fd-board-col">
+            <span class="fd-board-col-title">To do</span>
+            <div class="fd-board-chip">Design onboarding</div>
+            <div class="fd-board-chip">Q3 roadmap review</div>
+          </div>
+          <div class="fd-board-col">
+            <span class="fd-board-col-title">In progress</span>
+            <div class="fd-board-chip fd-board-chip--active">API integration</div>
+          </div>
+          <div class="fd-board-col">
+            <span class="fd-board-col-title">Done</span>
+            <div class="fd-board-chip fd-board-chip--done">Landing page copy</div>
+            <div class="fd-board-chip fd-board-chip--done">User interviews</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Logo strip ────────────────────────────────────────────────────────── -->
+  <section class="fd-logos">
+    <span class="fd-logos-label">Trusted by teams at</span>
+    <div class="fd-logos-row">
+      @for (logo of logos; track logo) {
+        <span class="fd-logo-item">{{ logo }}</span>
+      }
+    </div>
+  </section>
+
+  <!-- ── Features ──────────────────────────────────────────────────────────── -->
+  <section class="fd-section" id="features">
+    <span class="eyebrow">What's included</span>
+    <h2 class="fd-section-h2">Everything your team needs to stay in sync.</h2>
+
+    <div class="bento-grid fd-features-grid">
+      @for (f of features; track f.title) {
+        <div appReveal class="bento-card fd-feature-card">
+          <h3>{{ f.title }}</h3>
+          <p>{{ f.body }}</p>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- ── Pricing ───────────────────────────────────────────────────────────── -->
+  <section class="fd-section" id="pricing">
+    <span class="eyebrow">Pricing</span>
+    <h2 class="fd-section-h2">Simple pricing that scales with your team.</h2>
+
+    <div class="fd-pricing-grid">
+      @for (tier of pricingTiers; track tier.name) {
+        <div
+          appReveal
+          class="fd-pricing-card"
+          [class.fd-pricing-card--highlighted]="tier.highlighted"
+        >
+          @if (tier.highlighted) {
+            <span class="fd-pricing-badge">Most popular</span>
+          }
+          <h3 class="fd-pricing-name">{{ tier.name }}</h3>
+          <div class="fd-pricing-amount">
+            {{ tier.price }} <span>{{ tier.cadence }}</span>
+          </div>
+          <p class="fd-pricing-blurb">{{ tier.blurb }}</p>
+          <ul class="fd-pricing-features" role="list">
+            @for (item of tier.features; track item) {
+              <li>{{ item }}</li>
+            }
+          </ul>
+          <a class="fd-btn-outline fd-btn-full" [routerLink]="[]" fragment="waitlist">
+            Get started
+          </a>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- ── Testimonials ──────────────────────────────────────────────────────── -->
+  <section class="fd-section fd-testimonials">
+    <div class="fd-testimonial-grid">
+      @for (t of testimonials; track t.author) {
+        <blockquote appReveal class="fd-testimonial-card">
+          <p>“{{ t.quote }}”</p>
+          <footer>{{ t.author }}, {{ t.role }}</footer>
+        </blockquote>
+      }
+    </div>
+  </section>
+
+  <!-- ── Waitlist ──────────────────────────────────────────────────────────── -->
+  <section class="fd-section fd-waitlist" id="waitlist">
+    <div appReveal class="bento-card bento-card--dark fd-waitlist-card">
+      <span class="eyebrow">Coming soon</span>
+      <h2 class="fd-waitlist-h2">Get notified when Flowdesk launches.</h2>
+      <p class="fd-waitlist-sub">No spam — just a note when it's ready.</p>
+
+      @if (!submitted()) {
+        <form class="fd-waitlist-form" (submit)="handleWaitlistSubmit($event)" novalidate>
+          <div class="fd-form-field">
+            <label for="fd-email" class="fd-form-label">Work email</label>
+            <input
+              id="fd-email"
+              type="email"
+              placeholder="you@company.com"
+              autocomplete="email"
+              [formField]="waitlistForm.email"
+            />
+            @if (waitlistForm.email().touched() && waitlistForm.email().invalid()) {
+              <span class="fd-form-error" role="alert">
+                {{ waitlistForm.email().errors()[0]?.message }}
+              </span>
+            }
+          </div>
+          <button type="submit" class="btn-primary btn-arrow fd-btn-lg">Join the waitlist</button>
+        </form>
+      } @else {
+        <p class="fd-waitlist-success" role="status">
+          Thanks — you're on the list. (This is a demo; no email was actually sent.)
+        </p>
+      }
+    </div>
+  </section>
+
+  <!-- ── FAQ ───────────────────────────────────────────────────────────────── -->
+  <section class="fd-section" id="faq">
+    <span class="eyebrow">FAQ</span>
+    <h2 class="fd-section-h2">Questions, answered.</h2>
+
+    <div class="fd-faq-list">
+      @for (faq of faqs; track faq.q) {
+        <details class="fd-faq-item">
+          <summary>{{ faq.q }}</summary>
+          <p>{{ faq.a }}</p>
+        </details>
+      }
+    </div>
+  </section>
+
+  <p class="fd-demo-note">
+    Flowdesk is a fictional product built to demonstrate landing page design and Angular
+    development — not a real company or app.
+  </p>
+
+  <app-marketing-footer
+    [links]="[
+      { label: 'Landing Page Samples', routerLink: ['/landing-samples'] },
+      { label: 'Hire me for your landing page', routerLink: ['/contact'] },
+      { label: 'Portfolio', routerLink: ['/portfolio'] },
+    ]"
+  />
+</div>
