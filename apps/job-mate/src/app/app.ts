@@ -63,10 +63,14 @@ export class App implements OnInit {
   }
 
   private static readonly noShellRoutes = ['/', '/portfolio', '/about', '/contact', '/starter-kit'];
+  private static readonly noShellPrefixes = ['/landing-samples'];
 
   private static isShellRoute(url: string): boolean {
     const path = url.split('#')[0].split('?')[0];
-    return !App.noShellRoutes.includes(path);
+    if (App.noShellRoutes.includes(path)) {
+      return false;
+    }
+    return !App.noShellPrefixes.some(prefix => path === prefix || path.startsWith(`${prefix}/`));
   }
 
   readonly showShell = toSignal(
