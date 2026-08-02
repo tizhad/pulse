@@ -5,6 +5,10 @@ export const serverRoutes: ServerRoute[] = [
   { path: '', renderMode: RenderMode.Prerender },
   { path: 'portfolio', renderMode: RenderMode.Prerender },
   { path: 'about', renderMode: RenderMode.Prerender },
+  { path: 'landing-samples', renderMode: RenderMode.Prerender },
+  { path: 'landing-samples/saas', renderMode: RenderMode.Prerender },
+  { path: 'landing-samples/fintech', renderMode: RenderMode.Prerender },
+  { path: 'landing-samples/dev-tool', renderMode: RenderMode.Prerender },
   // Auth and all protected routes — client-side only, no point SSR-ing gated content
   { path: '**', renderMode: RenderMode.Client },
 ];

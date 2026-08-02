@@ -67,6 +67,26 @@ export const appRoutes: Route[] = [
       import('./features/starter-kit/starter-kit.component').then(m => m.StarterKitComponent),
   },
   {
+    path: 'landing-samples',
+    loadComponent: () =>
+      import('./features/landing-samples/landing-samples.component').then(m => m.LandingSamplesComponent),
+  },
+  {
+    path: 'landing-samples/saas',
+    loadComponent: () =>
+      import('./features/landing-samples/saas/saas-landing.component').then(m => m.SaasLandingComponent),
+  },
+  {
+    path: 'landing-samples/fintech',
+    loadComponent: () =>
+      import('./features/landing-samples/fintech/fintech-landing.component').then(m => m.FintechLandingComponent),
+  },
+  {
+    path: 'landing-samples/dev-tool',
+    loadComponent: () =>
+      import('./features/landing-samples/dev-tool/dev-tool-landing.component').then(m => m.DevToolLandingComponent),
+  },
+  {
     path: 'thank-you',
     loadComponent: () =>
       import('./features/thank-you/thank-you.component').then(m => m.ThankYouComponent),
