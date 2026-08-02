@@ -1,0 +1,148 @@
+<div class="fk-root">
+  <app-marketing-nav brandName="FORGE KIT" logoSubtitle="BOILERPLATE FOR BUILDERS" [links]="navLinks" />
+
+  <!-- ── Hero ──────────────────────────────────────────────────────────────── -->
+  <section class="fk-hero">
+    <div class="fk-hero-text">
+      <span class="eyebrow">Angular 21 starter kit</span>
+      <h1 class="fk-hero-h1">
+        Stop rebuilding the <span class="accent-swash">same 40 hours.</span>
+      </h1>
+      <p class="fk-hero-desc">
+        Auth, SSR, zoneless signals, and a CI pipeline — wired together so you start on feature
+        one, not on boilerplate.
+      </p>
+      <div class="fk-hero-actions">
+        <a class="btn-primary btn-arrow fk-btn-lg" [routerLink]="['/contact']">Get Forge Kit</a>
+        <a class="fk-btn-outline" [routerLink]="[]" fragment="features">See what's included</a>
+      </div>
+    </div>
+
+    <div class="fk-hero-visual">
+      <div class="fk-terminal">
+        <div class="fk-terminal-bar">
+          <span></span><span></span><span></span>
+        </div>
+        <pre class="fk-terminal-body"><code><span class="fk-t-prompt">$</span> npx create-forge-kit my-app
+<span class="fk-t-dim">✔</span> Scaffolding Angular 21 project…
+<span class="fk-t-dim">✔</span> Wiring auth + SSR…
+<span class="fk-t-dim">✔</span> Installing zoneless change detection…
+<span class="fk-t-ok">Done in 8.2s. Run `npm start`.</span></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Stats ─────────────────────────────────────────────────────────────── -->
+  <section class="fk-stats">
+    <div class="fk-stats-row">
+      <div class="fk-stat">
+        <span class="fk-stat-value"><span [appCountUp]="2400">2400</span></span>
+        <span class="fk-stat-label">GitHub stars</span>
+      </div>
+      <div class="fk-stat">
+        <span class="fk-stat-value"><span [appCountUp]="180">180</span></span>
+        <span class="fk-stat-label">Forks</span>
+      </div>
+      <div class="fk-stat">
+        <span class="fk-stat-value"><span [appCountUp]="12000">12000</span></span>
+        <span class="fk-stat-label">Downloads</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Features ──────────────────────────────────────────────────────────── -->
+  <section class="fk-section" id="features">
+    <span class="eyebrow">What's included</span>
+    <h2 class="fk-section-h2">Everything wired, nothing to glue together.</h2>
+
+    <div class="bento-grid fk-features-grid">
+      @for (f of features; track f.title) {
+        <div appReveal class="bento-card bento-card--cream fk-feature-card">
+          <h3>{{ f.title }}</h3>
+          <p>{{ f.body }}</p>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- ── Before / after ────────────────────────────────────────────────────── -->
+  <section class="fk-section">
+    <span class="eyebrow">The difference</span>
+    <h2 class="fk-section-h2">Same feature, a fraction of the code.</h2>
+
+    <div class="fk-compare-grid">
+      <div appReveal class="fk-compare-col">
+        <span class="fk-compare-label fk-compare-label--before">Before</span>
+        <pre class="code-block fk-compare-code"><code>{{ beforeCode }}</code></pre>
+      </div>
+      <div appReveal class="fk-compare-col">
+        <span class="fk-compare-label fk-compare-label--after">After</span>
+        <pre class="code-block fk-compare-code"><code>{{ afterCode }}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Pricing ───────────────────────────────────────────────────────────── -->
+  <section class="fk-section" id="pricing">
+    <div class="bento-card bento-card--dark fk-pricing-card">
+      <span class="eyebrow">Pricing</span>
+      <div class="fk-pricing-amount">$49 <span>one-time</span></div>
+      <p class="fk-pricing-blurb">Pay once, fork forever. No subscription.</p>
+
+      <ul class="fk-checklist" role="list">
+        @for (item of checklist; track item) {
+          <li>
+            <span class="fk-check-icon" aria-hidden="true">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            </span>
+            {{ item }}
+          </li>
+        }
+      </ul>
+
+      <a class="btn-primary btn-arrow fk-btn-full" [routerLink]="['/contact']">Get Forge Kit — $49</a>
+    </div>
+  </section>
+
+  <!-- ── Testimonials ──────────────────────────────────────────────────────── -->
+  <section class="fk-section fk-testimonials">
+    <div class="fk-testimonial-grid">
+      @for (t of testimonials; track t.quote) {
+        <blockquote appReveal class="fk-testimonial-card">
+          <p>“{{ t.quote }}”</p>
+          <footer>{{ t.author }}, {{ t.role }}</footer>
+        </blockquote>
+      }
+    </div>
+  </section>
+
+  <!-- ── FAQ ───────────────────────────────────────────────────────────────── -->
+  <section class="fk-section" id="faq">
+    <span class="eyebrow">FAQ</span>
+    <h2 class="fk-section-h2">Questions, answered.</h2>
+
+    <div class="fk-faq-list">
+      @for (faq of faqs; track faq.q) {
+        <details class="fk-faq-item">
+          <summary>{{ faq.q }}</summary>
+          <p>{{ faq.a }}</p>
+        </details>
+      }
+    </div>
+  </section>
+
+  <p class="fk-demo-note">
+    Forge Kit is a fictional product built to demonstrate landing page design and Angular
+    development — not a real package or company.
+  </p>
+
+  <app-marketing-footer
+    [links]="[
+      { label: 'Landing Page Samples', routerLink: ['/landing-samples'] },
+      { label: 'Hire me for your landing page', routerLink: ['/contact'] },
+      { label: 'Portfolio', routerLink: ['/portfolio'] },
+    ]"
+  />
+</div>
