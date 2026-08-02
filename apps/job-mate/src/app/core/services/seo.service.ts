@@ -10,6 +10,8 @@ export type SeoConfig = {
   readonly type?: 'website' | 'profile';
   /** Use the title as-is, without the "| Pulse" site suffix (for personal pages). */
   readonly absoluteTitle?: boolean;
+  /** Adds a robots noindex/nofollow tag (for pages that shouldn't be searchable, e.g. demo content). */
+  readonly noindex?: boolean;
 };
 
 @Injectable({ providedIn: 'root' })
@@ -48,6 +50,13 @@ export class SeoService {
     // Canonical
     if (config.url) {
       this.setCanonical(config.url);
+    }
+
+    // Robots
+    if (config.noindex) {
+      this.meta.updateTag({ name: 'robots', content: 'noindex, nofollow' });
+    } else {
+      this.meta.removeTag('name="robots"');
     }
   }
 
