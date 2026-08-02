@@ -20,6 +20,7 @@ export interface MarketingNavCta {
   imports: [RouterLink],
 })
 export class MarketingNavComponent {
+  readonly brandName = input('PULSE');
   readonly logoSubtitle = input.required<string>();
   readonly links = input.required<readonly MarketingNavLink[]>();
   readonly cta = input<MarketingNavCta | null>(null);
