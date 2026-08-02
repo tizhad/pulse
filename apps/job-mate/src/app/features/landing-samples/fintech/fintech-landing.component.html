@@ -1,0 +1,150 @@
+<div class="vt-root">
+  <app-marketing-nav brandName="VAULTLY" logoSubtitle="BUDGETING, SIMPLIFIED" [links]="navLinks" />
+
+  <!-- ── Hero ──────────────────────────────────────────────────────────────── -->
+  <section class="vt-hero">
+    <div class="vt-hero-text">
+      <span class="eyebrow">Personal budgeting</span>
+      <h1 class="vt-hero-h1">
+        See where your money <span class="accent-swash">actually goes.</span>
+      </h1>
+      <p class="vt-hero-desc">
+        Vaultly connects to your bank, sorts every transaction automatically, and shows you one
+        clear number: what's actually left to spend.
+      </p>
+      <div class="vt-hero-actions">
+        <a class="btn-primary btn-arrow vt-btn-lg" [routerLink]="['/contact']">
+          Get early access
+        </a>
+        <a class="vt-btn-outline" [routerLink]="[]" fragment="features">See how it works</a>
+      </div>
+    </div>
+
+    <div class="vt-hero-visual">
+      <div class="vt-phone">
+        <div class="vt-phone-notch"></div>
+        <div class="vt-phone-screen">
+          <span class="vt-phone-label">This month</span>
+          <div class="vt-phone-balance">€1,240<span>.50 left</span></div>
+
+          <div class="vt-phone-bar">
+            <span class="vt-phone-bar-fill" style="width: 62%"></span>
+          </div>
+
+          <div class="vt-phone-rows">
+            <div class="vt-phone-row">
+              <span>Groceries</span>
+              <span>€310</span>
+            </div>
+            <div class="vt-phone-row">
+              <span>Subscriptions</span>
+              <span>€48</span>
+            </div>
+            <div class="vt-phone-row">
+              <span>Rent</span>
+              <span>€950</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Trust badges ──────────────────────────────────────────────────────── -->
+  <section class="vt-trust" id="security">
+    <div class="vt-trust-row">
+      @for (badge of trustBadges; track badge) {
+        <div class="vt-trust-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+          {{ badge }}
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- ── Feature rows (alternating) ───────────────────────────────────────── -->
+  <section class="vt-section" id="features">
+    <div class="vt-feature-rows">
+      @for (row of featureRows; track row.title) {
+        <div appReveal class="vt-feature-row" [class.vt-feature-row--reverse]="row.reverse">
+          <div class="vt-feature-visual">
+            <div class="vt-feature-visual-dot"></div>
+          </div>
+          <div class="vt-feature-text">
+            <h3>{{ row.title }}</h3>
+            <p>{{ row.body }}</p>
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- ── Comparison table ──────────────────────────────────────────────────── -->
+  <section class="vt-section">
+    <span class="eyebrow">Why switch</span>
+    <h2 class="vt-section-h2">Vaultly vs. a spreadsheet.</h2>
+
+    <div class="vt-table-wrap">
+      <table class="vt-table">
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">Vaultly</th>
+            <th scope="col">Spreadsheet</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of comparisonRows; track row.label) {
+            <tr>
+              <th scope="row">{{ row.label }}</th>
+              <td>
+                @if (row.vaultly === true) {
+                  <span class="vt-check" aria-label="Yes">✓</span>
+                } @else {
+                  {{ row.vaultly }}
+                }
+              </td>
+              <td>
+                @if (row.spreadsheet === false) {
+                  <span class="vt-cross" aria-label="No">✕</span>
+                } @else {
+                  {{ row.spreadsheet }}
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── FAQ ───────────────────────────────────────────────────────────────── -->
+  <section class="vt-section" id="faq">
+    <span class="eyebrow">FAQ</span>
+    <h2 class="vt-section-h2">Questions, answered.</h2>
+
+    <div class="vt-faq-list">
+      @for (faq of faqs; track faq.q) {
+        <details class="vt-faq-item">
+          <summary>{{ faq.q }}</summary>
+          <p>{{ faq.a }}</p>
+        </details>
+      }
+    </div>
+  </section>
+
+  <p class="vt-demo-note">
+    Vaultly is a fictional product built to demonstrate landing page design and Angular
+    development — not a real company or app.
+  </p>
+
+  <app-marketing-footer
+    [links]="[
+      { label: 'Landing Page Samples', routerLink: ['/landing-samples'] },
+      { label: 'Hire me for your landing page', routerLink: ['/contact'] },
+      { label: 'Portfolio', routerLink: ['/portfolio'] },
+    ]"
+  />
+</div>
