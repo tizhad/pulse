@@ -1,5 +1,20 @@
 # Architecture Decisions Log
 
+## Route-selective preloading over PreloadAllModules — 2026-08-04
+
+**Context:** A Lighthouse audit of production `tizhad.com` (the public landing page) found ~250 KiB of unused JS on initial load. Part of the cause was `withPreloading(PreloadAllModules)` in `app.config.ts`, which background-fetches every lazy route chunk in the app — including the resume editor (Tiptap), the architecture page (mermaid+marked+highlight.js, 1MB+), and every authenticated dashboard route — immediately after a completely anonymous visitor lands on the public marketing page, none of which they have any reason to need yet.
+
+**Decision:** Replaced `PreloadAllModules` with a custom `SelectivePreloadingStrategy` (`core/strategies/selective-preloading.strategy.ts`) that skips preloading for public marketing routes (`/`, `/portfolio`, `/about`, `/contact`, `/starter-kit`, `/landing-samples*`, `/thank-you`, `/download`) and preloads everything else (the authenticated app routes) as before. Also converted `PosthogService` to dynamically `import()` `posthog-js` rather than a static top-level import, and deferred its `init()` call to `afterNextRender()`, and swapped `provideAnimations()` for `provideAnimationsAsync()` since the app's only animation consumer was unrouted dead code.
+
+**Alternatives considered:**
+- Making `SupabaseService`'s client creation lazy too, since `AuthService` (needed app-wide for the sidebar's signed-in state) eagerly pulls in the full `@supabase/supabase-js` client on every route including the landing page where the sidebar doesn't render. Rejected for this pass: `SupabaseService.client`/`.from`/`.auth` are accessed synchronously throughout many feature files, so making it lazy is a real cross-cutting refactor, not a scoped fix — left as a documented, known gap rather than risking a broad undertested change.
+- Deleting `StudyPlanComponent` (the dead code that was the animations engine's only justification for existing). Rejected: it's real, working code, just unrouted — without knowing whether it's abandoned or mid-migration WIP, deleting it is a bigger call than a performance fix should make unilaterally.
+
+**Consequences:**
+- Authenticated-route chunks (dashboard, subjects, resume editor, etc.) still preload in the background after landing on a public page is technically possible if a route is misclassified in `PUBLIC_ROUTE_PATHS` — the list needs to be kept in sync with `app.routes.ts` by hand; no automated check ties them together.
+- The Supabase eager-load gap remains: the landing page still ships the full `@supabase/supabase-js` client (~75 KiB) even though it's not used there. Real fix requires either lazy-initializing `SupabaseService` or deferring `AuthService`'s construction specifically on shell-less routes — scoped as future work.
+- Local Lighthouse re-testing after this change was inconclusive (static local server ≠ production CDN); the real before/after comparison requires a production deploy and a fresh live audit, not a local one.
+
 ## Editorial Design System Replacement — 2026-07-23
 
 **Context:** JobMate had three visually inconsistent design languages that had accumulated over time: the cream/indigo CRUD product UI (Dashboard/Subjects/Companies/Applications/Settings), a dark terminal/hacker-themed `/portfolio` page from a recent rebuild, and a glassmorphism marketing style shared (via copy-pasted markup) between Landing and Starter-Kit. The user commissioned a Lovable-generated redesign of `/portfolio` — an editorial/agency aesthetic (Instrument Serif display headlines with an italic gold accent word, warm cream background, dark forest-green sections, muted gold accent, asymmetric bento-grid cards, a tech-stack marquee, dark footer CTAs) — and, after review, chose to roll it out across the entire application rather than just the one page.

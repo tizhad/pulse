@@ -3,6 +3,7 @@ import {
   Component,
   DestroyRef,
   OnInit,
+  afterNextRender,
   effect,
   inject,
   signal,
@@ -44,16 +45,21 @@ export class App implements OnInit {
         this.posthog.reset();
       }
     });
+
+    // Deferred until after first paint so the PostHog SDK doesn't compete
+    // with initial render on the landing page.
+    afterNextRender(() => {
+      void this.posthog.init(environment.posthogKey, {
+        api_host: environment.posthogHost,
+        defaults: '2026-01-30',
+        capture_exceptions: true,
+        capture_pageview: false,
+        disable_surveys: true,
+      });
+    });
   }
 
   ngOnInit(): void {
-    this.posthog.init(environment.posthogKey, {
-      api_host: environment.posthogHost,
-      defaults: '2026-01-30',
-      capture_exceptions: true,
-      capture_pageview: false,
-    });
-
     this.router.events.pipe(
       filter((e): e is NavigationEnd => e instanceof NavigationEnd),
       takeUntilDestroyed(this.destroyRef),

@@ -3,21 +3,22 @@ import {
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection,
 } from '@angular/core';
-import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient, withFetch } from '@angular/common/http';
-import { provideRouter, withComponentInputBinding, withPreloading, PreloadAllModules, withInMemoryScrolling } from '@angular/router';
+import { provideRouter, withComponentInputBinding, withPreloading, withInMemoryScrolling } from '@angular/router';
 import { appRoutes } from './app.routes';
+import { SelectivePreloadingStrategy } from './core/strategies/selective-preloading.strategy';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZonelessChangeDetection(),
     provideBrowserGlobalErrorListeners(),
-    provideAnimations(),
+    provideAnimationsAsync(),
     provideHttpClient(withFetch()),
     provideRouter(
       appRoutes,
       withComponentInputBinding(),
-      withPreloading(PreloadAllModules),
+      withPreloading(SelectivePreloadingStrategy),
       withInMemoryScrolling({ anchorScrolling: 'enabled', scrollPositionRestoration: 'top' }),
     ),
   ],
