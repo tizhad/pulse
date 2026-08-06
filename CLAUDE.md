@@ -6,13 +6,12 @@
 
 ## 🗂️ Monorepo Structure
 
-This workspace contains **two Angular 21 applications** in a monorepo:
+This workspace contains **one Angular 21 application** in a monorepo:
 
 ```
 /
 ├── projects/
-│   ├── job-mate/
-│   └── wealth-mate/
+│   └── job-mate/
 ├── libs/
 │   └── shared/           # Shared components, services, models, utils
 ├── decision.md           # Architecture decisions log
@@ -112,7 +111,7 @@ Every commit message must follow this format:
 ```
 
 Types: `feat`, `fix`, `refactor`, `style`, `test`, `docs`, `chore`, `perf`  
-Scope: the affected project or lib, e.g. `job-mate`, `wealth-mate`, `shared`, `e2e`
+Scope: the affected project or lib, e.g. `job-mate`, `shared`, `e2e`
 
 Examples:
 
@@ -209,13 +208,12 @@ This prevents refactoring entire data layers later.
 
 ## 🏗️ Monorepo-Specific Rules
 
-- **Shared lib imports only** — apps import from `@workspace/shared`, never with relative paths crossing project boundaries (e.g., `../../wealth-mate/...` is forbidden).
+- **Shared lib imports only** — the app imports from `@workspace/shared`, never with relative paths crossing project boundaries.
 - **Path aliases** are defined in `tsconfig.base.json`. Never hardcode relative cross-project paths.
-- When generating a component, service, or pipe that will be used by both apps, generate it in `libs/shared`, not in either app.
-- When only one app needs something, keep it inside that app's folder.
-- **Build both apps before declaring a feature done:**
+- When generating a component, service, or pipe that will be reused across the app, prefer `libs/shared` over duplicating it.
+- **Build before declaring a feature done:**
   ```bash
-  ng build job-mate && ng build wealth-mate
+  ng build job-mate
   ```
 - Check for **circular dependencies** if a shared lib import causes unexpected errors.
 

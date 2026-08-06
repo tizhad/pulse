@@ -99,13 +99,12 @@ AI-generated study outlines and Q&A sessions tailored to your weak spots.
 
 ## Architecture
 
-Nx monorepo with two Angular 21 applications:
+Nx monorepo with one Angular 21 application:
 
 ```
 /
 ├── apps/
-│   ├── job-mate/           # Pulse — active
-│   └── wealth-mate/        # Future: personal finance app (frozen)
+│   └── job-mate/           # Pulse — active
 ├── libs/
 │   └── shared/             # Shared components, services, models
 ├── e2e/                    # Playwright end-to-end tests

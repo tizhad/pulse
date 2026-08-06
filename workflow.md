@@ -226,3 +226,14 @@
 - Verified structurally instead: both apps build clean (`nx build job-mate`/`wealth-mate --configuration=production`), SSR prerendering still succeeds (7 static routes), and the full Playwright suite passes (223/224 — 1 failure confirmed flaky, passed on isolated re-run)
 - Projects affected: `job-mate` (`wealth-mate` untouched, build verified)
 - Playwright test added: no — this is a non-visual performance fix with no new user-facing behavior; existing full suite (224 tests) re-run instead to confirm no regressions, particularly around the now-deferred auth modal and shell navigation
+
+## Remove wealth-mate app — completed 2026-08-06
+
+- Deleted `apps/wealth-mate/` entirely (`git rm -r`) — the app was unused scaffold with no shared-lib coupling and was already scoped out of CI, the root build/serve scripts, and `nx run-many` targets
+- Updated `CLAUDE.md`: monorepo structure diagram, commit-scope example, shared-lib-import example, and "build both apps" rule all now reflect a single-app workspace
+- Updated `README.md`: architecture diagram now lists only `job-mate`
+- Updated `.github/workflows/ci.yml`: removed the now-stale "wealth-mate is frozen" comment (CI already only targeted `job-mate`)
+- Historical `workflow.md` entries that mention `wealth-mate` as "untouched" were left as-is — they're accurate records of what was true at the time
+- Verified via `npx nx show projects` (only `job-mate` remains) and `npx nx build job-mate --configuration=production` (succeeds, same pre-existing bundle-budget warnings as before)
+- Projects affected: `job-mate` (removed `wealth-mate`)
+- Playwright test added: no — deletion of an unused app, no user-facing behavior change
